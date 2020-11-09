@@ -15,6 +15,10 @@ namespace PCInfo
     public partial class MainForm : Form
     {
 
+        List<Computer> initialComputerList = new List<Computer>();
+        List<Computer> onlineComputerList = new List<Computer>();
+        List<Computer> offlineComputerList = new List<Computer>();
+
         private void setDataGrid(string text)
         {
             datagrid_pcList.Rows.Add(text);
@@ -39,11 +43,10 @@ namespace PCInfo
                 {
                     var filePath = openSelectPCDialog.FileName;
                     string[] pcNames = File.ReadAllLines(filePath);
+
                     foreach (var pc in pcNames)
                     {
-
-                        setDataGrid(pc);
-
+                        initialComputerList.Add(new Computer(pc));
                     }
 
                 }
@@ -51,6 +54,25 @@ namespace PCInfo
                 {
                     MessageBox.Show($"Security error.\n\nError Message: {ex.Message}\n\n" + $"Details:\n\n{ex.StackTrace}");
                 }
+
+            }
+
+            foreach (var pc in initialComputerList)
+            {
+                pc.getOnlineStatus();
+                if (pc.onlineStatus == "Online")
+                {
+                    onlineComputerList.Add(pc);
+                }
+                else
+                {
+                    offlineComputerList.Add(pc);
+                }
+            }
+
+            foreach (var pc in onlineComputerList)
+            {
+                pc.getCurrentVersion();
             }
         }
     }
