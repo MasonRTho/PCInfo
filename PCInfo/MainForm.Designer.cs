@@ -28,29 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.datagrid_pcList = new System.Windows.Forms.DataGridView();
-            this.pcName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.onlineStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.currentVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.upgradeStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.logResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.timeStamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button_selectList = new System.Windows.Forms.Button();
             this.openSelectPCDialog = new System.Windows.Forms.OpenFileDialog();
+            this.label_statusLabel = new System.Windows.Forms.Label();
+            this.computerBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.datagrid_pcList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.computerBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // datagrid_pcList
             // 
             this.datagrid_pcList.AllowUserToDeleteRows = false;
-            this.datagrid_pcList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.pcName,
-            this.onlineStatus,
-            this.currentVersion,
-            this.upgradeStatus,
-            this.logResult,
-            this.timeStamp});
-            this.datagrid_pcList.Location = new System.Drawing.Point(12, 27);
+            this.datagrid_pcList.Location = new System.Drawing.Point(12, 76);
             this.datagrid_pcList.Name = "datagrid_pcList";
             this.datagrid_pcList.ReadOnly = true;
             this.datagrid_pcList.RowHeadersVisible = false;
@@ -58,45 +49,9 @@
             this.datagrid_pcList.TabIndex = 0;
             this.datagrid_pcList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
-            // pcName
-            // 
-            this.pcName.HeaderText = "PC Name";
-            this.pcName.Name = "pcName";
-            this.pcName.ReadOnly = true;
-            // 
-            // onlineStatus
-            // 
-            this.onlineStatus.HeaderText = "Online Status";
-            this.onlineStatus.Name = "onlineStatus";
-            this.onlineStatus.ReadOnly = true;
-            // 
-            // currentVersion
-            // 
-            this.currentVersion.HeaderText = "CurrentVersion";
-            this.currentVersion.Name = "currentVersion";
-            this.currentVersion.ReadOnly = true;
-            // 
-            // upgradeStatus
-            // 
-            this.upgradeStatus.HeaderText = "Upgrade Status";
-            this.upgradeStatus.Name = "upgradeStatus";
-            this.upgradeStatus.ReadOnly = true;
-            // 
-            // logResult
-            // 
-            this.logResult.HeaderText = "Log Result";
-            this.logResult.Name = "logResult";
-            this.logResult.ReadOnly = true;
-            // 
-            // timeStamp
-            // 
-            this.timeStamp.HeaderText = "Time Stamp";
-            this.timeStamp.Name = "timeStamp";
-            this.timeStamp.ReadOnly = true;
-            // 
             // button_selectList
             // 
-            this.button_selectList.Location = new System.Drawing.Point(12, 447);
+            this.button_selectList.Location = new System.Drawing.Point(12, 486);
             this.button_selectList.Name = "button_selectList";
             this.button_selectList.Size = new System.Drawing.Size(107, 36);
             this.button_selectList.TabIndex = 1;
@@ -108,16 +63,29 @@
             // 
             this.openSelectPCDialog.FileName = "Select a text file";
             // 
+            // label_statusLabel
+            // 
+            this.label_statusLabel.Location = new System.Drawing.Point(12, 9);
+            this.label_statusLabel.Name = "label_statusLabel";
+            this.label_statusLabel.Size = new System.Drawing.Size(314, 40);
+            this.label_statusLabel.TabIndex = 2;
+            // 
+            // computerBindingSource
+            // 
+            this.computerBindingSource.DataSource = typeof(PCInfo.Computer);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1030, 607);
+            this.Controls.Add(this.label_statusLabel);
             this.Controls.Add(this.button_selectList);
             this.Controls.Add(this.datagrid_pcList);
             this.Name = "MainForm";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.datagrid_pcList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.computerBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -126,13 +94,10 @@
 
         private System.Windows.Forms.DataGridView datagrid_pcList;
         private System.Windows.Forms.Button button_selectList;
-        private System.Windows.Forms.DataGridViewTextBoxColumn pcName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn onlineStatus;
-        private System.Windows.Forms.DataGridViewTextBoxColumn currentVersion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn upgradeStatus;
-        private System.Windows.Forms.DataGridViewTextBoxColumn logResult;
-        private System.Windows.Forms.DataGridViewTextBoxColumn timeStamp;
         private System.Windows.Forms.OpenFileDialog openSelectPCDialog;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pcNameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.BindingSource computerBindingSource;
+        private System.Windows.Forms.Label label_statusLabel;
     }
 }
 

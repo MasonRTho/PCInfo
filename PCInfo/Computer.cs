@@ -10,37 +10,39 @@ namespace PCInfo
 {
     class Computer
     {
-        public string pcName { get; set; }
-        public string onlineStatus;
-        public string currentVersion;
-        public string timeStamp;
-        public string logResult;
+        public string PCName { get; set; }
+        public string OnlineStatus { get; set; }
+        public string CurrentVersion { get; set; }
+        public string TimeStamp { get; set; }
+        public string LogResult { get; set; }
 
         
 
         public Computer(string name)
         {
-            pcName = name;
+            PCName = name;
         }
+
+ 
 
         public void getOnlineStatus()
         {
             Ping ping = new Ping();
             try
             {
-                PingReply pingReply = ping.Send(pcName);
-                onlineStatus = "Online";
+                PingReply pingReply = ping.Send(PCName);
+                OnlineStatus = "Online";
             }
             catch
             {
-                onlineStatus = "Offline";
+                OnlineStatus = "Offline";
             }
 
         }
 
         public void getCurrentVersion()
         {
-            string wmiPath = "\\\\" + pcName + "\\root\\cimv2";
+            string wmiPath = "\\\\" + PCName + "\\root\\cimv2";
             string tempVersion = "N/A";
 
             ConnectionOptions options = new ConnectionOptions();
@@ -61,28 +63,28 @@ namespace PCInfo
             switch (tempVersion)
             {
                 case "10.0.15063":
-                    currentVersion = "1703";
+                    CurrentVersion = "1703";
                     break;
                 case "10.0.16299":
-                    currentVersion = "1709";
+                    CurrentVersion = "1709";
                     break;
                 case "10.0.17134":
-                    currentVersion = "1803";
+                    CurrentVersion = "1803";
                     break;
                 case "10.0.17763":
-                    currentVersion = "1809";
+                    CurrentVersion = "1809";
                     break;
                 case "10.0.18362":
-                    currentVersion = "1903";
+                    CurrentVersion = "1903";
                     break;
                 case "10.0.18363":
-                    currentVersion = "1909";
+                    CurrentVersion = "1909";
                     break;
                 case "10.0.19041":
-                    currentVersion = "2004";
+                    CurrentVersion = "2004";
                     break;
                 case "10.0.19042":
-                    currentVersion = "20H2";
+                    CurrentVersion = "20H2";
                     break;
             }
 

@@ -24,6 +24,11 @@ namespace PCInfo
             datagrid_pcList.Rows.Add(text);
         }
 
+        public void getStatus(string pc)
+        {
+            label_statusLabel.Text = "Checking status of: " + pc;
+        }
+
         public MainForm()
         {
             InitializeComponent();
@@ -59,8 +64,9 @@ namespace PCInfo
 
             foreach (var pc in initialComputerList)
             {
+                getStatus(pc.PCName);
                 pc.getOnlineStatus();
-                if (pc.onlineStatus == "Online")
+                if (pc.OnlineStatus == "Online")
                 {
                     onlineComputerList.Add(pc);
                 }
@@ -74,6 +80,24 @@ namespace PCInfo
             {
                 pc.getCurrentVersion();
             }
+
+            datagrid_pcList.DataSource = onlineComputerList;
+            label_statusLabel.Text = "";
+
+            if (offlineComputerList.Count > 0)
+            {
+                string offlinePCS = "";
+
+                foreach (var pc in offlineComputerList)
+                {
+                   offlinePCS = offlinePCS +  pc.PCName.ToString() + "`n";
+                }
+
+                MessageBox.Show("The following PCs are offline: " + offlinePCS);
+               
+            }
+         
+            
         }
     }
 }
