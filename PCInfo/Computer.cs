@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PCInfo
 {
-    class Computer
+    public class Computer
     {
         public string PCName { get; set; }
         public string OnlineStatus { get; set; }

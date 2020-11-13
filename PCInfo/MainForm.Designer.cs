@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -37,11 +36,9 @@
             this.openSelectPCDialog = new System.Windows.Forms.OpenFileDialog();
             this.label_statusLabel = new System.Windows.Forms.Label();
             this.label_StaticCurrentlyScanning = new System.Windows.Forms.Label();
-            this.computerBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.button_clearList = new System.Windows.Forms.Button();
             this.button_addPC = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.datagrid_pcList)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.computerBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // datagrid_pcList
@@ -108,10 +105,6 @@
             this.label_StaticCurrentlyScanning.TabIndex = 3;
             this.label_StaticCurrentlyScanning.Text = "Currently scanning PC: ";
             // 
-            // computerBindingSource
-            // 
-            this.computerBindingSource.DataSource = typeof(PCInfo.Computer);
-            // 
             // button_clearList
             // 
             this.button_clearList.Location = new System.Drawing.Point(510, 486);
@@ -143,9 +136,8 @@
             this.Controls.Add(this.button_selectList);
             this.Controls.Add(this.datagrid_pcList);
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "Feature Upgrade";
             ((System.ComponentModel.ISupportInitialize)(this.datagrid_pcList)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.computerBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -156,7 +148,6 @@
         private System.Windows.Forms.Button button_selectList;
         private System.Windows.Forms.OpenFileDialog openSelectPCDialog;
         private System.Windows.Forms.DataGridViewTextBoxColumn pcNameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.BindingSource computerBindingSource;
         private System.Windows.Forms.Label label_statusLabel;
         private System.Windows.Forms.Label label_StaticCurrentlyScanning;
         private System.Windows.Forms.Button button_clearList;

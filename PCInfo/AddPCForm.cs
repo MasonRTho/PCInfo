@@ -21,5 +21,25 @@ namespace PCInfo
         {
 
         }
+
+        private void button_addPC_Click(object sender, EventArgs e)
+        {
+            string pcName = textbox_pcName.Text;
+            Computer textboxPC = new Computer(pcName);
+            textboxPC.getOnlineStatus();
+
+            if (textboxPC.OnlineStatus == "Online")
+            {
+                textboxPC.getCurrentVersion();
+                MainForm.onlineComputerList.Add(textboxPC);
+            }
+            else
+            {
+                MainForm.offlineComputerList.Add(textboxPC);
+            }
+
+            
+            this.Close();
+        }
     }
 }

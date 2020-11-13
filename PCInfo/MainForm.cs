@@ -16,8 +16,8 @@ namespace PCInfo
     {
         private delegate void SafeCallDelegate(string text);
         List<Computer> initialComputerList = new List<Computer>();
-        List<Computer> onlineComputerList = new List<Computer>();
-        List<Computer> offlineComputerList = new List<Computer>();
+        public static List<Computer> onlineComputerList = new  List<Computer>();
+        public static List<Computer> offlineComputerList = new List<Computer>();
         
         private void setDataGrid(string text)
         {
@@ -113,8 +113,11 @@ namespace PCInfo
             //    }
             //}
 
-            datagrid_pcList.DataSource = onlineComputerList;
-           // label_statusLabel.Text = "";
+            BindingSource source = new BindingSource();
+            source.DataSource = onlineComputerList;
+            datagrid_pcList.DataSource = source;
+
+            // label_statusLabel.Text = "";
 
             if (offlineComputerList.Count > 0)
             {
@@ -134,7 +137,15 @@ namespace PCInfo
 
         private void button_addPC_Click(object sender, EventArgs e)
         {
-            AddPCForm.Show();
+            var addPCForm = new AddPCForm();
+
+            addPCForm.Show();
+            
+        }
+
+        private void computerBindingSource_CurrentChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

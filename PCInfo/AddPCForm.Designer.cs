@@ -29,35 +29,47 @@
         private void InitializeComponent()
         {
             this.label_pcName = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textbox_pcName = new System.Windows.Forms.TextBox();
+            this.button_addPC = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label_pcName
             // 
             this.label_pcName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_pcName.Location = new System.Drawing.Point(25, 61);
+            this.label_pcName.Location = new System.Drawing.Point(51, 57);
             this.label_pcName.Name = "label_pcName";
             this.label_pcName.Size = new System.Drawing.Size(100, 26);
             this.label_pcName.TabIndex = 0;
             this.label_pcName.Text = "PC Name:";
             this.label_pcName.Click += new System.EventHandler(this.label_pcName_Click);
             // 
-            // textBox1
+            // textbox_pcName
             // 
-            this.textBox1.Location = new System.Drawing.Point(122, 66);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(184, 20);
-            this.textBox1.TabIndex = 1;
+            this.textbox_pcName.Location = new System.Drawing.Point(148, 62);
+            this.textbox_pcName.Name = "textbox_pcName";
+            this.textbox_pcName.Size = new System.Drawing.Size(184, 20);
+            this.textbox_pcName.TabIndex = 1;
+            // 
+            // button_addPC
+            // 
+            this.button_addPC.Location = new System.Drawing.Point(130, 105);
+            this.button_addPC.Name = "button_addPC";
+            this.button_addPC.Size = new System.Drawing.Size(114, 35);
+            this.button_addPC.TabIndex = 2;
+            this.button_addPC.Text = "Add PC";
+            this.button_addPC.UseVisualStyleBackColor = true;
+            this.button_addPC.Click += new System.EventHandler(this.button_addPC_Click);
             // 
             // AddPCForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(410, 173);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.button_addPC);
+            this.Controls.Add(this.textbox_pcName);
             this.Controls.Add(this.label_pcName);
             this.Name = "AddPCForm";
-            this.Text = "AddPCForm";
+            this.Text = "Add a new PC";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -66,6 +78,7 @@
         #endregion
 
         private System.Windows.Forms.Label label_pcName;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textbox_pcName;
+        private System.Windows.Forms.Button button_addPC;
     }
 }
