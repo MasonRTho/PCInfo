@@ -22,6 +22,7 @@ namespace PCInfo
 
         }
 
+        // does basically the same as the main form version 
         private void button_addPC_Click(object sender, EventArgs e)
         {
             string pcName = textbox_pcName.Text;
@@ -38,7 +39,8 @@ namespace PCInfo
                 MainForm.offlineComputerList.Add(textboxPC);
             }
 
-            
+            //refreshes the data source to update the dgv
+            MainForm.source.ResetBindings(false);
             this.Close();
         }
     }

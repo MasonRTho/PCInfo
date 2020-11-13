@@ -24,7 +24,7 @@ namespace PCInfo
         }
 
  
-
+        //gets online status via ping reply. could probably combine this with object creation. freezes a bit on offline pcs
         public void getOnlineStatus()
         {
             Ping ping = new Ping();
@@ -40,6 +40,7 @@ namespace PCInfo
 
         }
 
+        // gets current version via WMI. nearly instant. only run on online PCs
         public void getCurrentVersion()
         {
             string wmiPath = "\\\\" + PCName + "\\root\\cimv2";
@@ -48,7 +49,7 @@ namespace PCInfo
             ConnectionOptions options = new ConnectionOptions();
             ManagementScope scope = new ManagementScope(wmiPath, options);
             scope.Connect();
-
+            // selects everything from the win32_operatingsystem DB, could probably rewrite to only select version.
             ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
 

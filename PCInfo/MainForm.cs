@@ -18,7 +18,8 @@ namespace PCInfo
         List<Computer> initialComputerList = new List<Computer>();
         public static List<Computer> onlineComputerList = new  List<Computer>();
         public static List<Computer> offlineComputerList = new List<Computer>();
-        
+        public static BindingSource source = new BindingSource();
+
         private void setDataGrid(string text)
         {
             datagrid_pcList.Rows.Add(text);
@@ -53,6 +54,7 @@ namespace PCInfo
 
         }
 
+        // button gets text list of computers and puts them in an array of strings then into a list of computer objects. async method to not freeze UI thread
         private async void button_selectList_Click(object sender, EventArgs e)
         {
            
@@ -77,7 +79,8 @@ namespace PCInfo
             }
 
             
-
+            // Initial online status check, using await task to update label and not freeze UI thread.
+            // After online check, get version.
             await Task.Run(() =>
             {
                 foreach (var pc in initialComputerList)
@@ -100,32 +103,19 @@ namespace PCInfo
                     pc.getCurrentVersion();
                 }
             });
-            //for (int i = 0; i < initialComputerList.Count; i++)
-            //{
-            //    initialComputerList[i].getOnlineStatus();
-            //    if (initialComputerList[i].OnlineStatus == "Online")
-            //    {
-            //        onlineComputerList.Add(initialComputerList[i]);
-            //    }
-            //    else
-            //    {
-            //        offlineComputerList.Add(initialComputerList[i]);
-            //    }
-            //}
 
-            BindingSource source = new BindingSource();
+            // Assign data source. Probably not great to have this chilling in the middle of nowhere
             source.DataSource = onlineComputerList;
             datagrid_pcList.DataSource = source;
 
-            // label_statusLabel.Text = "";
-
+            // temp to test offline computer tracking
             if (offlineComputerList.Count > 0)
             {
                 string offlinePCS = "";
 
                 foreach (var pc in offlineComputerList)
                 {
-                   offlinePCS = offlinePCS +  pc.PCName.ToString() + "`n";
+                   offlinePCS = offlinePCS +  pc.PCName.ToString() + "\n";
                 }
 
                 MessageBox.Show("The following PCs are offline: " + offlinePCS);
@@ -143,7 +133,7 @@ namespace PCInfo
             
         }
 
-        private void computerBindingSource_CurrentChanged(object sender, EventArgs e)
+        private void button_showOfflinePCs_Click(object sender, EventArgs e)
         {
 
         }
