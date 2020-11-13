@@ -14,20 +14,33 @@ namespace PCInfo
 {
     public partial class MainForm : Form
     {
-
+        private delegate void SafeCallDelegate(string text);
         List<Computer> initialComputerList = new List<Computer>();
         List<Computer> onlineComputerList = new List<Computer>();
         List<Computer> offlineComputerList = new List<Computer>();
-
+        
         private void setDataGrid(string text)
         {
             datagrid_pcList.Rows.Add(text);
         }
 
-        public void getStatus(string pc)
+        public void updateStatusLabelSafe(string pcName)
         {
-            label_statusLabel.Text = "Checking status of: " + pc;
+            
+            if (label_statusLabel.InvokeRequired)
+            {
+                var d = new SafeCallDelegate(updateStatusLabelSafe);
+                label_statusLabel.Invoke(d, new object[] { pcName });
+            }
+            else
+            {
+                
+                label_statusLabel.Text = pcName;
+            }
+            
         }
+
+      
 
         public MainForm()
         {
@@ -40,8 +53,9 @@ namespace PCInfo
 
         }
 
-        private void button_selectList_Click(object sender, EventArgs e)
+        private async void button_selectList_Click(object sender, EventArgs e)
         {
+           
             if (openSelectPCDialog.ShowDialog() == DialogResult.OK)
             {
                 try
@@ -62,27 +76,45 @@ namespace PCInfo
 
             }
 
-            foreach (var pc in initialComputerList)
-            {
-                getStatus(pc.PCName);
-                pc.getOnlineStatus();
-                if (pc.OnlineStatus == "Online")
-                {
-                    onlineComputerList.Add(pc);
-                }
-                else
-                {
-                    offlineComputerList.Add(pc);
-                }
-            }
+            
 
-            foreach (var pc in onlineComputerList)
+            await Task.Run(() =>
             {
-                pc.getCurrentVersion();
-            }
+                foreach (var pc in initialComputerList)
+                {
+                    updateStatusLabelSafe(pc.PCName);
+
+                    pc.getOnlineStatus();
+                    if (pc.OnlineStatus == "Online")
+                    {
+                        onlineComputerList.Add(pc);
+                    }
+                    else
+                    {
+                        offlineComputerList.Add(pc);
+                    }
+                }
+
+                foreach (var pc in onlineComputerList)
+                {
+                    pc.getCurrentVersion();
+                }
+            });
+            //for (int i = 0; i < initialComputerList.Count; i++)
+            //{
+            //    initialComputerList[i].getOnlineStatus();
+            //    if (initialComputerList[i].OnlineStatus == "Online")
+            //    {
+            //        onlineComputerList.Add(initialComputerList[i]);
+            //    }
+            //    else
+            //    {
+            //        offlineComputerList.Add(initialComputerList[i]);
+            //    }
+            //}
 
             datagrid_pcList.DataSource = onlineComputerList;
-            label_statusLabel.Text = "";
+           // label_statusLabel.Text = "";
 
             if (offlineComputerList.Count > 0)
             {
@@ -98,6 +130,11 @@ namespace PCInfo
             }
          
             
+        }
+
+        private void button_addPC_Click(object sender, EventArgs e)
+        {
+            AddPCForm.Show();
         }
     }
 }
