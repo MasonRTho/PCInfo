@@ -135,6 +135,13 @@ namespace PCInfo
 
         private void button_showOfflinePCs_Click(object sender, EventArgs e)
         {
+            var offlinePCForm = new OfflinePCList();
+            offlinePCForm.Show();
+        }
+
+        private void button_clearList_Click(object sender, EventArgs e)
+        {
+            onlineComputerList.Clear();
 
         }
     }

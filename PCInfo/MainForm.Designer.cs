@@ -114,6 +114,7 @@
             this.button_clearList.TabIndex = 4;
             this.button_clearList.Text = "Clear List";
             this.button_clearList.UseVisualStyleBackColor = true;
+            this.button_clearList.Click += new System.EventHandler(this.button_clearList_Click);
             // 
             // button_addPC
             // 
