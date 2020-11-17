@@ -27,11 +27,26 @@ namespace PCInfo
         //gets online status via ping reply. could probably combine this with object creation. freezes a bit on offline pcs
         public void getOnlineStatus()
         {
-            Ping ping = new Ping();
+            Ping pingSender = new Ping();
+            PingOptions options = new PingOptions();
+            options.DontFragment = true;
+
+            //create buffer of 32 bytes of data to transmit
+            string pingData = "are you there?";
+            byte[] buffer = Encoding.ASCII.GetBytes(pingData);
+            int timeout = 3000;
             try
             {
-                PingReply pingReply = ping.Send(PCName);
-                OnlineStatus = "Online";
+                PingReply reply = pingSender.Send(PCName, timeout, buffer, options);
+                if (reply.Status == IPStatus.Success)
+                {
+                    OnlineStatus = "Online";
+                }
+                else
+                {
+                    OnlineStatus = "Offline";
+                }
+                
             }
             catch
             {
@@ -56,21 +71,28 @@ namespace PCInfo
             catch
             {
                 //not sure about this, hard to test. had a random error where an offline PC passed the ping
-                Computer offlinePC = new Computer(PCName);
-                MainForm.offlineComputerList.Add(offlinePC);
+                this.CurrentVersion = "WMI Failed";
             }
-            
-            // selects everything from the win32_operatingsystem DB, could probably rewrite to only select version.
-            ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
-
-            ManagementObjectCollection queryCollection = searcher.Get();
-
-            foreach (ManagementObject m in queryCollection)
+            try
             {
-                tempVersion = (m["version"]).ToString();
+                // selects everything from the win32_operatingsystem DB, could probably rewrite to only select version.
+                ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
 
+                ManagementObjectCollection queryCollection = searcher.Get();
+
+                foreach (ManagementObject m in queryCollection)
+                {
+                    tempVersion = (m["version"]).ToString();
+
+                }
             }
+            catch
+            {
+                this.CurrentVersion = "WMI Failed";
+            }
+
+          
 
             switch (tempVersion)
             {

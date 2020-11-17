@@ -94,10 +94,14 @@ namespace PCInfo
                     }
                     else
                     {
-                        offlineComputerList.Add(pc);
+                        if (!offlineComputerList.Contains(pc))
+                        {
+                            offlineComputerList.Add(pc);
+                        }
+                        
                     }
                 }
-
+                initialComputerList.Clear();
                 foreach (var pc in onlineComputerList)
                 {
                     pc.getCurrentVersion();
