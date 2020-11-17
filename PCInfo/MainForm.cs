@@ -105,6 +105,7 @@ namespace PCInfo
                 foreach (var pc in onlineComputerList)
                 {
                     pc.getCurrentVersion();
+                    pc.getFreeSpace();
                 }
             });
 
