@@ -48,7 +48,18 @@ namespace PCInfo
 
             ConnectionOptions options = new ConnectionOptions();
             ManagementScope scope = new ManagementScope(wmiPath, options);
-            scope.Connect();
+
+            try
+            {
+                scope.Connect();
+            }
+            catch
+            {
+                //not sure about this, hard to test. had a random error where an offline PC passed the ping
+                Computer offlinePC = new Computer(PCName);
+                MainForm.offlineComputerList.Add(offlinePC);
+            }
+            
             // selects everything from the win32_operatingsystem DB, could probably rewrite to only select version.
             ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);

@@ -142,7 +142,7 @@ namespace PCInfo
         private void button_clearList_Click(object sender, EventArgs e)
         {
             onlineComputerList.Clear();
-
+            source.ResetBindings(false);
         }
     }
 }
