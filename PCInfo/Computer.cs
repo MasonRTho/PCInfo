@@ -165,7 +165,7 @@ namespace PCInfo
             decimal tempSpaceCast = Int64.Parse(tempSpace);
             decimal freespace = tempSpaceCast / 1073741824;
             var freespaceRounded = Math.Round(freespace, 2);
-            this.FreeSpace = freespaceRounded.ToString();
+            this.FreeSpace = freespaceRounded.ToString() + "GB";
 
         }
 

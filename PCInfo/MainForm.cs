@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,7 +47,10 @@ namespace PCInfo
         public MainForm()
         {
             InitializeComponent();
-            
+            // Assign data source. Probably not great to have this chilling in the middle of nowhere
+            source.DataSource = onlineComputerList;
+            datagrid_pcList.DataSource = source;
+
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -109,9 +113,7 @@ namespace PCInfo
                 }
             });
 
-            // Assign data source. Probably not great to have this chilling in the middle of nowhere
-            source.DataSource = onlineComputerList;
-            datagrid_pcList.DataSource = source;
+            
 
             // temp to test offline computer tracking
             if (offlineComputerList.Count > 0)
@@ -148,6 +150,32 @@ namespace PCInfo
         {
             onlineComputerList.Clear();
             source.ResetBindings(false);
+        }
+
+        private void button_startProcess_Click(object sender, EventArgs e)
+        {
+            foreach (var pc in onlineComputerList)
+            {
+
+                try
+                {
+                    object[] theProcessToRun = { "\\\fs1\\userapps\\1909\\setup.exe \"/auto upgrade\" \"/quiet\"" };
+                    ConnectionOptions theConnection = new ConnectionOptions();
+
+                    //theConnection.Username = @"MyDomain\Admin";
+                    //theConnection.Password = "mypassword";
+                    ManagementScope theScope = new ManagementScope("\\\\" + pc.PCName + "\\root\\cimv2", theConnection);
+                    ManagementClass theClass = new ManagementClass(theScope, new ManagementPath("Win32_Process"), new ObjectGetOptions());
+                    theClass.InvokeMethod("Create", theProcessToRun);
+                    MessageBox.Show("created");
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+
+                }
+            }
         }
     }
 }

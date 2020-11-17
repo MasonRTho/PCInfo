@@ -33,6 +33,7 @@ namespace PCInfo
             {
                 textboxPC.getCurrentVersion();
                 MainForm.onlineComputerList.Add(textboxPC);
+                MainForm.source.ResetBindings(false);
             }
             else
             {
@@ -40,7 +41,7 @@ namespace PCInfo
             }
 
             //refreshes the data source to update the dgv
-            MainForm.source.ResetBindings(false);
+            
             this.Close();
         }
     }

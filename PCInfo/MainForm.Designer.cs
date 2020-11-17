@@ -39,6 +39,7 @@
             this.button_clearList = new System.Windows.Forms.Button();
             this.button_addPC = new System.Windows.Forms.Button();
             this.button_showOfflinePCs = new System.Windows.Forms.Button();
+            this.button_startProcess = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.datagrid_pcList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -136,11 +137,22 @@
             this.button_showOfflinePCs.UseVisualStyleBackColor = true;
             this.button_showOfflinePCs.Click += new System.EventHandler(this.button_showOfflinePCs_Click);
             // 
+            // button_startProcess
+            // 
+            this.button_startProcess.Location = new System.Drawing.Point(660, 175);
+            this.button_startProcess.Name = "button_startProcess";
+            this.button_startProcess.Size = new System.Drawing.Size(128, 48);
+            this.button_startProcess.TabIndex = 7;
+            this.button_startProcess.Text = "Start";
+            this.button_startProcess.UseVisualStyleBackColor = true;
+            this.button_startProcess.Click += new System.EventHandler(this.button_startProcess_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1030, 607);
+            this.Controls.Add(this.button_startProcess);
             this.Controls.Add(this.button_showOfflinePCs);
             this.Controls.Add(this.button_addPC);
             this.Controls.Add(this.button_clearList);
@@ -166,6 +178,7 @@
         private System.Windows.Forms.Button button_clearList;
         private System.Windows.Forms.Button button_addPC;
         private System.Windows.Forms.Button button_showOfflinePCs;
+        private System.Windows.Forms.Button button_startProcess;
     }
 }
 
