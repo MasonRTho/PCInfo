@@ -38,6 +38,7 @@ namespace PCInfo
             else
             {
                 MainForm.offlineComputerList.Add(textboxPC);
+                MessageBox.Show(textboxPC.PCName + " is offline!");
             }
 
             //refreshes the data source to update the dgv

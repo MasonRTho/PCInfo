@@ -26,7 +26,7 @@ namespace PCInfo
         }
 
  
-        //gets online status via ping reply. could probably combine this with object creation. freezes a bit on offline pcs
+        //gets online status via ping sender. sends name timeout (3s) buffer and a dont fragment option. only accepts success. prevents destination host unreachables from sneaking in
         public void getOnlineStatus()
         {
             Ping pingSender = new Ping();

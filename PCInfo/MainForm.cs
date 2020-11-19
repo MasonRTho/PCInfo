@@ -159,11 +159,12 @@ namespace PCInfo
 
                 try
                 {
-                    object[] theProcessToRun = { "\\\fs1\\userapps\\1909\\setup.exe \"/auto upgrade\" \"/quiet\"" };
+                    object[] theProcessToRun = { @"\\10.6.8.120\userapps\1909\setup.exe" };
+                    
                     ConnectionOptions theConnection = new ConnectionOptions();
 
-                    //theConnection.Username = @"MyDomain\Admin";
-                    //theConnection.Password = "mypassword";
+                    theConnection.Username = @"covdnssrv\itanalyst";
+                    theConnection.Password = "vctech203";
                     ManagementScope theScope = new ManagementScope("\\\\" + pc.PCName + "\\root\\cimv2", theConnection);
                     ManagementClass theClass = new ManagementClass(theScope, new ManagementPath("Win32_Process"), new ObjectGetOptions());
                     theClass.InvokeMethod("Create", theProcessToRun);
