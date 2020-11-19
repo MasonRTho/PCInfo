@@ -94,7 +94,11 @@ namespace PCInfo
                     pc.getOnlineStatus();
                     if (pc.OnlineStatus == "Online")
                     {
-                        onlineComputerList.Add(pc);
+                        if (!CheckIfPCExistsinOnlineComputerList(pc))
+                        {
+                            onlineComputerList.Add(pc);
+                        };
+                        
                     }
                     else
                     {
@@ -113,6 +117,7 @@ namespace PCInfo
                 }
             });
 
+            source.ResetBindings(false);
             
 
             // temp to test offline computer tracking
@@ -129,6 +134,26 @@ namespace PCInfo
                
             }
          
+            
+        }
+
+        //checks if PC object is already in online computer list based on pc name, used linq
+        public static bool CheckIfPCExistsinOnlineComputerList(Computer pc)
+        {
+            
+            bool exists;
+            int index = onlineComputerList.FindIndex(Computer => Computer.PCName == pc.PCName);
+            if (index >= 0)
+            {
+                exists = true;
+                return exists;
+            }
+            else
+            {
+                exists = false;
+                return exists;
+            }
+
             
         }
 
@@ -159,21 +184,18 @@ namespace PCInfo
 
                 try
                 {
-                    object[] theProcessToRun = { @"\\10.6.8.120\userapps\1909\setup.exe" };
-                    
-                    ConnectionOptions theConnection = new ConnectionOptions();
-
-                    theConnection.Username = @"covdnssrv\itanalyst";
-                    theConnection.Password = "vctech203";
-                    ManagementScope theScope = new ManagementScope("\\\\" + pc.PCName + "\\root\\cimv2", theConnection);
-                    ManagementClass theClass = new ManagementClass(theScope, new ManagementPath("Win32_Process"), new ObjectGetOptions());
-                    theClass.InvokeMethod("Create", theProcessToRun);
-                    MessageBox.Show("created");
+                    if (!System.IO.File.Exists($@"\\{pc.PCName}\c$\windows\temp\psexec.exe")){
+                        File.Copy(
+                        @"\\fs1\userapps\1909\psexec.exe",
+                        $@"\\{pc.PCName}\c$\windows\temp\psexec.exe"
+                        );
+                    }
+                  
 
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    MessageBox.Show($"There was an error copying PSExec to {pc.PCName}.\n" + ex.ToString());
 
                 }
             }

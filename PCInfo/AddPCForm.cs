@@ -31,9 +31,17 @@ namespace PCInfo
 
             if (textboxPC.OnlineStatus == "Online")
             {
-                textboxPC.getCurrentVersion();
-                MainForm.onlineComputerList.Add(textboxPC);
-                MainForm.source.ResetBindings(false);
+                if (!MainForm.CheckIfPCExistsinOnlineComputerList(textboxPC))
+                {
+                    textboxPC.getCurrentVersion();
+                    MainForm.onlineComputerList.Add(textboxPC);
+                    MainForm.source.ResetBindings(false);
+                }
+                else
+                {
+                    MessageBox.Show($"{textboxPC.PCName} is already in the list!");
+                }
+               
             }
             else
             {
