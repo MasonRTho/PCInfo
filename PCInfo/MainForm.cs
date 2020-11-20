@@ -18,7 +18,7 @@ namespace PCInfo
         private delegate void SafeCallDelegate(string text);
         List<Computer> initialComputerList = new List<Computer>();
         public static List<Computer> onlineComputerList = new  List<Computer>();
-        public static List<Computer> offlineComputerList = new List<Computer>();
+        public static List<OfflineComputer> offlineComputerList = new List<OfflineComputer>();
         public static BindingSource source = new BindingSource();
 
         private void setDataGrid(string text)
@@ -102,9 +102,11 @@ namespace PCInfo
                     }
                     else
                     {
-                        if (!offlineComputerList.Contains(pc))
+                        OfflineComputer offlinePC = new OfflineComputer(pc.PCName);
+
+                        if (!offlineComputerList.Contains(offlinePC))
                         {
-                            offlineComputerList.Add(pc);
+                            offlineComputerList.Add(offlinePC);
                         }
                         
                     }
@@ -114,8 +116,25 @@ namespace PCInfo
                 {
                     pc.getCurrentVersion();
                     pc.getFreeSpace();
+
+
+                    if (IsThereEnoughFreeSpace(pc))
+                    {
+                        onlineComputerList.Add(pc);
+                    }
+                    else
+                    {
+                        OfflineComputer offlinePCNoSpace = new OfflineComputer(pc.PCName);
+                        if (!offlineComputerList.Contains(offlinePCNoSpace))
+                        {
+                            offlinePCNoSpace.Reason = "Less than 20GB avail";
+                            offlineComputerList.Add(offlinePCNoSpace);
+                        }
+                        
+                    }
                 }
             });
+
 
             source.ResetBindings(false);
             
@@ -135,6 +154,21 @@ namespace PCInfo
             }
          
             
+        }
+
+        //removes GB from freespace and converts to decimal for comparison
+        public static bool IsThereEnoughFreeSpace(Computer pc)
+        {
+           // var tempName = pc.FreeSpace;
+            var tempFreespace = decimal.Parse(pc.FreeSpace.Substring(0, pc.FreeSpace.Length - 2));
+            if (tempFreespace < 20)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         //checks if PC object is already in online computer list based on pc name, used linq
