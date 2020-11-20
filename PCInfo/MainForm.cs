@@ -32,21 +32,34 @@ namespace PCInfo
             if (label_statusLabel.InvokeRequired)
             {
                 var d = new SafeCallDelegate(updateStatusLabelSafe);
+                //label_StaticCurrentlyScanning.Invoke(d, new object[] { label_StaticCurrentlyScanning.Show = true });
                 label_statusLabel.Invoke(d, new object[] { pcName });
+                
             }
             else
             {
-                
+                label_StaticCurrentlyScanning.Visible = true;
                 label_statusLabel.Text = pcName;
             }
             
         }
+
+        //public void ShowStaticLabel(Label label)
+        //{
+        //    label.Visible = true;
+        //    if (label_StaticCurrentlyScanning.InvokeRequired)
+        //    {
+        //        var d = new SafeCallDelegate(ShowStaticLabel);
+        //        label_StaticCurrentlyScanning.Invoke(d, new object[] { })
+        //    }
+        //}
 
       
 
         public MainForm()
         {
             InitializeComponent();
+            label_StaticCurrentlyScanning.Visible = false;
             // Assign data source. Probably not great to have this chilling in the middle of nowhere
             source.DataSource = onlineComputerList;
             datagrid_pcList.DataSource = source;
@@ -87,6 +100,7 @@ namespace PCInfo
             // After online check, get version.
             await Task.Run(() =>
             {
+                
                 foreach (var pc in initialComputerList)
                 {
                     updateStatusLabelSafe(pc.PCName);
@@ -118,11 +132,7 @@ namespace PCInfo
                     pc.getFreeSpace();
 
 
-                    if (IsThereEnoughFreeSpace(pc))
-                    {
-                        onlineComputerList.Add(pc);
-                    }
-                    else
+                    if (!IsThereEnoughFreeSpace(pc))
                     {
                         OfflineComputer offlinePCNoSpace = new OfflineComputer(pc.PCName);
                         if (!offlineComputerList.Contains(offlinePCNoSpace))
@@ -130,12 +140,12 @@ namespace PCInfo
                             offlinePCNoSpace.Reason = "Less than 20GB avail";
                             offlineComputerList.Add(offlinePCNoSpace);
                         }
-                        
                     }
+          
                 }
             });
 
-
+            label_StaticCurrentlyScanning.Visible = false;
             source.ResetBindings(false);
             
 
@@ -244,6 +254,11 @@ namespace PCInfo
         {
             onlineComputerList.RemoveAt(datagrid_pcList.CurrentRow.Index);
             source.ResetBindings(false);
+        }
+
+        private void label_statusLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

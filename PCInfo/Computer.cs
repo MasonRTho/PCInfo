@@ -23,6 +23,8 @@ namespace PCInfo
         public Computer(string name)
         {
             PCName = name;
+            TimeStamp = "N/A";
+            LogResult = "N/A";
         }
 
  

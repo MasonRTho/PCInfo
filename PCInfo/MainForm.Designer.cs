@@ -95,16 +95,17 @@
             // 
             // label_statusLabel
             // 
-            this.label_statusLabel.Location = new System.Drawing.Point(124, 33);
+            this.label_statusLabel.Location = new System.Drawing.Point(123, 45);
             this.label_statusLabel.Name = "label_statusLabel";
-            this.label_statusLabel.Size = new System.Drawing.Size(131, 24);
+            this.label_statusLabel.Size = new System.Drawing.Size(131, 25);
             this.label_statusLabel.TabIndex = 2;
+            this.label_statusLabel.Click += new System.EventHandler(this.label_statusLabel_Click);
             // 
             // label_StaticCurrentlyScanning
             // 
-            this.label_StaticCurrentlyScanning.Location = new System.Drawing.Point(12, 33);
+            this.label_StaticCurrentlyScanning.Location = new System.Drawing.Point(12, 45);
             this.label_StaticCurrentlyScanning.Name = "label_StaticCurrentlyScanning";
-            this.label_StaticCurrentlyScanning.Size = new System.Drawing.Size(115, 40);
+            this.label_StaticCurrentlyScanning.Size = new System.Drawing.Size(115, 25);
             this.label_StaticCurrentlyScanning.TabIndex = 3;
             this.label_StaticCurrentlyScanning.Text = "Currently scanning PC: ";
             // 
