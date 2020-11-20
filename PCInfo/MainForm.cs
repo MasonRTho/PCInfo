@@ -108,10 +108,29 @@ namespace PCInfo
                     pc.getOnlineStatus();
                     if (pc.OnlineStatus == "Online")
                     {
-                        if (!CheckIfPCExistsinOnlineComputerList(pc))
+                        pc.getCurrentVersion();
+                        pc.getFreeSpace();
+
+
+                        if (IsThereEnoughFreeSpace(pc))
                         {
-                            onlineComputerList.Add(pc);
-                        };
+                            if (!CheckIfPCExistsinOnlineComputerList(pc))
+                            {
+                                onlineComputerList.Add(pc);
+                            };
+
+                        }
+                        else
+                        {
+                            OfflineComputer offlinePCNoSpace = new OfflineComputer(pc.PCName);
+                            if (!offlineComputerList.Contains(offlinePCNoSpace))
+                            {
+                                offlinePCNoSpace.Reason = "Less than 20GB avail";
+                                offlineComputerList.Add(offlinePCNoSpace);
+                            }
+                        }
+
+                        
                         
                     }
                     else
@@ -126,26 +145,11 @@ namespace PCInfo
                     }
                 }
                 initialComputerList.Clear();
-                foreach (var pc in onlineComputerList)
-                {
-                    pc.getCurrentVersion();
-                    pc.getFreeSpace();
 
-
-                    if (!IsThereEnoughFreeSpace(pc))
-                    {
-                        OfflineComputer offlinePCNoSpace = new OfflineComputer(pc.PCName);
-                        if (!offlineComputerList.Contains(offlinePCNoSpace))
-                        {
-                            offlinePCNoSpace.Reason = "Less than 20GB avail";
-                            offlineComputerList.Add(offlinePCNoSpace);
-                        }
-                    }
-          
-                }
             });
 
             label_StaticCurrentlyScanning.Visible = false;
+            label_statusLabel.Visible = false;
             source.ResetBindings(false);
             
 
