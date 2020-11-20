@@ -199,6 +199,17 @@ namespace PCInfo
 
                 }
             }
+            foreach (var pc in onlineComputerList)
+            {
+
+
+            }
+        }
+
+        private void button_RemovePC_Click(object sender, EventArgs e)
+        {
+            onlineComputerList.RemoveAt(datagrid_pcList.CurrentRow.Index);
+            source.ResetBindings(false);
         }
     }
 }

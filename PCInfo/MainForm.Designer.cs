@@ -40,6 +40,7 @@
             this.button_addPC = new System.Windows.Forms.Button();
             this.button_showOfflinePCs = new System.Windows.Forms.Button();
             this.button_startProcess = new System.Windows.Forms.Button();
+            this.button_RemovePC = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.datagrid_pcList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -80,7 +81,7 @@
             // 
             // button_selectList
             // 
-            this.button_selectList.Location = new System.Drawing.Point(12, 486);
+            this.button_selectList.Location = new System.Drawing.Point(11, 486);
             this.button_selectList.Name = "button_selectList";
             this.button_selectList.Size = new System.Drawing.Size(107, 36);
             this.button_selectList.TabIndex = 1;
@@ -119,7 +120,7 @@
             // 
             // button_addPC
             // 
-            this.button_addPC.Location = new System.Drawing.Point(148, 486);
+            this.button_addPC.Location = new System.Drawing.Point(126, 486);
             this.button_addPC.Name = "button_addPC";
             this.button_addPC.Size = new System.Drawing.Size(107, 36);
             this.button_addPC.TabIndex = 5;
@@ -139,7 +140,7 @@
             // 
             // button_startProcess
             // 
-            this.button_startProcess.Location = new System.Drawing.Point(660, 175);
+            this.button_startProcess.Location = new System.Drawing.Point(623, 432);
             this.button_startProcess.Name = "button_startProcess";
             this.button_startProcess.Size = new System.Drawing.Size(128, 48);
             this.button_startProcess.TabIndex = 7;
@@ -147,11 +148,22 @@
             this.button_startProcess.UseVisualStyleBackColor = true;
             this.button_startProcess.Click += new System.EventHandler(this.button_startProcess_Click);
             // 
+            // button_RemovePC
+            // 
+            this.button_RemovePC.Location = new System.Drawing.Point(387, 486);
+            this.button_RemovePC.Name = "button_RemovePC";
+            this.button_RemovePC.Size = new System.Drawing.Size(107, 36);
+            this.button_RemovePC.TabIndex = 8;
+            this.button_RemovePC.Text = "Remove PC";
+            this.button_RemovePC.UseVisualStyleBackColor = true;
+            this.button_RemovePC.Click += new System.EventHandler(this.button_RemovePC_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1030, 607);
+            this.Controls.Add(this.button_RemovePC);
             this.Controls.Add(this.button_startProcess);
             this.Controls.Add(this.button_showOfflinePCs);
             this.Controls.Add(this.button_addPC);
@@ -179,6 +191,7 @@
         private System.Windows.Forms.Button button_addPC;
         private System.Windows.Forms.Button button_showOfflinePCs;
         private System.Windows.Forms.Button button_startProcess;
+        private System.Windows.Forms.Button button_RemovePC;
     }
 }
 
