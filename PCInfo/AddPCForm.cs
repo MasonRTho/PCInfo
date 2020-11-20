@@ -25,6 +25,14 @@ namespace PCInfo
         // does basically the same as the main form version 
         private void button_addPC_Click(object sender, EventArgs e)
         {
+            if (String.IsNullOrEmpty(textbox_pcName.Text))
+            {
+                MessageBox.Show("You didn't enter anything");
+              
+            }
+            else
+            {
+
             string pcName = textbox_pcName.Text;
             Computer textboxPC = new Computer(pcName);
             textboxPC.getOnlineStatus();
@@ -66,6 +74,7 @@ namespace PCInfo
             //refreshes the data source to update the dgv
             
             this.Close();
+            }
         }
     }
 }

@@ -12,14 +12,15 @@ namespace PCInfo
 {
     public partial class OfflinePCList : Form
     {
+
+        public static BindingSource offlineSource = new BindingSource();
         public OfflinePCList()
         {
             InitializeComponent();
+            offlineSource.DataSource = MainForm.offlineComputerList;
+            datagridview_offlinePCs.DataSource = offlineSource;
+
             
-           foreach(var pc in MainForm.offlineComputerList)
-            {
-               listview_offlinePCs.Items.Add(pc.PCName);
-            }
         }
 
         private void button_exportList_Click(object sender, EventArgs e)
