@@ -96,8 +96,7 @@ namespace PCInfo
             }
 
             
-            // Initial online status check, using await task to update label and not freeze UI thread.
-            // After online check, get version.
+            //online,version, free space check, using await task to update label and not freeze UI thread.
             await Task.Run(() =>
             {
                 
@@ -108,14 +107,15 @@ namespace PCInfo
                     pc.getOnlineStatus();
                     if (pc.OnlineStatus == "Online")
                     {
-                        pc.getCurrentVersion();
+                       
                         pc.getFreeSpace();
 
-
+                        // free space check
                         if (IsThereEnoughFreeSpace(pc))
                         {
                             if (!CheckIfPCExistsinOnlineComputerList(pc))
                             {
+                                pc.getCurrentVersion();
                                 onlineComputerList.Add(pc);
                             };
 
@@ -129,8 +129,6 @@ namespace PCInfo
                                 offlineComputerList.Add(offlinePCNoSpace);
                             }
                         }
-
-                        
                         
                     }
                     else
@@ -163,7 +161,7 @@ namespace PCInfo
                    offlinePCS = offlinePCS +  pc.PCName.ToString() + "\n";
                 }
 
-                MessageBox.Show("The following PCs are offline: " + offlinePCS);
+                MessageBox.Show("The following PCs will be skipped: " + offlinePCS);
                
             }
          
@@ -256,8 +254,17 @@ namespace PCInfo
 
         private void button_RemovePC_Click(object sender, EventArgs e)
         {
-            onlineComputerList.RemoveAt(datagrid_pcList.CurrentRow.Index);
-            source.ResetBindings(false);
+            if (onlineComputerList.Count > 0)
+            {
+                onlineComputerList.RemoveAt(datagrid_pcList.CurrentRow.Index);
+                source.ResetBindings(false);
+            }
+            else
+            {
+                MessageBox.Show("Nothing to remove","Info",MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            
+            
         }
 
         private void label_statusLabel_Click(object sender, EventArgs e)
