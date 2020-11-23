@@ -41,7 +41,19 @@
             this.button_showOfflinePCs = new System.Windows.Forms.Button();
             this.button_startProcess = new System.Windows.Forms.Button();
             this.button_RemovePC = new System.Windows.Forms.Button();
+            this.groupbox_settings = new System.Windows.Forms.GroupBox();
+            this.label_featureUpgrade = new System.Windows.Forms.Label();
+            this.label_osUpgrade = new System.Windows.Forms.Label();
+            this.radioButton_fuRestart = new System.Windows.Forms.RadioButton();
+            this.radioButton_fuNoRestart = new System.Windows.Forms.RadioButton();
+            this.radioButton_fuRestartSkip = new System.Windows.Forms.RadioButton();
+            this.radioButton_fuNoRestartSkip = new System.Windows.Forms.RadioButton();
+            this.radioButton_osNoRestartSkip = new System.Windows.Forms.RadioButton();
+            this.radioButton_osRestartSkip = new System.Windows.Forms.RadioButton();
+            this.radioButton_osNoRestart = new System.Windows.Forms.RadioButton();
+            this.radioButton_osRestart = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.datagrid_pcList)).BeginInit();
+            this.groupbox_settings.SuspendLayout();
             this.SuspendLayout();
             // 
             // datagrid_pcList
@@ -141,9 +153,9 @@
             // 
             // button_startProcess
             // 
-            this.button_startProcess.Location = new System.Drawing.Point(623, 432);
+            this.button_startProcess.Location = new System.Drawing.Point(139, 176);
             this.button_startProcess.Name = "button_startProcess";
-            this.button_startProcess.Size = new System.Drawing.Size(128, 48);
+            this.button_startProcess.Size = new System.Drawing.Size(88, 32);
             this.button_startProcess.TabIndex = 7;
             this.button_startProcess.Text = "Start";
             this.button_startProcess.UseVisualStyleBackColor = true;
@@ -159,13 +171,139 @@
             this.button_RemovePC.UseVisualStyleBackColor = true;
             this.button_RemovePC.Click += new System.EventHandler(this.button_RemovePC_Click);
             // 
+            // groupbox_settings
+            // 
+            this.groupbox_settings.Controls.Add(this.radioButton_osNoRestartSkip);
+            this.groupbox_settings.Controls.Add(this.radioButton_osRestartSkip);
+            this.groupbox_settings.Controls.Add(this.radioButton_osNoRestart);
+            this.groupbox_settings.Controls.Add(this.radioButton_osRestart);
+            this.groupbox_settings.Controls.Add(this.radioButton_fuNoRestartSkip);
+            this.groupbox_settings.Controls.Add(this.radioButton_fuRestartSkip);
+            this.groupbox_settings.Controls.Add(this.radioButton_fuNoRestart);
+            this.groupbox_settings.Controls.Add(this.radioButton_fuRestart);
+            this.groupbox_settings.Controls.Add(this.label_osUpgrade);
+            this.groupbox_settings.Controls.Add(this.label_featureUpgrade);
+            this.groupbox_settings.Controls.Add(this.button_startProcess);
+            this.groupbox_settings.Location = new System.Drawing.Point(623, 76);
+            this.groupbox_settings.Name = "groupbox_settings";
+            this.groupbox_settings.Size = new System.Drawing.Size(395, 234);
+            this.groupbox_settings.TabIndex = 9;
+            this.groupbox_settings.TabStop = false;
+            this.groupbox_settings.Text = "Settings";
+            // 
+            // label_featureUpgrade
+            // 
+            this.label_featureUpgrade.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_featureUpgrade.Location = new System.Drawing.Point(16, 46);
+            this.label_featureUpgrade.Name = "label_featureUpgrade";
+            this.label_featureUpgrade.Size = new System.Drawing.Size(100, 23);
+            this.label_featureUpgrade.TabIndex = 8;
+            this.label_featureUpgrade.Text = "Feature Upgrade";
+            // 
+            // label_osUpgrade
+            // 
+            this.label_osUpgrade.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_osUpgrade.Location = new System.Drawing.Point(225, 46);
+            this.label_osUpgrade.Name = "label_osUpgrade";
+            this.label_osUpgrade.Size = new System.Drawing.Size(138, 23);
+            this.label_osUpgrade.TabIndex = 9;
+            this.label_osUpgrade.Text = "Windows 7 -> 10";
+            // 
+            // radioButton_fuRestart
+            // 
+            this.radioButton_fuRestart.AutoSize = true;
+            this.radioButton_fuRestart.Location = new System.Drawing.Point(19, 73);
+            this.radioButton_fuRestart.Name = "radioButton_fuRestart";
+            this.radioButton_fuRestart.Size = new System.Drawing.Size(59, 17);
+            this.radioButton_fuRestart.TabIndex = 10;
+            this.radioButton_fuRestart.TabStop = true;
+            this.radioButton_fuRestart.Text = "Restart";
+            this.radioButton_fuRestart.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_fuNoRestart
+            // 
+            this.radioButton_fuNoRestart.AutoSize = true;
+            this.radioButton_fuNoRestart.Location = new System.Drawing.Point(19, 96);
+            this.radioButton_fuNoRestart.Name = "radioButton_fuNoRestart";
+            this.radioButton_fuNoRestart.Size = new System.Drawing.Size(76, 17);
+            this.radioButton_fuNoRestart.TabIndex = 11;
+            this.radioButton_fuNoRestart.TabStop = true;
+            this.radioButton_fuNoRestart.Text = "No Restart";
+            this.radioButton_fuNoRestart.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_fuRestartSkip
+            // 
+            this.radioButton_fuRestartSkip.AutoSize = true;
+            this.radioButton_fuRestartSkip.Location = new System.Drawing.Point(19, 119);
+            this.radioButton_fuRestartSkip.Name = "radioButton_fuRestartSkip";
+            this.radioButton_fuRestartSkip.Size = new System.Drawing.Size(135, 17);
+            this.radioButton_fuRestartSkip.TabIndex = 12;
+            this.radioButton_fuRestartSkip.TabStop = true;
+            this.radioButton_fuRestartSkip.Text = "Restart && Skip Updates";
+            this.radioButton_fuRestartSkip.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_fuNoRestartSkip
+            // 
+            this.radioButton_fuNoRestartSkip.AutoSize = true;
+            this.radioButton_fuNoRestartSkip.Location = new System.Drawing.Point(19, 142);
+            this.radioButton_fuNoRestartSkip.Name = "radioButton_fuNoRestartSkip";
+            this.radioButton_fuNoRestartSkip.Size = new System.Drawing.Size(152, 17);
+            this.radioButton_fuNoRestartSkip.TabIndex = 13;
+            this.radioButton_fuNoRestartSkip.TabStop = true;
+            this.radioButton_fuNoRestartSkip.Text = "No Restart && Skip Updates";
+            this.radioButton_fuNoRestartSkip.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_osNoRestartSkip
+            // 
+            this.radioButton_osNoRestartSkip.AutoSize = true;
+            this.radioButton_osNoRestartSkip.Location = new System.Drawing.Point(228, 142);
+            this.radioButton_osNoRestartSkip.Name = "radioButton_osNoRestartSkip";
+            this.radioButton_osNoRestartSkip.Size = new System.Drawing.Size(152, 17);
+            this.radioButton_osNoRestartSkip.TabIndex = 17;
+            this.radioButton_osNoRestartSkip.TabStop = true;
+            this.radioButton_osNoRestartSkip.Text = "No Restart && Skip Updates";
+            this.radioButton_osNoRestartSkip.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_osRestartSkip
+            // 
+            this.radioButton_osRestartSkip.AutoSize = true;
+            this.radioButton_osRestartSkip.Location = new System.Drawing.Point(228, 119);
+            this.radioButton_osRestartSkip.Name = "radioButton_osRestartSkip";
+            this.radioButton_osRestartSkip.Size = new System.Drawing.Size(135, 17);
+            this.radioButton_osRestartSkip.TabIndex = 16;
+            this.radioButton_osRestartSkip.TabStop = true;
+            this.radioButton_osRestartSkip.Text = "Restart && Skip Updates";
+            this.radioButton_osRestartSkip.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_osNoRestart
+            // 
+            this.radioButton_osNoRestart.AutoSize = true;
+            this.radioButton_osNoRestart.Location = new System.Drawing.Point(228, 96);
+            this.radioButton_osNoRestart.Name = "radioButton_osNoRestart";
+            this.radioButton_osNoRestart.Size = new System.Drawing.Size(76, 17);
+            this.radioButton_osNoRestart.TabIndex = 15;
+            this.radioButton_osNoRestart.TabStop = true;
+            this.radioButton_osNoRestart.Text = "No Restart";
+            this.radioButton_osNoRestart.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_osRestart
+            // 
+            this.radioButton_osRestart.AutoSize = true;
+            this.radioButton_osRestart.Location = new System.Drawing.Point(228, 73);
+            this.radioButton_osRestart.Name = "radioButton_osRestart";
+            this.radioButton_osRestart.Size = new System.Drawing.Size(59, 17);
+            this.radioButton_osRestart.TabIndex = 14;
+            this.radioButton_osRestart.TabStop = true;
+            this.radioButton_osRestart.Text = "Restart";
+            this.radioButton_osRestart.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1030, 607);
+            this.Controls.Add(this.groupbox_settings);
             this.Controls.Add(this.button_RemovePC);
-            this.Controls.Add(this.button_startProcess);
             this.Controls.Add(this.button_showOfflinePCs);
             this.Controls.Add(this.button_addPC);
             this.Controls.Add(this.button_clearList);
@@ -176,6 +314,8 @@
             this.Name = "MainForm";
             this.Text = "Feature Upgrade";
             ((System.ComponentModel.ISupportInitialize)(this.datagrid_pcList)).EndInit();
+            this.groupbox_settings.ResumeLayout(false);
+            this.groupbox_settings.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -193,6 +333,17 @@
         private System.Windows.Forms.Button button_showOfflinePCs;
         private System.Windows.Forms.Button button_startProcess;
         private System.Windows.Forms.Button button_RemovePC;
+        private System.Windows.Forms.GroupBox groupbox_settings;
+        private System.Windows.Forms.RadioButton radioButton_osNoRestartSkip;
+        private System.Windows.Forms.RadioButton radioButton_osRestartSkip;
+        private System.Windows.Forms.RadioButton radioButton_osNoRestart;
+        private System.Windows.Forms.RadioButton radioButton_osRestart;
+        private System.Windows.Forms.RadioButton radioButton_fuNoRestartSkip;
+        private System.Windows.Forms.RadioButton radioButton_fuRestartSkip;
+        private System.Windows.Forms.RadioButton radioButton_fuNoRestart;
+        private System.Windows.Forms.RadioButton radioButton_fuRestart;
+        private System.Windows.Forms.Label label_osUpgrade;
+        private System.Windows.Forms.Label label_featureUpgrade;
     }
 }
 

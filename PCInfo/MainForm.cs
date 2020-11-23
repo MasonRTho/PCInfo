@@ -225,6 +225,19 @@ namespace PCInfo
 
         private void button_startProcess_Click(object sender, EventArgs e)
         {
+            bool isAnyRadioButtonChecked = false;
+            foreach (RadioButton rb in groupbox_settings.Controls.OfType<RadioButton>())
+            {
+                if (rb.Checked)
+                {
+                    isAnyRadioButtonChecked = true;
+                    break;
+                }
+            }
+            if (!isAnyRadioButtonChecked)
+            {
+                MessageBox.Show("You didn't select anything!");
+            }
             foreach (var pc in onlineComputerList)
             {
 
