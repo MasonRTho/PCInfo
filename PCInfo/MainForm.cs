@@ -44,18 +44,103 @@ namespace PCInfo
             
         }
 
-        //public void ShowStaticLabel(Label label)
-        //{
-        //    label.Visible = true;
-        //    if (label_StaticCurrentlyScanning.InvokeRequired)
-        //    {
-        //        var d = new SafeCallDelegate(ShowStaticLabel);
-        //        label_StaticCurrentlyScanning.Invoke(d, new object[] { })
-        //    }
-        //}
+        private static void CopyPsExec(List<Computer> computers)
+        {
+            foreach (var pc in onlineComputerList)
+            {
 
-      
+                try
+                {
+                    if (!System.IO.File.Exists($@"\\{pc.PCName}\c$\windows\temp\psexec.exe"))
+                    {
+                        File.Copy(
+                        @"\\fs1\userapps\1909\psexec.exe",
+                        $@"\\{pc.PCName}\c$\windows\temp\psexec.exe"
+                        );
+                    }
 
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"There was an error copying PSExec to {pc.PCName}.\n" + ex.ToString());
+
+                }
+            }
+        }
+
+        public static bool IsThereEnoughFreeSpace(Computer pc)
+        {
+            // var tempName = pc.FreeSpace;
+            var tempFreespace = decimal.Parse(pc.FreeSpace.Substring(0, pc.FreeSpace.Length - 2));
+            if (tempFreespace < 20)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public static bool CheckIfPCExistsinOnlineComputerList(Computer pc)
+        {
+
+            bool exists;
+            int index = onlineComputerList.FindIndex(Computer => Computer.PCName == pc.PCName);
+            if (index >= 0)
+            {
+                exists = true;
+                return exists;
+            }
+            else
+            {
+                exists = false;
+                return exists;
+            }
+
+
+        }
+
+        public string GetInstallStringFromRadioButton(RadioButton rb)
+        {
+            string rbName = "";
+            string installString = "";
+
+                    rbName = rb.Name;
+
+                    switch (rbName)
+                    {
+                        case "radioButton_fuRestart":
+                            installString = "/auto upgrade /quiet";
+                            break;
+                        case "radioButton_fuNoRestart":
+                            installString = "/auto upgrade /quiet /noreboot";
+                            break;
+                        case "radioButton_fuRestartSkip":
+                            installString = "/auto upgrade /quiet /DynamicUpdate Disable";
+                            break;
+                        case "radioButton_fuNoRestartSkip":
+                            installString = "/auto upgrade /quiet /DynamicUpdate Disable /noreboot";
+                            break;
+                        case "radioButton_osRestart":
+                            installString = "/auto upgrade /quiet /compat ignorewarning";
+                            break;
+                        case "radioButton_osNoRestart":
+                            installString = "/auto upgrade /quiet /compat ignorewarning /noreboot";
+                            break;
+                        case "radioButton_osRestartSkip":
+                            installString = "/auto upgrade /quiet /compat ignorewarning /DynamicUpdate disable";
+                            break;
+                        case "radioButton_osNoRestartSkip":
+                            installString = "/auto upgrade /quiet /compat ignorewarning /DynamicUpdate disable /noreboot";
+                            break;
+                    }
+
+
+            return installString;
+
+        }
         public MainForm()
         {
             InitializeComponent();
@@ -169,39 +254,10 @@ namespace PCInfo
         }
 
         //removes GB from freespace and converts to decimal for comparison
-        public static bool IsThereEnoughFreeSpace(Computer pc)
-        {
-           // var tempName = pc.FreeSpace;
-            var tempFreespace = decimal.Parse(pc.FreeSpace.Substring(0, pc.FreeSpace.Length - 2));
-            if (tempFreespace < 20)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
+        
 
         //checks if PC object is already in online computer list based on pc name, used linq
-        public static bool CheckIfPCExistsinOnlineComputerList(Computer pc)
-        {
-            
-            bool exists;
-            int index = onlineComputerList.FindIndex(Computer => Computer.PCName == pc.PCName);
-            if (index >= 0)
-            {
-                exists = true;
-                return exists;
-            }
-            else
-            {
-                exists = false;
-                return exists;
-            }
-
-            
-        }
+        
 
         private void button_addPC_Click(object sender, EventArgs e)
         {
@@ -226,11 +282,17 @@ namespace PCInfo
         private void button_startProcess_Click(object sender, EventArgs e)
         {
             bool isAnyRadioButtonChecked = false;
+            bool goodToGo = false;
+            //default string
+            string installString = "/auto upgrade /quiet";
             foreach (RadioButton rb in groupbox_settings.Controls.OfType<RadioButton>())
             {
                 if (rb.Checked)
                 {
                     isAnyRadioButtonChecked = true;
+                    goodToGo = true;
+                    installString = GetInstallStringFromRadioButton(rb);
+                   // MessageBox.Show(installString);
                     break;
                 }
             }
@@ -238,32 +300,20 @@ namespace PCInfo
             {
                 MessageBox.Show("You didn't select anything!");
             }
-            foreach (var pc in onlineComputerList)
-            {
 
-                try
+            if (goodToGo)
+            {
+                CopyPsExec(onlineComputerList);
+                
+                foreach (var pc in onlineComputerList)
                 {
-                    if (!System.IO.File.Exists($@"\\{pc.PCName}\c$\windows\temp\psexec.exe")){
-                        File.Copy(
-                        @"\\fs1\userapps\1909\psexec.exe",
-                        $@"\\{pc.PCName}\c$\windows\temp\psexec.exe"
-                        );
-                    }
-                  
+
 
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"There was an error copying PSExec to {pc.PCName}.\n" + ex.ToString());
-
-                }
-            }
-            foreach (var pc in onlineComputerList)
-            {
-
-
             }
         }
+
+        
 
         private void button_RemovePC_Click(object sender, EventArgs e)
         {
