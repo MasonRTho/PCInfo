@@ -9,10 +9,14 @@ namespace PCInfo
 {
     class GetUNC
     {
+        // mpr.dll used for information on network providers
+        //wngetuniversalnamea is a windows function
+        // apparently there is no built in way in C# to convert to a unc path, stack exchange coming in clutch as always
+        //rest of the comments are from SE
         [DllImport("mpr.dll")]
         static extern int WNetGetUniversalNameA(string lpLocalPath, int dwInfoLevel, IntPtr lpBuffer, ref int lpBufferSize);
 
-        // I think max length for UNC is actually 32,767
+        // I think max length for UNC is actually 32,767 
         public static string LocalToUNC(string localPath, int maxLen = 2000)
         {
             IntPtr lpBuff;

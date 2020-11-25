@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -17,10 +18,14 @@ namespace PCInfo
     {
         // used later for getting the path of the setup.exe file
         public static string filePath = "";
+        public string setupPath = "";
+
         private delegate void SafeCallDelegate(string text);
+
         List<Computer> initialComputerList = new List<Computer>();
         public static List<Computer> onlineComputerList = new  List<Computer>();
         public static List<OfflineComputer> offlineComputerList = new List<OfflineComputer>();
+
         public static BindingSource source = new BindingSource();
 
         private void setDataGrid(string text)
@@ -284,7 +289,8 @@ namespace PCInfo
         private void button_startProcess_Click(object sender, EventArgs e)
         {
             bool isAnyRadioButtonChecked = false;
-            bool goodToGo = false;
+            bool goodToGoRadio = false;
+            bool goodToGoSetup = false;
             //default string
             string installString = "/auto upgrade /quiet";
             foreach (RadioButton rb in groupbox_settings.Controls.OfType<RadioButton>())
@@ -292,7 +298,7 @@ namespace PCInfo
                 if (rb.Checked)
                 {
                     isAnyRadioButtonChecked = true;
-                    goodToGo = true;
+                    goodToGoRadio = true;
                     installString = GetInstallStringFromRadioButton(rb);
                    // MessageBox.Show(installString);
                     break;
@@ -302,20 +308,54 @@ namespace PCInfo
             {
                 MessageBox.Show("You didn't select anything!");
             }
-
-            if (goodToGo)
+            if (goodToGoRadio)
             {
+                if(setupPath.Length > 0)
+                {
+                    goodToGoSetup = true;
+                }
+                else
+                {
+                    MessageBox.Show("You didn't choose the setup file");
+                    goodToGoSetup = false;
+                }
+            }
+            if (goodToGoSetup)
+            {
+                string noPcPsexecLocation = "\\c$\\windows\\temp\\psexec.exe";
+                string noPcArgumentList = " -s -i -d " + setupPath + " " + installString;
                 CopyPsExec(onlineComputerList);
                 
                 foreach (var pc in onlineComputerList)
                 {
-
+                    string finalPcPsexeclocation = "\\\\" + pc.PCName + noPcPsexecLocation;
+                    string finalPcArgumentList = "\\\\" + pc.PCName + noPcArgumentList;
+                   // MessageBox.Show("PSExec location: " + finalPcPsexeclocation + "\n" + "Argument List: " + finalPcArgumentList);
+                    StartSetup(finalPcPsexeclocation,finalPcArgumentList, pc.PCName);
 
                 }
             }
         }
 
-        
+        private void StartSetup(string psExecLocation, string argumentList, string pcName)
+        {
+            try
+            {
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.FileName = psExecLocation;
+                p.StartInfo.Arguments = argumentList;
+                p.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error starting PsExec on" + pcName + ex);
+            }
+
+        }
 
         private void button_RemovePC_Click(object sender, EventArgs e)
         {
@@ -342,7 +382,6 @@ namespace PCInfo
             using (OpenFileDialog chooseSetupDialog = new OpenFileDialog())
             {
                 string localPath = "";
-                string finalPath = "";
                 chooseSetupDialog.InitialDirectory = "c:\\";
                 chooseSetupDialog.Filter = "Executable File (*.exe)|*.exe";
                 chooseSetupDialog.FilterIndex = 1;
@@ -357,15 +396,15 @@ namespace PCInfo
                     if (localPath.Contains("C:") || localPath.Contains("D:"))
                     {
                         
-                        finalPath = localPath;
+                        setupPath = localPath;
                         label_waiting.Text = "Setup Location: ";
-                        label_choseSetupLocation.Text = finalPath;
+                        label_choseSetupLocation.Text = setupPath;
                     }
                     else
                     {
-                        finalPath = GetUNC.LocalToUNC(localPath, 200);
+                        setupPath = GetUNC.LocalToUNC(localPath, 200);
                         label_waiting.Text = "Setup Location: ";
-                        label_choseSetupLocation.Text = finalPath;
+                        label_choseSetupLocation.Text = setupPath;
                     }
                 }
             }
@@ -373,7 +412,6 @@ namespace PCInfo
             
             
             
-           // MessageBox.Show(test2);
 
             
         }
