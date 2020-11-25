@@ -15,6 +15,8 @@ namespace PCInfo
 {
     public partial class MainForm : Form
     {
+        // used later for getting the path of the setup.exe file
+        public static string filePath = "";
         private delegate void SafeCallDelegate(string text);
         List<Computer> initialComputerList = new List<Computer>();
         public static List<Computer> onlineComputerList = new  List<Computer>();
@@ -333,6 +335,47 @@ namespace PCInfo
         private void label_statusLabel_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button_chooseSetup_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog chooseSetupDialog = new OpenFileDialog())
+            {
+                string localPath = "";
+                string finalPath = "";
+                chooseSetupDialog.InitialDirectory = "c:\\";
+                chooseSetupDialog.Filter = "Executable File (*.exe)|*.exe";
+                chooseSetupDialog.FilterIndex = 1;
+                chooseSetupDialog.RestoreDirectory = true;
+
+                if (chooseSetupDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = chooseSetupDialog.FileName;
+                    FileInfo f = new FileInfo(filePath);
+                    localPath = f.FullName.ToString();
+
+                    if (localPath.Contains("C:") || localPath.Contains("D:"))
+                    {
+                        
+                        finalPath = localPath;
+                        label_waiting.Text = "Setup Location: ";
+                        label_choseSetupLocation.Text = finalPath;
+                    }
+                    else
+                    {
+                        finalPath = GetUNC.LocalToUNC(localPath, 200);
+                        label_waiting.Text = "Setup Location: ";
+                        label_choseSetupLocation.Text = finalPath;
+                    }
+                }
+            }
+            
+            
+            
+            
+           // MessageBox.Show(test2);
+
+            
         }
     }
 }

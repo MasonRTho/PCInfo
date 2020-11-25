@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.datagrid_pcList = new System.Windows.Forms.DataGridView();
             this.button_selectList = new System.Windows.Forms.Button();
             this.openSelectPCDialog = new System.Windows.Forms.OpenFileDialog();
@@ -52,6 +52,9 @@
             this.radioButton_osRestartSkip = new System.Windows.Forms.RadioButton();
             this.radioButton_osNoRestart = new System.Windows.Forms.RadioButton();
             this.radioButton_osRestart = new System.Windows.Forms.RadioButton();
+            this.button_chooseSetup = new System.Windows.Forms.Button();
+            this.label_waiting = new System.Windows.Forms.Label();
+            this.label_choseSetupLocation = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.datagrid_pcList)).BeginInit();
             this.groupbox_settings.SuspendLayout();
             this.SuspendLayout();
@@ -59,33 +62,33 @@
             // datagrid_pcList
             // 
             this.datagrid_pcList.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.datagrid_pcList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.datagrid_pcList.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.datagrid_pcList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.datagrid_pcList.DefaultCellStyle = dataGridViewCellStyle5;
             this.datagrid_pcList.Location = new System.Drawing.Point(12, 76);
             this.datagrid_pcList.Name = "datagrid_pcList";
             this.datagrid_pcList.ReadOnly = true;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.datagrid_pcList.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.datagrid_pcList.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.datagrid_pcList.RowHeadersVisible = false;
             this.datagrid_pcList.Size = new System.Drawing.Size(605, 404);
             this.datagrid_pcList.TabIndex = 0;
@@ -153,7 +156,7 @@
             // 
             // button_startProcess
             // 
-            this.button_startProcess.Location = new System.Drawing.Point(139, 176);
+            this.button_startProcess.Location = new System.Drawing.Point(149, 180);
             this.button_startProcess.Name = "button_startProcess";
             this.button_startProcess.Size = new System.Drawing.Size(88, 32);
             this.button_startProcess.TabIndex = 7;
@@ -186,7 +189,7 @@
             this.groupbox_settings.Controls.Add(this.button_startProcess);
             this.groupbox_settings.Location = new System.Drawing.Point(623, 76);
             this.groupbox_settings.Name = "groupbox_settings";
-            this.groupbox_settings.Size = new System.Drawing.Size(395, 234);
+            this.groupbox_settings.Size = new System.Drawing.Size(395, 237);
             this.groupbox_settings.TabIndex = 9;
             this.groupbox_settings.TabStop = false;
             this.groupbox_settings.Text = "Settings";
@@ -297,11 +300,39 @@
             this.radioButton_osRestart.Text = "Restart";
             this.radioButton_osRestart.UseVisualStyleBackColor = true;
             // 
+            // button_chooseSetup
+            // 
+            this.button_chooseSetup.Location = new System.Drawing.Point(623, 38);
+            this.button_chooseSetup.Name = "button_chooseSetup";
+            this.button_chooseSetup.Size = new System.Drawing.Size(134, 32);
+            this.button_chooseSetup.TabIndex = 18;
+            this.button_chooseSetup.Text = "Choose setup file";
+            this.button_chooseSetup.UseVisualStyleBackColor = true;
+            this.button_chooseSetup.Click += new System.EventHandler(this.button_chooseSetup_Click);
+            // 
+            // label_waiting
+            // 
+            this.label_waiting.Location = new System.Drawing.Point(763, 38);
+            this.label_waiting.Name = "label_waiting";
+            this.label_waiting.Size = new System.Drawing.Size(247, 16);
+            this.label_waiting.TabIndex = 19;
+            this.label_waiting.Text = "Waiting for setup file";
+            // 
+            // label_choseSetupLocation
+            // 
+            this.label_choseSetupLocation.Location = new System.Drawing.Point(763, 54);
+            this.label_choseSetupLocation.Name = "label_choseSetupLocation";
+            this.label_choseSetupLocation.Size = new System.Drawing.Size(247, 25);
+            this.label_choseSetupLocation.TabIndex = 20;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1030, 607);
+            this.Controls.Add(this.label_choseSetupLocation);
+            this.Controls.Add(this.label_waiting);
+            this.Controls.Add(this.button_chooseSetup);
             this.Controls.Add(this.groupbox_settings);
             this.Controls.Add(this.button_RemovePC);
             this.Controls.Add(this.button_showOfflinePCs);
@@ -344,6 +375,9 @@
         private System.Windows.Forms.Label label_osUpgrade;
         private System.Windows.Forms.Label label_featureUpgrade;
         public System.Windows.Forms.GroupBox groupbox_settings;
+        private System.Windows.Forms.Button button_chooseSetup;
+        private System.Windows.Forms.Label label_waiting;
+        private System.Windows.Forms.Label label_choseSetupLocation;
     }
 }
 
