@@ -28,6 +28,8 @@ namespace PCInfo
 
         public static BindingSource source = new BindingSource();
 
+       // dispatchTimer = new System.Windows.Threading.DispatchTimer();
+
         private void setDataGrid(string text)
         {
             datagrid_pcList.Rows.Add(text);

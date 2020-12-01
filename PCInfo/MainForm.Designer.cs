@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.datagrid_pcList = new System.Windows.Forms.DataGridView();
             this.button_selectList = new System.Windows.Forms.Button();
             this.openSelectPCDialog = new System.Windows.Forms.OpenFileDialog();
@@ -42,16 +42,16 @@
             this.button_startProcess = new System.Windows.Forms.Button();
             this.button_RemovePC = new System.Windows.Forms.Button();
             this.groupbox_settings = new System.Windows.Forms.GroupBox();
-            this.label_featureUpgrade = new System.Windows.Forms.Label();
-            this.label_osUpgrade = new System.Windows.Forms.Label();
-            this.radioButton_fuRestart = new System.Windows.Forms.RadioButton();
-            this.radioButton_fuNoRestart = new System.Windows.Forms.RadioButton();
-            this.radioButton_fuRestartSkip = new System.Windows.Forms.RadioButton();
-            this.radioButton_fuNoRestartSkip = new System.Windows.Forms.RadioButton();
             this.radioButton_osNoRestartSkip = new System.Windows.Forms.RadioButton();
             this.radioButton_osRestartSkip = new System.Windows.Forms.RadioButton();
             this.radioButton_osNoRestart = new System.Windows.Forms.RadioButton();
             this.radioButton_osRestart = new System.Windows.Forms.RadioButton();
+            this.radioButton_fuNoRestartSkip = new System.Windows.Forms.RadioButton();
+            this.radioButton_fuRestartSkip = new System.Windows.Forms.RadioButton();
+            this.radioButton_fuNoRestart = new System.Windows.Forms.RadioButton();
+            this.radioButton_fuRestart = new System.Windows.Forms.RadioButton();
+            this.label_osUpgrade = new System.Windows.Forms.Label();
+            this.label_featureUpgrade = new System.Windows.Forms.Label();
             this.button_chooseSetup = new System.Windows.Forms.Button();
             this.label_waiting = new System.Windows.Forms.Label();
             this.label_choseSetupLocation = new System.Windows.Forms.Label();
@@ -62,33 +62,33 @@
             // datagrid_pcList
             // 
             this.datagrid_pcList.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.datagrid_pcList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.datagrid_pcList.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.datagrid_pcList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.datagrid_pcList.DefaultCellStyle = dataGridViewCellStyle2;
             this.datagrid_pcList.Location = new System.Drawing.Point(12, 76);
             this.datagrid_pcList.Name = "datagrid_pcList";
             this.datagrid_pcList.ReadOnly = true;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.datagrid_pcList.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.datagrid_pcList.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.datagrid_pcList.RowHeadersVisible = false;
             this.datagrid_pcList.Size = new System.Drawing.Size(605, 404);
             this.datagrid_pcList.TabIndex = 0;
@@ -194,68 +194,6 @@
             this.groupbox_settings.TabStop = false;
             this.groupbox_settings.Text = "Settings";
             // 
-            // label_featureUpgrade
-            // 
-            this.label_featureUpgrade.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_featureUpgrade.Location = new System.Drawing.Point(16, 46);
-            this.label_featureUpgrade.Name = "label_featureUpgrade";
-            this.label_featureUpgrade.Size = new System.Drawing.Size(100, 23);
-            this.label_featureUpgrade.TabIndex = 8;
-            this.label_featureUpgrade.Text = "Feature Upgrade";
-            // 
-            // label_osUpgrade
-            // 
-            this.label_osUpgrade.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_osUpgrade.Location = new System.Drawing.Point(225, 46);
-            this.label_osUpgrade.Name = "label_osUpgrade";
-            this.label_osUpgrade.Size = new System.Drawing.Size(138, 23);
-            this.label_osUpgrade.TabIndex = 9;
-            this.label_osUpgrade.Text = "Windows 7 -> 10";
-            // 
-            // radioButton_fuRestart
-            // 
-            this.radioButton_fuRestart.AutoSize = true;
-            this.radioButton_fuRestart.Location = new System.Drawing.Point(19, 73);
-            this.radioButton_fuRestart.Name = "radioButton_fuRestart";
-            this.radioButton_fuRestart.Size = new System.Drawing.Size(59, 17);
-            this.radioButton_fuRestart.TabIndex = 10;
-            this.radioButton_fuRestart.TabStop = true;
-            this.radioButton_fuRestart.Text = "Restart";
-            this.radioButton_fuRestart.UseVisualStyleBackColor = true;
-            // 
-            // radioButton_fuNoRestart
-            // 
-            this.radioButton_fuNoRestart.AutoSize = true;
-            this.radioButton_fuNoRestart.Location = new System.Drawing.Point(19, 96);
-            this.radioButton_fuNoRestart.Name = "radioButton_fuNoRestart";
-            this.radioButton_fuNoRestart.Size = new System.Drawing.Size(76, 17);
-            this.radioButton_fuNoRestart.TabIndex = 11;
-            this.radioButton_fuNoRestart.TabStop = true;
-            this.radioButton_fuNoRestart.Text = "No Restart";
-            this.radioButton_fuNoRestart.UseVisualStyleBackColor = true;
-            // 
-            // radioButton_fuRestartSkip
-            // 
-            this.radioButton_fuRestartSkip.AutoSize = true;
-            this.radioButton_fuRestartSkip.Location = new System.Drawing.Point(19, 119);
-            this.radioButton_fuRestartSkip.Name = "radioButton_fuRestartSkip";
-            this.radioButton_fuRestartSkip.Size = new System.Drawing.Size(135, 17);
-            this.radioButton_fuRestartSkip.TabIndex = 12;
-            this.radioButton_fuRestartSkip.TabStop = true;
-            this.radioButton_fuRestartSkip.Text = "Restart && Skip Updates";
-            this.radioButton_fuRestartSkip.UseVisualStyleBackColor = true;
-            // 
-            // radioButton_fuNoRestartSkip
-            // 
-            this.radioButton_fuNoRestartSkip.AutoSize = true;
-            this.radioButton_fuNoRestartSkip.Location = new System.Drawing.Point(19, 142);
-            this.radioButton_fuNoRestartSkip.Name = "radioButton_fuNoRestartSkip";
-            this.radioButton_fuNoRestartSkip.Size = new System.Drawing.Size(152, 17);
-            this.radioButton_fuNoRestartSkip.TabIndex = 13;
-            this.radioButton_fuNoRestartSkip.TabStop = true;
-            this.radioButton_fuNoRestartSkip.Text = "No Restart && Skip Updates";
-            this.radioButton_fuNoRestartSkip.UseVisualStyleBackColor = true;
-            // 
             // radioButton_osNoRestartSkip
             // 
             this.radioButton_osNoRestartSkip.AutoSize = true;
@@ -299,6 +237,68 @@
             this.radioButton_osRestart.TabStop = true;
             this.radioButton_osRestart.Text = "Restart";
             this.radioButton_osRestart.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_fuNoRestartSkip
+            // 
+            this.radioButton_fuNoRestartSkip.AutoSize = true;
+            this.radioButton_fuNoRestartSkip.Location = new System.Drawing.Point(19, 142);
+            this.radioButton_fuNoRestartSkip.Name = "radioButton_fuNoRestartSkip";
+            this.radioButton_fuNoRestartSkip.Size = new System.Drawing.Size(152, 17);
+            this.radioButton_fuNoRestartSkip.TabIndex = 13;
+            this.radioButton_fuNoRestartSkip.TabStop = true;
+            this.radioButton_fuNoRestartSkip.Text = "No Restart && Skip Updates";
+            this.radioButton_fuNoRestartSkip.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_fuRestartSkip
+            // 
+            this.radioButton_fuRestartSkip.AutoSize = true;
+            this.radioButton_fuRestartSkip.Location = new System.Drawing.Point(19, 119);
+            this.radioButton_fuRestartSkip.Name = "radioButton_fuRestartSkip";
+            this.radioButton_fuRestartSkip.Size = new System.Drawing.Size(135, 17);
+            this.radioButton_fuRestartSkip.TabIndex = 12;
+            this.radioButton_fuRestartSkip.TabStop = true;
+            this.radioButton_fuRestartSkip.Text = "Restart && Skip Updates";
+            this.radioButton_fuRestartSkip.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_fuNoRestart
+            // 
+            this.radioButton_fuNoRestart.AutoSize = true;
+            this.radioButton_fuNoRestart.Location = new System.Drawing.Point(19, 96);
+            this.radioButton_fuNoRestart.Name = "radioButton_fuNoRestart";
+            this.radioButton_fuNoRestart.Size = new System.Drawing.Size(76, 17);
+            this.radioButton_fuNoRestart.TabIndex = 11;
+            this.radioButton_fuNoRestart.TabStop = true;
+            this.radioButton_fuNoRestart.Text = "No Restart";
+            this.radioButton_fuNoRestart.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_fuRestart
+            // 
+            this.radioButton_fuRestart.AutoSize = true;
+            this.radioButton_fuRestart.Location = new System.Drawing.Point(19, 73);
+            this.radioButton_fuRestart.Name = "radioButton_fuRestart";
+            this.radioButton_fuRestart.Size = new System.Drawing.Size(59, 17);
+            this.radioButton_fuRestart.TabIndex = 10;
+            this.radioButton_fuRestart.TabStop = true;
+            this.radioButton_fuRestart.Text = "Restart";
+            this.radioButton_fuRestart.UseVisualStyleBackColor = true;
+            // 
+            // label_osUpgrade
+            // 
+            this.label_osUpgrade.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_osUpgrade.Location = new System.Drawing.Point(225, 46);
+            this.label_osUpgrade.Name = "label_osUpgrade";
+            this.label_osUpgrade.Size = new System.Drawing.Size(138, 23);
+            this.label_osUpgrade.TabIndex = 9;
+            this.label_osUpgrade.Text = "Windows 7 -> 10";
+            // 
+            // label_featureUpgrade
+            // 
+            this.label_featureUpgrade.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_featureUpgrade.Location = new System.Drawing.Point(16, 46);
+            this.label_featureUpgrade.Name = "label_featureUpgrade";
+            this.label_featureUpgrade.Size = new System.Drawing.Size(100, 23);
+            this.label_featureUpgrade.TabIndex = 8;
+            this.label_featureUpgrade.Text = "Feature Upgrade";
             // 
             // button_chooseSetup
             // 
