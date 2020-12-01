@@ -16,6 +16,11 @@ namespace PCInfo
         {
             this.PCName = name;
         }
+        public OfflineComputer(string name, string reason)
+        {
+            this.PCName = name;
+            this.Reason = reason;
+        }
     }
 
 

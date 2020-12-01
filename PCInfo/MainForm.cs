@@ -293,6 +293,19 @@ namespace PCInfo
             bool goodToGoSetup = false;
             //default string
             string installString = "/auto upgrade /quiet";
+
+            //do a final online status check
+            foreach (var pc in onlineComputerList)
+            {
+                pc.getOnlineStatus();
+                if (pc.OnlineStatus == "Offline")
+                {
+                    onlineComputerList.Remove(pc);
+                    OfflineComputer offlinePCfinalCheck = new OfflineComputer(pc.PCName,"Offline");
+                }
+            }
+
+            //check if any radio button is selected
             foreach (RadioButton rb in groupbox_settings.Controls.OfType<RadioButton>())
             {
                 if (rb.Checked)
@@ -308,6 +321,7 @@ namespace PCInfo
             {
                 MessageBox.Show("You didn't select anything!");
             }
+            //if something is checked, make sure a setup.exe file is selected
             if (goodToGoRadio)
             {
                 if(setupPath.Length > 0)
@@ -320,6 +334,7 @@ namespace PCInfo
                     goodToGoSetup = false;
                 }
             }
+            //if a rb is checked and setup file is chosen, get the strings together and start the setup
             if (goodToGoSetup)
             {
                 string noPcPsexecLocation = "\\c$\\windows\\temp\\psexec.exe";
@@ -337,8 +352,10 @@ namespace PCInfo
             }
         }
 
+        //start the setup with a new process. using psexec, start a process on a remote computer. might use "using" eventually
         private void StartSetup(string psExecLocation, string argumentList, string pcName)
         {
+            
             try
             {
                 Process p = new Process();
@@ -377,13 +394,14 @@ namespace PCInfo
 
         }
 
+        // button for choosing the location of the setupfile. uses a windows function to convert the network path to UNC. little touchy with pointers, but seems to work. see GetUNC.cs for more info
         private void button_chooseSetup_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog chooseSetupDialog = new OpenFileDialog())
             {
                 string localPath = "";
                 chooseSetupDialog.InitialDirectory = "c:\\";
-                chooseSetupDialog.Filter = "Executable File (*.exe)|*.exe";
+                chooseSetupDialog.Filter = "Setup File|setup.exe";
                 chooseSetupDialog.FilterIndex = 1;
                 chooseSetupDialog.RestoreDirectory = true;
 
