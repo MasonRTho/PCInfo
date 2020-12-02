@@ -70,7 +70,8 @@ namespace PCInfo
             
         }
 
-        private static bool CopyPsExec(List<Computer> computers)
+        //TODO: Test this more
+        private static bool CopyPsExec(Computer computer)
         {
             bool success = false;
             foreach (var pc in onlineComputerList)
@@ -91,7 +92,7 @@ namespace PCInfo
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"There was an error copying PSExec to {pc.PCName}.\n" + ex.ToString());
+                    MessageBox.Show($"There was an error copying PSExec to {pc.PCName}.\n" + ex.ToString() + "\n" + "The PC will be removed");
 
                     success = false;
                 }
@@ -131,9 +132,6 @@ namespace PCInfo
                 else
                 {
                     MessageBox.Show("Error starting RemoteRegistry on" + pc.PCName + "\n" + "This computer will be skipped");
-                    onlineComputerList.Remove(pc);
-                    OfflineComputer remoteRegistryFailPC = new OfflineComputer(pc.PCName, "Remote Registry Disabled");
-                    offlineComputerList.Add(remoteRegistryFailPC);
                     success = false;
                 }
 
@@ -141,9 +139,6 @@ namespace PCInfo
             catch (Exception ex)
             {
                 MessageBox.Show("Error starting RemoteRegistry on" + pc.PCName + ex + "\n" + "This computer will be skipped");
-                onlineComputerList.Remove(pc);
-                OfflineComputer remoteRegistryFailPC = new OfflineComputer(pc.PCName, "Remote Registry Disabled");
-                offlineComputerList.Add(remoteRegistryFailPC);
                 success = false;
             }
             if (success)
@@ -154,6 +149,29 @@ namespace PCInfo
             {
                 return false;
             }
+        }
+
+        //start the setup with a new process. using psexec, start a process on a remote computer. might use "using" eventually
+        //TODO: Add the error handling from previous psexec methods
+        private void StartSetup(string psExecLocation, string argumentList, string pcName)
+        {
+
+            try
+            {
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.FileName = psExecLocation;
+                p.StartInfo.Arguments = argumentList;
+                p.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error starting PsExec on" + pcName + ex);
+            }
+
         }
 
         public static bool IsThereEnoughFreeSpace(Computer pc)
@@ -324,6 +342,7 @@ namespace PCInfo
             
 
             // temp to test offline computer tracking
+            //TODO: fix offline computer tracking
             if (offlineComputerList.Count > 0)
             {
                 string offlinePCS = "";
@@ -372,8 +391,6 @@ namespace PCInfo
             bool isAnyRadioButtonChecked = false;
             bool goodToGoRadio = false;
             bool goodToGoSetupPath = false;
-            bool goodToGoPSExecCopy = false;
-            bool goodToGoRegistry = false;
             bool goodToGoSetup = false;
             //default string
             string installString = "/auto upgrade /quiet";
@@ -410,6 +427,7 @@ namespace PCInfo
             if (!isAnyRadioButtonChecked)
             {
                 MessageBox.Show("You didn't select anything!");
+                goodToGoRadio = false;
             }
             //if something is checked, make sure a setup.exe file is selected
             if (goodToGoRadio)
@@ -424,41 +442,54 @@ namespace PCInfo
                     goodToGoSetupPath = false;
                 }
             }
+            // if a setup path is selected, attempt to copy psexec
             if (goodToGoSetupPath)
             {
-                if (CopyPsExec(onlineComputerList))
-                {
-                    goodToGoPSExecCopy = true;
-                }
-                else
-                {
-                    goodToGoPSExecCopy = false;
-                }
-
-                if (goodToGoPSExecCopy)
-                {
-
-                }
-            }
-            //if a rb is checked and setup file is chosen, get the strings together and start the setup
-            if (goodToGoSetup)
-            {
-                bool removeCurrentPC = false;
-                
-                
-                
-
-                for(var i = 0; i < onlineComputerList.Count; i++)
+                for (var i = 0; i < onlineComputerList.Count; i++)
                 {
                     var tempComputer = onlineComputerList.ElementAt<Computer>(i);
-                    
+                    if (!CopyPsExec(tempComputer))
+                    {
+                        onlineComputerList.Remove(tempComputer);
+                        source.ResetBindings(false);
+                        OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Offline");
+                        MessageBox.Show("Failed to copy PsExec to " + tempComputer.PCName.ToUpper() + " removing from list");
+                    }
+
+                }
+
+            }
+            //TODO: Add a check to see if remote registry is already enabled
+            if (onlineComputerList.Count > 0)
+            {
+                for (var i = 0; i < onlineComputerList.Count; i++)
+                {
+                    var tempComputer = onlineComputerList.ElementAt<Computer>(i);
+
                     string finalPcPsexeclocation = "\\\\" + tempComputer.PCName + noPcPsexecLocation;
                     string finalPcArgumentList = "\\\\" + tempComputer.PCName + noPcArgumentList;
-                    
-                    EnableRemoteRegistry(finalPcPsexeclocation, tempComputer);
+
+                    if (!EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
+                    {
+                        onlineComputerList.Remove(tempComputer);
+                        source.ResetBindings(false);
+                        OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Offline");
+                        MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + " removing from list. \n");
+                    }
                     source.ResetBindings(false);
-                    //StartSetup(finalPcPsexeclocation,finalPcArgumentList, pc.PCName);
+                    
                 }
+            }
+
+            //TODO: finish setup logic
+            if (onlineComputerList.Count > 0)
+            {
+                bool removeCurrentPC = false;
+
+
+
+                //StartSetup(finalPcPsexeclocation,finalPcArgumentList, pc.PCName);
+
 
                 processTimer.Tick += new EventHandler(GetProcessActive);
                 processTimer.Start();
@@ -466,27 +497,7 @@ namespace PCInfo
         }
 
         
-        //start the setup with a new process. using psexec, start a process on a remote computer. might use "using" eventually
-        private void StartSetup(string psExecLocation, string argumentList, string pcName)
-        {
-            
-            try
-            {
-                Process p = new Process();
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.RedirectStandardError = true;
-                p.StartInfo.RedirectStandardInput = true;
-                p.StartInfo.FileName = psExecLocation;
-                p.StartInfo.Arguments = argumentList;
-                p.Start();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error starting PsExec on" + pcName + ex);
-            }
 
-        }
 
         private void button_RemovePC_Click(object sender, EventArgs e)
         {
