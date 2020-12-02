@@ -41,7 +41,7 @@ namespace PCInfo
         {
             processTimer.Interval = 1000;
             var test = 1;
-            MessageBox.Show(test.ToString());
+           // MessageBox.Show(test.ToString());
             test++;
             
 
@@ -70,8 +70,9 @@ namespace PCInfo
             
         }
 
-        private static void CopyPsExec(List<Computer> computers)
+        private static bool CopyPsExec(List<Computer> computers)
         {
+            bool success = false;
             foreach (var pc in onlineComputerList)
             {
 
@@ -83,15 +84,75 @@ namespace PCInfo
                         @"\\fs1\userapps\1909\psexec.exe",
                         $@"\\{pc.PCName}\c$\windows\temp\psexec.exe"
                         );
+                        
                     }
-
+                    success = true;
 
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"There was an error copying PSExec to {pc.PCName}.\n" + ex.ToString());
 
+                    success = false;
                 }
+
+            }
+            if (success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        //use psexec to change the startup type of remote registry. Not very many options to change the startup type if it is disabled. There is spotty WMI, reg edit, or a winfunction
+        //figured I would just use psexec if it's already being used anyway.
+        private bool EnableRemoteRegistry(string psExecLocation, Computer pc)
+        {
+            bool success = false;
+            try
+            {
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.FileName = psExecLocation;
+                p.StartInfo.Arguments = "\\\\" + pc.PCName + " -s sc config remoteregistry start = auto";
+                p.Start();
+                var error = p.StandardError.ReadToEnd();
+                var output = p.StandardOutput;
+
+                if (error.Contains("error code 0"))
+                {
+                    success = true;
+                }
+                else
+                {
+                    MessageBox.Show("Error starting RemoteRegistry on" + pc.PCName + "\n" + "This computer will be skipped");
+                    onlineComputerList.Remove(pc);
+                    OfflineComputer remoteRegistryFailPC = new OfflineComputer(pc.PCName, "Remote Registry Disabled");
+                    offlineComputerList.Add(remoteRegistryFailPC);
+                    success = false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error starting RemoteRegistry on" + pc.PCName + ex + "\n" + "This computer will be skipped");
+                onlineComputerList.Remove(pc);
+                OfflineComputer remoteRegistryFailPC = new OfflineComputer(pc.PCName, "Remote Registry Disabled");
+                offlineComputerList.Add(remoteRegistryFailPC);
+                success = false;
+            }
+            if (success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -307,20 +368,30 @@ namespace PCInfo
 
         private void button_startProcess_Click(object sender, EventArgs e)
         {
+            //todo: if the start button can be clicked again, reset bool values
             bool isAnyRadioButtonChecked = false;
             bool goodToGoRadio = false;
+            bool goodToGoSetupPath = false;
+            bool goodToGoPSExecCopy = false;
+            bool goodToGoRegistry = false;
             bool goodToGoSetup = false;
             //default string
             string installString = "/auto upgrade /quiet";
 
+            string noPcPsexecLocation = "\\c$\\windows\\temp\\psexec.exe";
+            string noPcArgumentList = " -s -i -d " + setupPath + " " + installString;
+
             //do a final online status check
-            foreach (var pc in onlineComputerList)
+            for (var i = 0; i < onlineComputerList.Count; i++)
             {
-                pc.getOnlineStatus();
-                if (pc.OnlineStatus == "Offline")
+                var tempComputer = onlineComputerList.ElementAt<Computer>(i);
+                tempComputer.getOnlineStatus();
+                if (tempComputer.OnlineStatus == "Offline")
                 {
-                    onlineComputerList.Remove(pc);
-                    OfflineComputer offlinePCfinalCheck = new OfflineComputer(pc.PCName,"Offline");
+                    onlineComputerList.Remove(tempComputer);
+                    source.ResetBindings(false);
+                    OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName,"Offline");
+                    MessageBox.Show(tempComputer.PCName.ToUpper() + " has gone offline, removing from list");
                 }
             }
 
@@ -345,29 +416,48 @@ namespace PCInfo
             {
                 if(setupPath.Length > 0)
                 {
-                    goodToGoSetup = true;
+                    goodToGoSetupPath = true;
                 }
                 else
                 {
                     MessageBox.Show("You didn't choose the setup file");
-                    goodToGoSetup = false;
+                    goodToGoSetupPath = false;
+                }
+            }
+            if (goodToGoSetupPath)
+            {
+                if (CopyPsExec(onlineComputerList))
+                {
+                    goodToGoPSExecCopy = true;
+                }
+                else
+                {
+                    goodToGoPSExecCopy = false;
+                }
+
+                if (goodToGoPSExecCopy)
+                {
+
                 }
             }
             //if a rb is checked and setup file is chosen, get the strings together and start the setup
             if (goodToGoSetup)
             {
-                string noPcPsexecLocation = "\\c$\\windows\\temp\\psexec.exe";
-                string noPcArgumentList = " -s -i -d " + setupPath + " " + installString;
-                CopyPsExec(onlineComputerList);
+                bool removeCurrentPC = false;
                 
-                foreach (var pc in onlineComputerList)
-                {
-                    string finalPcPsexeclocation = "\\\\" + pc.PCName + noPcPsexecLocation;
-                    string finalPcArgumentList = "\\\\" + pc.PCName + noPcArgumentList;
-                    // MessageBox.Show("PSExec location: " + finalPcPsexeclocation + "\n" + "Argument List: " + finalPcArgumentList);
-                    EnableRemoteRegistry(finalPcPsexeclocation, pc);
-                    StartSetup(finalPcPsexeclocation,finalPcArgumentList, pc.PCName);
+                
+                
 
+                for(var i = 0; i < onlineComputerList.Count; i++)
+                {
+                    var tempComputer = onlineComputerList.ElementAt<Computer>(i);
+                    
+                    string finalPcPsexeclocation = "\\\\" + tempComputer.PCName + noPcPsexecLocation;
+                    string finalPcArgumentList = "\\\\" + tempComputer.PCName + noPcArgumentList;
+                    
+                    EnableRemoteRegistry(finalPcPsexeclocation, tempComputer);
+                    source.ResetBindings(false);
+                    //StartSetup(finalPcPsexeclocation,finalPcArgumentList, pc.PCName);
                 }
 
                 processTimer.Tick += new EventHandler(GetProcessActive);
@@ -375,29 +465,7 @@ namespace PCInfo
             }
         }
 
-        //use psexec to change the startup type of remote registry. Not very many options to change the startup type if it is disabled. There is spotty WMI, reg edit, or a winfunction
-        //figured I would just use psexec if it's already being used anyway.
-        private void EnableRemoteRegistry(string psExecLocation, Computer pc)
-        {
-            try
-            {
-                Process p = new Process();
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.RedirectStandardError = true;
-                p.StartInfo.RedirectStandardInput = true;
-                p.StartInfo.FileName = psExecLocation;
-                p.StartInfo.Arguments = "\\\\" + pc.PCName+ "-s sc config remoteregistry start= auto";
-                p.Start();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error starting RemoteRegistry on" + pc.PCName + ex + "\n" + "This computer will be skipped");
-                onlineComputerList.Remove(pc);
-                OfflineComputer remoteRegistryFailPC = new OfflineComputer(pc.PCName,"Remote Registry Disabled");
-                offlineComputerList.Add(remoteRegistryFailPC);
-            }
-        }
+        
         //start the setup with a new process. using psexec, start a process on a remote computer. might use "using" eventually
         private void StartSetup(string psExecLocation, string argumentList, string pcName)
         {
