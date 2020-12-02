@@ -22,13 +22,30 @@ namespace PCInfo
 
         private delegate void SafeCallDelegate(string text);
 
+        /// <summary>
+        /// 3 Object lists for the initial computer list, the online list, and the offline list. The initial list is abandoned early on. Online list is vital
+        /// </summary>
         List<Computer> initialComputerList = new List<Computer>();
         public static List<Computer> onlineComputerList = new  List<Computer>();
         public static List<OfflineComputer> offlineComputerList = new List<OfflineComputer>();
 
         public static BindingSource source = new BindingSource();
 
-       // dispatchTimer = new System.Windows.Threading.DispatchTimer();
+        
+        static Timer processTimer = new Timer();
+        
+        static bool exitProcessTimer = false;
+        //static exitProcessTimer = new Timer();
+
+        private static void GetProcessActive(object sender, EventArgs e)
+        {
+            processTimer.Interval = 1000;
+            var test = 1;
+            MessageBox.Show(test.ToString());
+            test++;
+            
+
+        }
 
         private void setDataGrid(string text)
         {
@@ -347,13 +364,40 @@ namespace PCInfo
                 {
                     string finalPcPsexeclocation = "\\\\" + pc.PCName + noPcPsexecLocation;
                     string finalPcArgumentList = "\\\\" + pc.PCName + noPcArgumentList;
-                   // MessageBox.Show("PSExec location: " + finalPcPsexeclocation + "\n" + "Argument List: " + finalPcArgumentList);
+                    // MessageBox.Show("PSExec location: " + finalPcPsexeclocation + "\n" + "Argument List: " + finalPcArgumentList);
+                    EnableRemoteRegistry(finalPcPsexeclocation, pc);
                     StartSetup(finalPcPsexeclocation,finalPcArgumentList, pc.PCName);
 
                 }
+
+                processTimer.Tick += new EventHandler(GetProcessActive);
+                processTimer.Start();
             }
         }
 
+        //use psexec to change the startup type of remote registry. Not very many options to change the startup type if it is disabled. There is spotty WMI, reg edit, or a winfunction
+        //figured I would just use psexec if it's already being used anyway.
+        private void EnableRemoteRegistry(string psExecLocation, Computer pc)
+        {
+            try
+            {
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.FileName = psExecLocation;
+                p.StartInfo.Arguments = "\\\\" + pc.PCName+ "-s sc config remoteregistry start= auto";
+                p.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error starting RemoteRegistry on" + pc.PCName + ex + "\n" + "This computer will be skipped");
+                onlineComputerList.Remove(pc);
+                OfflineComputer remoteRegistryFailPC = new OfflineComputer(pc.PCName,"Remote Registry Disabled");
+                offlineComputerList.Add(remoteRegistryFailPC);
+            }
+        }
         //start the setup with a new process. using psexec, start a process on a remote computer. might use "using" eventually
         private void StartSetup(string psExecLocation, string argumentList, string pcName)
         {
