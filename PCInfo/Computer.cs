@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Management;
 using System.Net.NetworkInformation;
@@ -29,6 +30,7 @@ namespace PCInfo
             LogResult = "N/A";
         }
 
+        //TODO: Add some error handling
         public void getProcessStatus()
         {
             Process[] setupProcess = Process.GetProcessesByName("setup", PCName);
@@ -43,6 +45,38 @@ namespace PCInfo
             {
                 ProcessStatus = "Not Running";
             }
+        }
+
+        public void getTimeStamp()
+        {
+            DateTime currentTime = DateTime.Now;
+            TimeStamp = currentTime.ToString();
+        }
+
+        //this seems like a terrible method and is probably extremely slow on a large log
+        public void getLogStatus()
+        {
+            try
+            {
+                var formattedString = "\\\\" + PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log";
+                var initialRead = File.ReadLines(formattedString);
+
+                var initialReadArray = initialRead.ToArray();
+
+                var lastLine = initialReadArray[initialReadArray.Length - 1];
+
+                string split = "MOUPG  ";
+                var lastLineFormatted = lastLine.Substring(lastLine.IndexOf(split) + split.Length);
+
+                LogResult = lastLineFormatted;
+            }
+            catch
+            {
+                LogResult = "Unable to get log info";
+            }
+
+
+
         }
  
         //gets online status via ping sender. sends name timeout (3s) buffer and a dont fragment option. only accepts success. prevents destination host unreachables from sneaking in

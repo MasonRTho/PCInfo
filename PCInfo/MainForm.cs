@@ -43,11 +43,8 @@ namespace PCInfo
             processTimer.Interval = 1000;
             foreach (var pc in onlineComputerList)
             {
-
+                pc.getProcessStatus();
             }
-
-
-
 
         }
 
