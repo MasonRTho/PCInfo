@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Management;
 using System.Net.NetworkInformation;
@@ -15,8 +16,8 @@ namespace PCInfo
         public string CurrentVersion { get; set; }
         public string FreeSpace { get; set; }
         public string TimeStamp { get; set; }
-        public string LogResult { get; set; }
-        //public 
+        public string LogResult { get; set; }      
+        public string ProcessStatus { get; set; }
 
 
 
@@ -28,6 +29,21 @@ namespace PCInfo
             LogResult = "N/A";
         }
 
+        public void getProcessStatus()
+        {
+            Process[] setupProcess = Process.GetProcessesByName("setup", PCName);
+            Process[] setupHostProcess = Process.GetProcessesByName("setuphost", PCName);
+            Process[] setupPrepProcess = Process.GetProcessesByName("setupprep", PCName);
+
+            if (setupProcess.Length > 0 || setupHostProcess.Length > 0 || setupPrepProcess.Length > 0)
+            {
+                ProcessStatus = "Running";
+            }
+            else
+            {
+                ProcessStatus = "Not Running";
+            }
+        }
  
         //gets online status via ping sender. sends name timeout (3s) buffer and a dont fragment option. only accepts success. prevents destination host unreachables from sneaking in
         public void getOnlineStatus()

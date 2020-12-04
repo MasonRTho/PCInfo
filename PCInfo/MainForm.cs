@@ -43,9 +43,7 @@ namespace PCInfo
             processTimer.Interval = 1000;
             foreach (var pc in onlineComputerList)
             {
-                Process[] setupProcess = Process.GetProcessesByName("setup", pc.PCName);
-                Process[] setupHostProcess = Process.GetProcessesByName("setuphost", pc.PCName);
-                Process[] setupPrepProcess = Process.GetProcessesByName("setupprep", pc.PCName);
+
             }
 
 
@@ -283,6 +281,9 @@ namespace PCInfo
             // Assign data source. Probably not great to have this chilling in the middle of nowhere
             source.DataSource = onlineComputerList;
             datagrid_pcList.DataSource = source;
+            //used to hide properties from the computer class from showing in the DG
+            datagrid_pcList.Columns[6].Visible = false;
+           
 
         }
 
