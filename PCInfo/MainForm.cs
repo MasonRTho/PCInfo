@@ -40,10 +40,12 @@ namespace PCInfo
         }
         private static void GetProcessActive(object sender, EventArgs e)
         {
-            processTimer.Interval = 1000;
+            processTimer.Interval = 3000;
             foreach (var pc in onlineComputerList)
             {
                 pc.getProcessStatus();
+                pc.getLogStatus();
+                source.ResetBindings(false);
             }
 
         }
@@ -121,7 +123,7 @@ namespace PCInfo
                 p.StartInfo.RedirectStandardError = true;
                 p.StartInfo.RedirectStandardInput = true;
                 p.StartInfo.FileName = psExecLocation;
-                p.StartInfo.Arguments = "\\\\" + pc.PCName + " -s sc config remoteregistry start = auto";
+                p.StartInfo.Arguments = "\\\\" + pc.PCName + " -s sc config remoteregistry start=auto";
                 p.Start();
                 var error = p.StandardError.ReadToEnd();
                 var output = p.StandardOutput;
@@ -132,14 +134,12 @@ namespace PCInfo
                 }
                 else
                 {
-                    MessageBox.Show("Error starting RemoteRegistry on" + pc.PCName + "\n" + "This computer will be skipped");
                     success = false;
                 }
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error starting RemoteRegistry on" + pc.PCName + ex + "\n" + "This computer will be skipped");
                 success = false;
             }
             if (success)
@@ -280,7 +280,7 @@ namespace PCInfo
             datagrid_pcList.DataSource = source;
             //used to hide properties from the computer class from showing in the DG
             datagrid_pcList.Columns[6].Visible = false;
-           
+
 
         }
 
@@ -439,6 +439,7 @@ namespace PCInfo
                     onlineComputerList.Remove(tempComputer);
                     source.ResetBindings(false);
                     OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed final offline check");
+                    offlineComputerList.Add(offlinePCfinalCheck);
                     MessageBox.Show(tempComputer.PCName.ToUpper() + " has gone offline, removing from list");
                 }
             }
@@ -484,6 +485,7 @@ namespace PCInfo
                         onlineComputerList.Remove(tempComputer);
                         source.ResetBindings(false);
                         OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed to copy PSExec");
+                        offlineComputerList.Add(offlinePCfinalCheck);
                         MessageBox.Show("Failed to copy PsExec to " + tempComputer.PCName.ToUpper() + " removing from list");
                     }
 
@@ -510,16 +512,21 @@ namespace PCInfo
                             onlineComputerList.Remove(tempComputer);
                             source.ResetBindings(false);
                             OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed to enable remote registry");
+                            offlineComputerList.Add(offlinePCfinalCheck);
                             MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + " removing from list. \n");
                         }
                         source.ResetBindings(false);
+                    }
+                    else
+                    {
+                        goodToGoSetup = true;
                     }
                 }
 
             }
 
             //TODO: finish setup logic
-            if (onlineComputerList.Count > 0)
+            if (goodToGoSetup)
             {
                 for (var i = 0; i < onlineComputerList.Count; i++)
                 {
@@ -529,9 +536,12 @@ namespace PCInfo
 
                     }
                 }
+
+                StartTimers();
             }
 
-            StartTimers();
+
+
 
         }
 

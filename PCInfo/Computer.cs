@@ -74,9 +74,6 @@ namespace PCInfo
             {
                 LogResult = "Unable to get log info";
             }
-
-
-
         }
  
         //gets online status via ping sender. sends name timeout (3s) buffer and a dont fragment option. only accepts success. prevents destination host unreachables from sneaking in
@@ -101,13 +98,11 @@ namespace PCInfo
                 {
                     OnlineStatus = "Offline";
                 }
-                
             }
             catch
             {
                 OnlineStatus = "Offline";
             }
-
         }
 
         // gets current version via WMI. nearly instant. only run on online PCs

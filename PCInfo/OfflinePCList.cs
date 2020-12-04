@@ -19,7 +19,7 @@ namespace PCInfo
             InitializeComponent();
             offlineSource.DataSource = MainForm.offlineComputerList;
             datagridview_offlinePCs.DataSource = offlineSource;
-
+            offlineSource.ResetBindings(false);
             
         }
 
