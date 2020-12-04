@@ -36,15 +36,18 @@ namespace PCInfo
         private void StartTimers()
         {
             processTimer.Tick += new EventHandler(GetProcessActive);
+            processTimer.Interval = 3000;
             processTimer.Start();
         }
         private static void GetProcessActive(object sender, EventArgs e)
         {
-            processTimer.Interval = 3000;
-            foreach (var pc in onlineComputerList)
+
+            for (var i = 0; i < onlineComputerList.Count; i++)
             {
-                pc.getProcessStatus();
-                pc.getLogStatus();
+                var tempPC = onlineComputerList[i];
+                tempPC.getProcessStatus();
+                tempPC.getTimeStamp();
+                tempPC.getLogStatus();
                 source.ResetBindings(false);
             }
 
@@ -177,14 +180,13 @@ namespace PCInfo
                 }
                 else
                 {
-                    MessageBox.Show("Error starting setup on" + pcName + "\n" + "This computer will be skipped");
                     success = false;
                 }
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error starting PsExec on " + pcName + "\n" + ex);
+               // MessageBox.Show("Error starting PsExec on " + pcName + "\n" + ex);
                 success = false;
             }
 
@@ -513,7 +515,7 @@ namespace PCInfo
                             source.ResetBindings(false);
                             OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed to enable remote registry");
                             offlineComputerList.Add(offlinePCfinalCheck);
-                            MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + " removing from list. \n");
+                            MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + ": Removing from list.");
                         }
                         source.ResetBindings(false);
                     }
@@ -522,7 +524,6 @@ namespace PCInfo
                         goodToGoSetup = true;
                     }
                 }
-
             }
 
             //TODO: finish setup logic
@@ -533,16 +534,18 @@ namespace PCInfo
                     var tempComputer = onlineComputerList.ElementAt<Computer>(i);
                     if (StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
                     {
-
+                        StartTimers();
+                    }
+                    else
+                    {
+                        onlineComputerList.Remove(tempComputer);
+                        source.ResetBindings(false);
+                        OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed to start setup (tell Mason)");
+                        offlineComputerList.Add(offlinePCfinalCheck);
+                        MessageBox.Show("Failed to start setup on " + tempComputer.PCName.ToUpper() + ": Removing from list.");
                     }
                 }
-
-                StartTimers();
             }
-
-
-
-
         }
 
         private void button_RemovePC_Click(object sender, EventArgs e)

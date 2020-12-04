@@ -74,6 +74,7 @@ namespace PCInfo
             {
                 LogResult = "Unable to get log info";
             }
+          
         }
  
         //gets online status via ping sender. sends name timeout (3s) buffer and a dont fragment option. only accepts success. prevents destination host unreachables from sneaking in
