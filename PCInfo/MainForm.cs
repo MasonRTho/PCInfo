@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Management;
 using System.Security;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -27,14 +22,14 @@ namespace PCInfo
         /// 3 Object lists for the initial computer list, the online list, and the offline list. The initial list is abandoned early on. Online list is vital
         /// </summary>
         List<Computer> initialComputerList = new List<Computer>();
-        public static List<Computer> onlineComputerList = new  List<Computer>();
+        public static List<Computer> onlineComputerList = new List<Computer>();
         public static List<OfflineComputer> offlineComputerList = new List<OfflineComputer>();
 
         public static BindingSource source = new BindingSource();
 
-        
+
         static Timer processTimer = new Timer();
-        
+
         static bool exitProcessTimer = false;
         //static exitProcessTimer = new Timer();
 
@@ -42,9 +37,9 @@ namespace PCInfo
         {
             processTimer.Interval = 1000;
             var test = 1;
-           // MessageBox.Show(test.ToString());
+            // MessageBox.Show(test.ToString());
             test++;
-            
+
 
         }
 
@@ -55,20 +50,20 @@ namespace PCInfo
 
         public void updateStatusLabelSafe(string pcName)
         {
-            
+
             if (label_statusLabel.InvokeRequired)
             {
                 var d = new SafeCallDelegate(updateStatusLabelSafe);
                 //label_StaticCurrentlyScanning.Invoke(d, new object[] { label_StaticCurrentlyScanning.Show = true });
                 label_statusLabel.Invoke(d, new object[] { pcName });
-                
+
             }
             else
             {
                 label_StaticCurrentlyScanning.Visible = true;
                 label_statusLabel.Text = pcName;
             }
-            
+
         }
 
         //TODO: Test this more
@@ -86,7 +81,7 @@ namespace PCInfo
                         @"\\fs1\userapps\1909\psexec.exe",
                         $@"\\{pc.PCName}\c$\windows\temp\psexec.exe"
                         );
-                        
+
                     }
                     success = true;
 
@@ -153,7 +148,7 @@ namespace PCInfo
         }
 
         //start the setup with a new process. using psexec, start a process on a remote computer. might use "using" eventually
-        
+
         private bool StartSetup(string psExecLocation, string argumentList, string pcName)
         {
             bool success = false;
@@ -169,7 +164,7 @@ namespace PCInfo
                 p.Start();
                 var error = p.StandardError.ReadToEnd();
                 var output = p.StandardOutput;
-                
+
 
                 if (error.Contains("setup.exe started on"))
                 {
@@ -237,35 +232,35 @@ namespace PCInfo
             string rbName = "";
             string installString = "";
 
-                    rbName = rb.Name;
+            rbName = rb.Name;
 
-                    switch (rbName)
-                    {
-                        case "radioButton_fuRestart":
-                            installString = "/auto upgrade /quiet";
-                            break;
-                        case "radioButton_fuNoRestart":
-                            installString = "/auto upgrade /quiet /noreboot";
-                            break;
-                        case "radioButton_fuRestartSkip":
-                            installString = "/auto upgrade /quiet /DynamicUpdate Disable";
-                            break;
-                        case "radioButton_fuNoRestartSkip":
-                            installString = "/auto upgrade /quiet /DynamicUpdate Disable /noreboot";
-                            break;
-                        case "radioButton_osRestart":
-                            installString = "/auto upgrade /quiet /compat ignorewarning";
-                            break;
-                        case "radioButton_osNoRestart":
-                            installString = "/auto upgrade /quiet /compat ignorewarning /noreboot";
-                            break;
-                        case "radioButton_osRestartSkip":
-                            installString = "/auto upgrade /quiet /compat ignorewarning /DynamicUpdate disable";
-                            break;
-                        case "radioButton_osNoRestartSkip":
-                            installString = "/auto upgrade /quiet /compat ignorewarning /DynamicUpdate disable /noreboot";
-                            break;
-                    }
+            switch (rbName)
+            {
+                case "radioButton_fuRestart":
+                    installString = "/auto upgrade /quiet";
+                    break;
+                case "radioButton_fuNoRestart":
+                    installString = "/auto upgrade /quiet /noreboot";
+                    break;
+                case "radioButton_fuRestartSkip":
+                    installString = "/auto upgrade /quiet /DynamicUpdate Disable";
+                    break;
+                case "radioButton_fuNoRestartSkip":
+                    installString = "/auto upgrade /quiet /DynamicUpdate Disable /noreboot";
+                    break;
+                case "radioButton_osRestart":
+                    installString = "/auto upgrade /quiet /compat ignorewarning";
+                    break;
+                case "radioButton_osNoRestart":
+                    installString = "/auto upgrade /quiet /compat ignorewarning /noreboot";
+                    break;
+                case "radioButton_osRestartSkip":
+                    installString = "/auto upgrade /quiet /compat ignorewarning /DynamicUpdate disable";
+                    break;
+                case "radioButton_osNoRestartSkip":
+                    installString = "/auto upgrade /quiet /compat ignorewarning /DynamicUpdate disable /noreboot";
+                    break;
+            }
 
 
             return installString;
@@ -289,7 +284,7 @@ namespace PCInfo
         // button gets text list of computers and puts them in an array of strings then into a list of computer objects. async method to not freeze UI thread
         private async void button_selectList_Click(object sender, EventArgs e)
         {
-           
+
             if (openSelectPCDialog.ShowDialog() == DialogResult.OK)
             {
                 try
@@ -310,11 +305,11 @@ namespace PCInfo
 
             }
 
-            
+
             //online,version, free space check, using await task to update label and not freeze UI thread.
             await Task.Run(() =>
             {
-                
+
                 foreach (var pc in initialComputerList)
                 {
                     updateStatusLabelSafe(pc.PCName);
@@ -322,7 +317,7 @@ namespace PCInfo
                     pc.getOnlineStatus();
                     if (pc.OnlineStatus == "Online")
                     {
-                       
+
                         pc.getFreeSpace();
 
                         // free space check
@@ -344,7 +339,7 @@ namespace PCInfo
                                 offlineComputerList.Add(offlinePCNoSpace);
                             }
                         }
-                        
+
                     }
                     else
                     {
@@ -354,7 +349,7 @@ namespace PCInfo
                         {
                             offlineComputerList.Add(offlinePC);
                         }
-                        
+
                     }
                 }
                 initialComputerList.Clear();
@@ -364,7 +359,7 @@ namespace PCInfo
             label_StaticCurrentlyScanning.Visible = false;
             label_statusLabel.Visible = false;
             source.ResetBindings(false);
-            
+
 
             // temp to test offline computer tracking
             //TODO: fix offline computer tracking
@@ -374,28 +369,28 @@ namespace PCInfo
 
                 foreach (var pc in offlineComputerList)
                 {
-                   offlinePCS = offlinePCS +  pc.PCName.ToString() + "\n";
+                    offlinePCS = offlinePCS + pc.PCName.ToString() + "\n";
                 }
 
                 MessageBox.Show("The following PCs will be skipped: " + offlinePCS);
-               
+
             }
-         
-            
+
+
         }
 
         //removes GB from freespace and converts to decimal for comparison
-        
+
 
         //checks if PC object is already in online computer list based on pc name, used linq
-        
+
 
         private void button_addPC_Click(object sender, EventArgs e)
         {
             var addPCForm = new AddPCForm();
 
             addPCForm.Show();
-            
+
         }
 
         private void button_showOfflinePCs_Click(object sender, EventArgs e)
@@ -435,7 +430,7 @@ namespace PCInfo
                 {
                     onlineComputerList.Remove(tempComputer);
                     source.ResetBindings(false);
-                    OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName,"Offline");
+                    OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Offline");
                     MessageBox.Show(tempComputer.PCName.ToUpper() + " has gone offline, removing from list");
                 }
             }
@@ -448,7 +443,7 @@ namespace PCInfo
                     isAnyRadioButtonChecked = true;
                     goodToGoRadio = true;
                     installString = GetInstallStringFromRadioButton(rb);
-                   // MessageBox.Show(installString);
+                    // MessageBox.Show(installString);
                     break;
                 }
             }
@@ -460,7 +455,7 @@ namespace PCInfo
             //if something is checked, make sure a setup.exe file is selected
             if (goodToGoRadio)
             {
-                if(setupPath.Length > 0)
+                if (setupPath.Length > 0)
                 {
                     goodToGoSetupPath = true;
                 }
@@ -490,34 +485,34 @@ namespace PCInfo
             //TODO: Add a check to see if remote registry is already enabled
             if (onlineComputerList.Count > 0)
             {
-                
-                
 
-                
-                
+
+
+
+
 
                 for (var i = 0; i < onlineComputerList.Count; i++)
-                    {
-                        var tempComputer = onlineComputerList.ElementAt<Computer>(i);
-                        //get start type of remoteregistry
-                        ServiceController sc = new ServiceController("RemoteRegistry", tempComputer.PCName);
-                        var startType = sc.StartType.ToString();
+                {
+                    var tempComputer = onlineComputerList.ElementAt<Computer>(i);
+                    //get start type of remoteregistry
+                    ServiceController sc = new ServiceController("RemoteRegistry", tempComputer.PCName);
+                    var startType = sc.StartType.ToString();
 
-                        finalPcPsexeclocation = "\\\\" + tempComputer.PCName + noPcPsexecLocation;
-                        finalPcArgumentList = "\\\\" + tempComputer.PCName + noPcArgumentList;
-                        if (startType.Contains("Disabled") || startType.Contains("Manual"))
+                    finalPcPsexeclocation = "\\\\" + tempComputer.PCName + noPcPsexecLocation;
+                    finalPcArgumentList = "\\\\" + tempComputer.PCName + noPcArgumentList;
+                    if (startType.Contains("Disabled") || startType.Contains("Manual"))
+                    {
+                        if (!EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
                         {
-                            if (!EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
-                            {
                             onlineComputerList.Remove(tempComputer);
                             source.ResetBindings(false);
                             OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Offline");
                             MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + " removing from list. \n");
-                            }
-                            source.ResetBindings(false);
                         }
+                        source.ResetBindings(false);
                     }
-              
+                }
+
             }
 
             //TODO: finish setup logic
@@ -526,7 +521,7 @@ namespace PCInfo
                 for (var i = 0; i < onlineComputerList.Count; i++)
                 {
                     var tempComputer = onlineComputerList.ElementAt<Computer>(i);
-                    if(StartSetup(finalPcPsexeclocation,finalPcArgumentList, tempComputer.PCName))
+                    if (StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
                     {
 
                     }
@@ -534,14 +529,14 @@ namespace PCInfo
 
 
                 }
-    
+
             }
 
             processTimer.Tick += new EventHandler(GetProcessActive);
             processTimer.Start();
         }
 
-        
+
 
 
         private void button_RemovePC_Click(object sender, EventArgs e)
@@ -553,10 +548,10 @@ namespace PCInfo
             }
             else
             {
-                MessageBox.Show("Nothing to remove","Info",MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Nothing to remove", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            
-            
+
+
         }
 
         private void label_statusLabel_Click(object sender, EventArgs e)
@@ -583,7 +578,7 @@ namespace PCInfo
 
                     if (localPath.Contains("C:") || localPath.Contains("D:"))
                     {
-                        
+
                         setupPath = localPath;
                         label_waiting.Text = "Setup Location: ";
                         label_choseSetupLocation.Text = setupPath;
@@ -596,12 +591,12 @@ namespace PCInfo
                     }
                 }
             }
-            
-            
-            
-            
 
-            
+
+
+
+
+
         }
     }
 }
