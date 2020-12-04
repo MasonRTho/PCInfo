@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.Security;
+using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -152,10 +153,10 @@ namespace PCInfo
         }
 
         //start the setup with a new process. using psexec, start a process on a remote computer. might use "using" eventually
-        //TODO: Add the error handling from previous psexec methods
-        private void StartSetup(string psExecLocation, string argumentList, string pcName)
+        
+        private bool StartSetup(string psExecLocation, string argumentList, string pcName)
         {
-
+            bool success = false;
             try
             {
                 Process p = new Process();
@@ -166,10 +167,34 @@ namespace PCInfo
                 p.StartInfo.FileName = psExecLocation;
                 p.StartInfo.Arguments = argumentList;
                 p.Start();
+                var error = p.StandardError.ReadToEnd();
+                var output = p.StandardOutput;
+                
+
+                if (error.Contains("setup.exe started on"))
+                {
+                    success = true;
+                }
+                else
+                {
+                    MessageBox.Show("Error starting setup on" + pcName + "\n" + "This computer will be skipped");
+                    success = false;
+                }
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error starting PsExec on" + pcName + ex);
+                MessageBox.Show("Error starting PsExec on " + pcName + "\n" + ex);
+                success = false;
+            }
+
+            if (success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
 
         }
@@ -397,6 +422,9 @@ namespace PCInfo
 
             string noPcPsexecLocation = "\\c$\\windows\\temp\\psexec.exe";
             string noPcArgumentList = " -s -i -d " + setupPath + " " + installString;
+            string finalPcPsexeclocation = "";
+            string finalPcArgumentList = "";
+
 
             //do a final online status check
             for (var i = 0; i < onlineComputerList.Count; i++)
@@ -462,38 +490,55 @@ namespace PCInfo
             //TODO: Add a check to see if remote registry is already enabled
             if (onlineComputerList.Count > 0)
             {
+                
+                
+
+                
+                
+
                 for (var i = 0; i < onlineComputerList.Count; i++)
-                {
-                    var tempComputer = onlineComputerList.ElementAt<Computer>(i);
-
-                    string finalPcPsexeclocation = "\\\\" + tempComputer.PCName + noPcPsexecLocation;
-                    string finalPcArgumentList = "\\\\" + tempComputer.PCName + noPcArgumentList;
-
-                    if (!EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
                     {
-                        onlineComputerList.Remove(tempComputer);
-                        source.ResetBindings(false);
-                        OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Offline");
-                        MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + " removing from list. \n");
+                        var tempComputer = onlineComputerList.ElementAt<Computer>(i);
+                        //get start type of remoteregistry
+                        ServiceController sc = new ServiceController("RemoteRegistry", tempComputer.PCName);
+                        var startType = sc.StartType.ToString();
+
+                        finalPcPsexeclocation = "\\\\" + tempComputer.PCName + noPcPsexecLocation;
+                        finalPcArgumentList = "\\\\" + tempComputer.PCName + noPcArgumentList;
+                        if (startType.Contains("Disabled") || startType.Contains("Manual"))
+                        {
+                            if (!EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
+                            {
+                            onlineComputerList.Remove(tempComputer);
+                            source.ResetBindings(false);
+                            OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Offline");
+                            MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + " removing from list. \n");
+                            }
+                            source.ResetBindings(false);
+                        }
                     }
-                    source.ResetBindings(false);
-                    
-                }
+              
             }
 
             //TODO: finish setup logic
             if (onlineComputerList.Count > 0)
             {
-                bool removeCurrentPC = false;
+                for (var i = 0; i < onlineComputerList.Count; i++)
+                {
+                    var tempComputer = onlineComputerList.ElementAt<Computer>(i);
+                    if(StartSetup(finalPcPsexeclocation,finalPcArgumentList, tempComputer.PCName))
+                    {
+
+                    }
 
 
 
-                //StartSetup(finalPcPsexeclocation,finalPcArgumentList, pc.PCName);
-
-
-                processTimer.Tick += new EventHandler(GetProcessActive);
-                processTimer.Start();
+                }
+    
             }
+
+            processTimer.Tick += new EventHandler(GetProcessActive);
+            processTimer.Start();
         }
 
         
