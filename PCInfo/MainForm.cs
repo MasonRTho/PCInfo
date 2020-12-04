@@ -33,6 +33,11 @@ namespace PCInfo
         static bool exitProcessTimer = false;
         //static exitProcessTimer = new Timer();
 
+        //initializing messagebox for confirmation on starting setup
+        const string message = "Are you sure you want to start setup?";
+        const string caption = "Point of no return";
+        DialogResult goodToGoMessageBox;
+
         private void StartTimers()
         {
             processTimer.Tick += new EventHandler(GetProcessActive);
@@ -494,46 +499,62 @@ namespace PCInfo
                 }
 
             }
-            //TODO: Add a check to see if remote registry is already enabled
-            if (onlineComputerList.Count > 0)
+            if(goodToGoRadio && goodToGoSetupPath)
             {
-
-                for (var i = 0; i < onlineComputerList.Count; i++)
+                if (onlineComputerList.Count > 0)
                 {
-                    var tempComputer = onlineComputerList.ElementAt<Computer>(i);
-                    //get start type of remoteregistry
-                    ServiceController sc = new ServiceController("RemoteRegistry", tempComputer.PCName);
-                    var startType = sc.StartType.ToString();
 
-                    finalPcPsexeclocation = "\\\\" + tempComputer.PCName + noPcPsexecLocation;
-                    finalPcArgumentList = "\\\\" + tempComputer.PCName + noPcArgumentList;
-                    if (startType.Contains("Disabled") || startType.Contains("Manual"))
+                    for (var i = 0; i < onlineComputerList.Count; i++)
                     {
-                        if (!EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
+                        var tempComputer = onlineComputerList.ElementAt<Computer>(i);
+                        //get start type of remoteregistry
+                        ServiceController sc = new ServiceController("RemoteRegistry", tempComputer.PCName);
+                        var startType = sc.StartType.ToString();
+
+                        finalPcPsexeclocation = "\\\\" + tempComputer.PCName + noPcPsexecLocation;
+                        finalPcArgumentList = "\\\\" + tempComputer.PCName + noPcArgumentList;
+                        if (startType.Contains("Disabled") || startType.Contains("Manual"))
                         {
-                            onlineComputerList.Remove(tempComputer);
+                            if (!EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
+                            {
+                                onlineComputerList.Remove(tempComputer);
+                                source.ResetBindings(false);
+                                OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed to enable remote registry");
+                                offlineComputerList.Add(offlinePCfinalCheck);
+                                MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + ": Removing from list.");
+                            }
                             source.ResetBindings(false);
-                            OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed to enable remote registry");
-                            offlineComputerList.Add(offlinePCfinalCheck);
-                            MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + ": Removing from list.");
                         }
-                        source.ResetBindings(false);
+                        else
+                        {
+                            goodToGoSetup = true;
+                        }
                     }
-                    else
-                    {
-                        goodToGoSetup = true;
-                    }
+                }
+                else
+                {
+                    MessageBox.Show("There are no computers in the list");
                 }
             }
 
-            //TODO: finish setup logic
+
             if (goodToGoSetup)
+            {
+                goodToGoMessageBox = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            }
+
+           
+            if (goodToGoMessageBox == DialogResult.Yes)
             {
                 for (var i = 0; i < onlineComputerList.Count; i++)
                 {
                     var tempComputer = onlineComputerList.ElementAt<Computer>(i);
                     if (StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
                     {
+                        button_addPC.Enabled = false;
+                        button_clearList.Enabled = false;
+                        button_RemovePC.Enabled = false;
+                        button_selectList.Enabled = false;
                         StartTimers();
                     }
                     else
