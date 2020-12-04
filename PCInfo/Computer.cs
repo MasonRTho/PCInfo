@@ -16,6 +16,7 @@ namespace PCInfo
         public string FreeSpace { get; set; }
         public string TimeStamp { get; set; }
         public string LogResult { get; set; }
+        //public 
 
 
 

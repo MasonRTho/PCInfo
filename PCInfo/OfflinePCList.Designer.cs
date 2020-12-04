@@ -37,7 +37,7 @@
             // 
             this.button_exportList.Location = new System.Drawing.Point(12, 262);
             this.button_exportList.Name = "button_exportList";
-            this.button_exportList.Size = new System.Drawing.Size(251, 36);
+            this.button_exportList.Size = new System.Drawing.Size(383, 36);
             this.button_exportList.TabIndex = 1;
             this.button_exportList.Text = "Export List";
             this.button_exportList.UseVisualStyleBackColor = true;
@@ -49,14 +49,14 @@
             this.datagridview_offlinePCs.Location = new System.Drawing.Point(12, 12);
             this.datagridview_offlinePCs.Name = "datagridview_offlinePCs";
             this.datagridview_offlinePCs.RowHeadersVisible = false;
-            this.datagridview_offlinePCs.Size = new System.Drawing.Size(250, 244);
+            this.datagridview_offlinePCs.Size = new System.Drawing.Size(383, 244);
             this.datagridview_offlinePCs.TabIndex = 2;
             // 
             // OfflinePCList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(274, 308);
+            this.ClientSize = new System.Drawing.Size(407, 312);
             this.Controls.Add(this.datagridview_offlinePCs);
             this.Controls.Add(this.button_exportList);
             this.Name = "OfflinePCList";

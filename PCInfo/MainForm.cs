@@ -33,12 +33,22 @@ namespace PCInfo
         static bool exitProcessTimer = false;
         //static exitProcessTimer = new Timer();
 
+        private void StartTimers()
+        {
+            processTimer.Tick += new EventHandler(GetProcessActive);
+            processTimer.Start();
+        }
         private static void GetProcessActive(object sender, EventArgs e)
         {
             processTimer.Interval = 1000;
-            var test = 1;
-            // MessageBox.Show(test.ToString());
-            test++;
+            foreach (var pc in onlineComputerList)
+            {
+                Process[] setupProcess = Process.GetProcessesByName("setup", pc.PCName);
+                Process[] setupHostProcess = Process.GetProcessesByName("setuphost", pc.PCName);
+                Process[] setupPrepProcess = Process.GetProcessesByName("setupprep", pc.PCName);
+            }
+
+
 
 
         }
@@ -430,7 +440,7 @@ namespace PCInfo
                 {
                     onlineComputerList.Remove(tempComputer);
                     source.ResetBindings(false);
-                    OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Offline");
+                    OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed final offline check");
                     MessageBox.Show(tempComputer.PCName.ToUpper() + " has gone offline, removing from list");
                 }
             }
@@ -475,7 +485,7 @@ namespace PCInfo
                     {
                         onlineComputerList.Remove(tempComputer);
                         source.ResetBindings(false);
-                        OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Offline");
+                        OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed to copy PSExec");
                         MessageBox.Show("Failed to copy PsExec to " + tempComputer.PCName.ToUpper() + " removing from list");
                     }
 
@@ -485,11 +495,6 @@ namespace PCInfo
             //TODO: Add a check to see if remote registry is already enabled
             if (onlineComputerList.Count > 0)
             {
-
-
-
-
-
 
                 for (var i = 0; i < onlineComputerList.Count; i++)
                 {
@@ -506,7 +511,7 @@ namespace PCInfo
                         {
                             onlineComputerList.Remove(tempComputer);
                             source.ResetBindings(false);
-                            OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Offline");
+                            OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed to enable remote registry");
                             MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + " removing from list. \n");
                         }
                         source.ResetBindings(false);
@@ -525,19 +530,12 @@ namespace PCInfo
                     {
 
                     }
-
-
-
                 }
-
             }
 
-            processTimer.Tick += new EventHandler(GetProcessActive);
-            processTimer.Start();
+            StartTimers();
+
         }
-
-
-
 
         private void button_RemovePC_Click(object sender, EventArgs e)
         {
