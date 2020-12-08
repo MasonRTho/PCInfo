@@ -21,7 +21,7 @@ namespace PCInfo
         public string ProcessStatus { get; set; }
         public string UpgradeStatus { get; set; }
 
-
+        
 
 
 
@@ -39,7 +39,7 @@ namespace PCInfo
             Process[] setupProcess = Process.GetProcessesByName("setup", PCName);
             Process[] setupHostProcess = Process.GetProcessesByName("setuphost", PCName);
             Process[] setupPrepProcess = Process.GetProcessesByName("setupprep", PCName);
-
+            
             if (setupProcess.Length > 0 || setupHostProcess.Length > 0 || setupPrepProcess.Length > 0)
             {
                 ProcessStatus = "Running";
@@ -48,6 +48,41 @@ namespace PCInfo
             {
                 ProcessStatus = "Not Running";
             }
+        }
+
+        public string getLogLocation()
+        {
+            string windowsBTLog = "\\\\" + PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log";
+            string windowsLog = "\\\\" + PCName + "\\c$\\windows\\panther\\setupact.log";
+
+            if (File.Exists(windowsBTLog))
+            {
+                return windowsBTLog;
+            }
+            else if (File.Exists(windowsLog))
+            {
+                return windowsLog;
+            }
+            return windowsBTLog; //might need to do something about this
+        }
+        //check if upgrade is hung, using last write time of log file
+        public void getStuckStatus()
+        {
+            
+            var lastWriteTime = File.GetLastWriteTime(getLogLocation());
+            DateTime currentTime = DateTime.Now;
+
+            TimeSpan elapsedTime = currentTime - lastWriteTime;
+
+            if(elapsedTime.TotalMinutes > 15)
+            {
+                this.UpgradeStatus = "Upgrade Stuck, retrying in 15min, then removing";
+            }
+            if(elapsedTime.TotalMinutes > 30)
+            {
+                this.UpgradeStatus = "Upgrade froze";
+            }
+
         }
 
         public void getTimeStamp()
@@ -61,17 +96,16 @@ namespace PCInfo
         {
             try
             {
-                var formattedString = "\\\\" + PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log";
-                var initialRead = File.ReadLines(formattedString);
+                    var initialRead = File.ReadLines(getLogLocation());
 
-                var initialReadArray = initialRead.ToArray();
+                    var initialReadArray = initialRead.ToArray();
 
-                var lastLine = initialReadArray[initialReadArray.Length - 1];
+                    var lastLine = initialReadArray[initialReadArray.Length - 1];
 
-                string split = "MOUPG  ";
-                var lastLineFormatted = lastLine.Substring(lastLine.IndexOf(split) + split.Length);
+                    string split = "MOUPG  ";
+                    var lastLineFormatted = lastLine.Substring(lastLine.IndexOf(split) + split.Length);
 
-                LogResult = lastLineFormatted;
+                    LogResult = lastLineFormatted;
             }
             catch
             {

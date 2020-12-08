@@ -29,6 +29,7 @@ namespace PCInfo
 
 
         static Timer processTimer = new Timer();
+        static Timer stuckCheckTimer = new Timer();
 
         static bool exitProcessTimer = false;
         //static exitProcessTimer = new Timer();
@@ -41,8 +42,12 @@ namespace PCInfo
         private void StartTimers()
         {
             processTimer.Tick += new EventHandler(GetProcessActive);
-            processTimer.Interval = 3000;
+            processTimer.Interval = 3000; // 3 seconds
             processTimer.Start();
+
+            stuckCheckTimer.Tick += new EventHandler(CheckStuckStatus);
+            stuckCheckTimer.Interval = 300000; //5 minutes
+            stuckCheckTimer.Start();
         }
         private static void GetProcessActive(object sender, EventArgs e)
         {
@@ -51,19 +56,38 @@ namespace PCInfo
             {
                 var tempPC = onlineComputerList[i];
                 tempPC.getProcessStatus();
+
                 if(tempPC.ProcessStatus == "Not running")
                 {
                     tempPC.getOnlineStatus();
                     if (tempPC.OnlineStatus == "Offline")
                     {
-                        //tempPC.
+                        tempPC.UpgradeStatus = "Possible Reboot";
                     }
                 }
+
                 tempPC.getTimeStamp();
                 tempPC.getLogStatus();
                 source.ResetBindings(false);
             }
 
+        }
+
+        private static void CheckStuckStatus(object sender, EventArgs e)
+        {
+            for (var i = 0; i < onlineComputerList.Count; i++)
+            {
+                var tempPC = onlineComputerList[i];
+                tempPC.getStuckStatus();
+
+                if (tempPC.UpgradeStatus == "Upgrade froze")
+                {
+                    onlineComputerList.Remove(tempPC);
+                    OfflineComputer upgradeStuck = new OfflineComputer(tempPC.PCName);
+                    upgradeStuck.Reason = "Upgrade hung";
+                    offlineComputerList.Add(upgradeStuck);
+                }
+            }
         }
 
         private void setDataGrid(string text)
