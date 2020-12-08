@@ -80,7 +80,7 @@ namespace PCInfo
             }
             if(elapsedTime.TotalMinutes > 30)
             {
-                this.UpgradeStatus = "Upgrade froze";
+                this.UpgradeStatus = "Upgrade stuck";
             }
 
         }
@@ -94,8 +94,14 @@ namespace PCInfo
         //this seems like a terrible method and is probably extremely slow on a large log
         public void getLogStatus()
         {
-            try
+            if(getLogLocation() == "\\\\" + PCName + "\\c$\\windows\\panther\\setupact.log")
             {
+                LogResult = "Finalizing";
+            }
+            else
+            {
+                try
+                {
                     var initialRead = File.ReadLines(getLogLocation());
 
                     var initialReadArray = initialRead.ToArray();
@@ -106,11 +112,13 @@ namespace PCInfo
                     var lastLineFormatted = lastLine.Substring(lastLine.IndexOf(split) + split.Length);
 
                     LogResult = lastLineFormatted;
+                }
+                catch
+                {
+                    LogResult = "Unable to get log info";
+                }
             }
-            catch
-            {
-                LogResult = "Unable to get log info";
-            }
+
           
         }
  

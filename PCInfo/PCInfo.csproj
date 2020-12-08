@@ -55,6 +55,7 @@
       <DependentUpon>AddPCForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Computer.cs" />
+    <Compile Include="FinishedComputer.cs" />
     <Compile Include="GetUNC.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

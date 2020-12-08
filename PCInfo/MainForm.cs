@@ -24,6 +24,7 @@ namespace PCInfo
         List<Computer> initialComputerList = new List<Computer>();
         public static List<Computer> onlineComputerList = new List<Computer>();
         public static List<OfflineComputer> offlineComputerList = new List<OfflineComputer>();
+        public static List<FinishedComputer> finishedComputerList = new List<FinishedComputer>();
 
         public static BindingSource source = new BindingSource();
 
@@ -60,7 +61,20 @@ namespace PCInfo
                 if(tempPC.ProcessStatus == "Not running")
                 {
                     tempPC.getOnlineStatus();
-                    if (tempPC.OnlineStatus == "Offline")
+                    if (tempPC.OnlineStatus == "Online")
+                    {
+                        if (File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
+                        {
+                            tempPC.UpgradeStatus = "Upgrade Failed";
+                            moveToOfflineList(tempPC,"Upgrade Failed");
+                        }
+                        else
+                        {
+                            tempPC.UpgradeStatus = "Upgrade Finished";
+                            moveToFinishedList(tempPC);
+                        }
+                    }
+                    else
                     {
                         tempPC.UpgradeStatus = "Possible Reboot";
                     }
@@ -73,6 +87,25 @@ namespace PCInfo
 
         }
 
+        //TODO: Add this method everywhere
+        private static void moveToOfflineList(Computer tempPC,string reason)
+        {
+            OfflineComputer upgradeFailed = new OfflineComputer(tempPC.PCName);
+            upgradeFailed.Reason = reason;
+            offlineComputerList.Add(upgradeFailed);
+            onlineComputerList.Remove(tempPC);
+            source.ResetBindings(false);
+        }
+        private static void moveToFinishedList(Computer tempPC)
+        {
+            FinishedComputer upgradeFinished = new FinishedComputer(tempPC.PCName);
+            upgradeFinished.CurrentVersion = tempPC.CurrentVersion;
+            upgradeFinished.FreeSpace = tempPC.FreeSpace;
+            finishedComputerList.Add(upgradeFinished);
+            onlineComputerList.Remove(tempPC);
+            source.ResetBindings(false);
+        }
+
         private static void CheckStuckStatus(object sender, EventArgs e)
         {
             for (var i = 0; i < onlineComputerList.Count; i++)
@@ -82,10 +115,12 @@ namespace PCInfo
 
                 if (tempPC.UpgradeStatus == "Upgrade froze")
                 {
-                    onlineComputerList.Remove(tempPC);
+                    
                     OfflineComputer upgradeStuck = new OfflineComputer(tempPC.PCName);
                     upgradeStuck.Reason = "Upgrade hung";
                     offlineComputerList.Add(upgradeStuck);
+                    onlineComputerList.Remove(tempPC);
+                    source.ResetBindings(false);
                 }
             }
         }
