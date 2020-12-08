@@ -51,6 +51,14 @@ namespace PCInfo
             {
                 var tempPC = onlineComputerList[i];
                 tempPC.getProcessStatus();
+                if(tempPC.ProcessStatus == "Not running")
+                {
+                    tempPC.getOnlineStatus();
+                    if (tempPC.OnlineStatus == "Offline")
+                    {
+                        //tempPC.
+                    }
+                }
                 tempPC.getTimeStamp();
                 tempPC.getLogStatus();
                 source.ResetBindings(false);
@@ -551,10 +559,8 @@ namespace PCInfo
                     var tempComputer = onlineComputerList.ElementAt<Computer>(i);
                     if (StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
                     {
-                        button_addPC.Enabled = false;
-                        button_clearList.Enabled = false;
-                        button_RemovePC.Enabled = false;
-                        button_selectList.Enabled = false;
+                        tempComputer.UpgradeStatus = "In Progress";
+                        ReorganizeWindow();
                         StartTimers();
                     }
                     else
@@ -567,6 +573,23 @@ namespace PCInfo
                     }
                 }
             }
+        }
+
+        private void ReorganizeWindow()
+        {
+            button_addPC.Enabled = false;
+            button_clearList.Enabled = false;
+            button_RemovePC.Enabled = false;
+            button_selectList.Enabled = false;
+            groupbox_settings.Visible = false;
+            label_choseSetupLocation.Visible = false;
+            label_waiting.Visible = false;
+            button_chooseSetup.Visible = false;
+            datagrid_pcList.Width = 800;
+            button_showOfflinePCs.Location = new System.Drawing.Point(685, 36);
+            Size = new System.Drawing.Size(851, 646);
+            datagrid_pcList.Columns[4].Width = 150;
+            datagrid_pcList.Columns[5].Width = 150;
         }
 
         private void button_RemovePC_Click(object sender, EventArgs e)

@@ -19,6 +19,8 @@ namespace PCInfo
         public string TimeStamp { get; set; }
         public string LogResult { get; set; }      
         public string ProcessStatus { get; set; }
+        public string UpgradeStatus { get; set; }
+
 
 
 
@@ -28,6 +30,7 @@ namespace PCInfo
             PCName = name;
             TimeStamp = "N/A";
             LogResult = "N/A";
+            UpgradeStatus = "N/A";
         }
 
         //TODO: Add some error handling
