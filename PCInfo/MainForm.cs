@@ -651,40 +651,42 @@ namespace PCInfo
                         {
                             goodToGoSetup = true;
                         }
+
+                        if (goodToGoSetup)
+                        {
+                            goodToGoMessageBox = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            if (goodToGoMessageBox == DialogResult.Yes)
+                            {
+                                if (StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
+                                {
+                                    tempComputer.UpgradeStatus = "In Progress";
+                                }
+                                else
+                                {
+                                    onlineComputerList.Remove(tempComputer);
+                                    source.ResetBindings(false);
+                                    OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed to start setup (tell Mason)");
+                                    offlineComputerList.Add(offlinePCfinalCheck);
+                                    MessageBox.Show("Failed to start setup on " + tempComputer.PCName.ToUpper() + ": Removing from list.");
+                                }
+                                
+                            }
+                        }
                     }
-                }
-                else
-                {
-                    MessageBox.Show("There are no computers in the list");
-                }
-            }
 
-
-            if (goodToGoSetup)
-            {
-                goodToGoMessageBox = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            }
-
-           
-            if (goodToGoMessageBox == DialogResult.Yes)
-            {
-                for (var i = 0; i < onlineComputerList.Count; i++)
-                {
-                    var tempComputer = onlineComputerList.ElementAt<Computer>(i);
-                    if (StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
+                    if(onlineComputerList.Count > 0)
                     {
-                        tempComputer.UpgradeStatus = "In Progress";
                         ReorganizeWindow();
                         StartTimers();
                     }
                     else
                     {
-                        onlineComputerList.Remove(tempComputer);
-                        source.ResetBindings(false);
-                        OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed to start setup (tell Mason)");
-                        offlineComputerList.Add(offlinePCfinalCheck);
-                        MessageBox.Show("Failed to start setup on " + tempComputer.PCName.ToUpper() + ": Removing from list.");
+                        MessageBox.Show("Setup failed to start on any of the computers");
                     }
+                }
+                else
+                {
+                    MessageBox.Show("There are no computers in the list");
                 }
             }
         }
