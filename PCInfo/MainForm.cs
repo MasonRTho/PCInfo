@@ -415,8 +415,10 @@ namespace PCInfo
             await Task.Run(() =>
             {
 
-                foreach (var pc in initialComputerList)
+                for(var i = 0; i < initialComputerList.Count; i++)
                 {
+                    var pc = initialComputerList[i];
+
                     updateStatusLabelSafe(pc.PCName);
 
                     pc.getOnlineStatus();
@@ -425,25 +427,7 @@ namespace PCInfo
 
                         pc.getFreeSpace();
 
-                        // free space check
-                        if (IsThereEnoughFreeSpace(pc))
-                        {
-                            if (!CheckIfPCExistsinOnlineComputerList(pc))
-                            {
-                                pc.getCurrentVersion();
-                                onlineComputerList.Add(pc);
-                            };
-
-                        }
-                        else
-                        {
-                            OfflineComputer offlinePCNoSpace = new OfflineComputer(pc.PCName);
-                            if (!offlineComputerList.Contains(offlinePCNoSpace))
-                            {
-                                offlinePCNoSpace.Reason = "Less than 20GB avail";
-                                offlineComputerList.Add(offlinePCNoSpace);
-                            }
-                        }
+                        CheckIfPCHasMoreThan20Gb(pc);
 
                     }
                     else
@@ -479,6 +463,41 @@ namespace PCInfo
 
                 MessageBox.Show("The following PCs will be skipped: " + offlinePCS);
 
+            }
+        }
+
+        private static void CheckIfPCHasMoreThan20Gb(Computer pc)
+        {
+            if (pc.FreeSpace == "WMI Failed")
+            {
+                OfflineComputer offlinePCWmiFail = new OfflineComputer(pc.PCName);
+                if (!offlineComputerList.Contains(offlinePCWmiFail))
+                {
+                    offlinePCWmiFail.Reason = "WMI Failed, unable to get disk space";
+                    offlineComputerList.Add(offlinePCWmiFail);
+                }
+            }
+            else
+            {
+                // free space check
+                if (IsThereEnoughFreeSpace(pc))
+                {
+                    if (!CheckIfPCExistsinOnlineComputerList(pc))
+                    {
+                        pc.getCurrentVersion();
+                        onlineComputerList.Add(pc);
+                    };
+
+                }
+                else
+                {
+                    OfflineComputer offlinePCNoSpace = new OfflineComputer(pc.PCName);
+                    if (!offlineComputerList.Contains(offlinePCNoSpace))
+                    {
+                        offlinePCNoSpace.Reason = "Less than 20GB avail";
+                        offlineComputerList.Add(offlinePCNoSpace);
+                    }
+                }
             }
         }
 

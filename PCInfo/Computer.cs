@@ -252,16 +252,18 @@ namespace PCInfo
                     tempSpace = (m["freespace"]).ToString();
 
                 }
+
+                decimal tempSpaceCast = Int64.Parse(tempSpace);
+                decimal freespace = tempSpaceCast / 1073741824;
+                var freespaceRounded = Math.Round(freespace, 2);
+                this.FreeSpace = freespaceRounded.ToString() + "GB";
             }
             catch
             {
                 this.FreeSpace = "WMI Failed";
             }
 
-            decimal tempSpaceCast = Int64.Parse(tempSpace);
-            decimal freespace = tempSpaceCast / 1073741824;
-            var freespaceRounded = Math.Round(freespace, 2);
-            this.FreeSpace = freespaceRounded.ToString() + "GB";
+         
 
         }
 
