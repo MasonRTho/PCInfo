@@ -310,6 +310,7 @@ namespace PCInfo
             }
         }
 
+        //check references on this, at least 1 redundant spot
         public static bool CheckIfPCExistsinOnlineComputerList(Computer pc)
         {
 
@@ -409,8 +410,18 @@ namespace PCInfo
                 }
 
             }
-
-
+            //Remove PCs from initial list if they already exist in the other 2. used to prevent duplicates
+            for (var i = 0; i < onlineComputerList.Count; i++)
+            {
+                var tempPC = onlineComputerList[i];
+                initialComputerList.RemoveAll(a => a.PCName == tempPC.PCName);
+            }
+            for (var i = 0; i < offlineComputerList.Count; i++)
+            {
+                var tempPC = offlineComputerList[i];
+                initialComputerList.RemoveAll(a => a.PCName == tempPC.PCName);
+            }
+                
             //online,version, free space check, using await task to update label and not freeze UI thread.
             await Task.Run(() =>
             {
@@ -420,7 +431,7 @@ namespace PCInfo
                     var pc = initialComputerList[i];
 
                     updateStatusLabelSafe(pc.PCName);
-
+                   
                     pc.getOnlineStatus();
                     if (pc.OnlineStatus == "Online")
                     {
@@ -461,7 +472,7 @@ namespace PCInfo
                     offlinePCS = offlinePCS + pc.PCName.ToString() + "\n";
                 }
 
-                MessageBox.Show("The following PCs will be skipped: " + offlinePCS);
+                MessageBox.Show("The following PCs will be skipped: \n" + offlinePCS.ToUpper());
 
             }
         }
