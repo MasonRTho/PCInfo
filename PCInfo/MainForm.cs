@@ -175,30 +175,27 @@ namespace PCInfo
         private static bool CopyPsExec(Computer computer)
         {
             bool success = false;
-            foreach (var pc in onlineComputerList)
+            try
             {
-
-                try
+                if (!System.IO.File.Exists($@"\\{computer.PCName}\c$\windows\temp\psexec.exe"))
                 {
-                    if (!System.IO.File.Exists($@"\\{pc.PCName}\c$\windows\temp\psexec.exe"))
-                    {
-                        File.Copy(
-                        @"\\fs1\userapps\1909\psexec.exe",
-                        $@"\\{pc.PCName}\c$\windows\temp\psexec.exe"
-                        );
-
-                    }
-                    success = true;
+                    File.Copy(
+                    @"\\fs1\userapps\1909\psexec.exe",
+                    $@"\\{computer.PCName}\c$\windows\temp\psexec.exe"
+                    );
 
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"There was an error copying PSExec to {pc.PCName}.\n" + ex.ToString() + "\n" + "The PC will be removed");
-
-                    success = false;
-                }
+                success = true;
 
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"There was an error copying PSExec to {computer.PCName}.\n" + ex.ToString() + "\n" + "The PC will be removed");
+
+                success = false;
+            }
+
+            
             if (success)
             {
                 return true;
