@@ -51,6 +51,7 @@
             this.button_finishedPcsExport.TabIndex = 1;
             this.button_finishedPcsExport.Text = "Export";
             this.button_finishedPcsExport.UseVisualStyleBackColor = true;
+            this.button_finishedPcsExport.Click += new System.EventHandler(this.button_finishedPcsExport_Click);
             // 
             // FinishedPCs
             // 

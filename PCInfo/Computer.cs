@@ -104,7 +104,9 @@ namespace PCInfo
                 {
                     var initialRead = File.ReadLines(getLogLocation());
 
-                    var initialReadArray = initialRead.ToArray();
+                    IEnumerable<string> selectLines = initialRead.Where(line => line.Contains("Overall progress:"));
+
+                    var initialReadArray = selectLines.ToArray();
 
                     var lastLine = initialReadArray[initialReadArray.Length - 1];
 

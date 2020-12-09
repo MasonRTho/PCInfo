@@ -471,8 +471,6 @@ namespace PCInfo
                 MessageBox.Show("The following PCs will be skipped: " + offlinePCS);
 
             }
-
-
         }
 
         //removes GB from freespace and converts to decimal for comparison
@@ -719,18 +717,20 @@ namespace PCInfo
                     }
                 }
             }
-
-
-
-
-
-
         }
 
         private void button_showFinishedPCs_Click(object sender, EventArgs e)
         {
             var finishedPCForm = new FinishedPCs();
             finishedPCForm.Show();
+        }
+
+        private void Mainform_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(MessageBox.Show("Are you sure you want to exit? \nAny updates will still continue","Exit",MessageBoxButtons.YesNo,MessageBoxIcon.Warning) == DialogResult.No)
+            {
+                e.Cancel = true;
+            }
         }
     }
 }

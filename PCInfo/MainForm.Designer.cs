@@ -357,6 +357,7 @@
             this.Controls.Add(this.datagrid_pcList);
             this.Name = "MainForm";
             this.Text = "Feature Upgrade";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Mainform_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.datagrid_pcList)).EndInit();
             this.groupbox_settings.ResumeLayout(false);
             this.groupbox_settings.PerformLayout();
