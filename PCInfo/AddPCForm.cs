@@ -51,21 +51,9 @@ namespace PCInfo
             {
                 if (!MainForm.CheckIfPCExistsinOnlineComputerList(textboxPC))
                 {
-                    textboxPC.getCurrentVersion();
-                    textboxPC.getFreeSpace();
-                    if (MainForm.IsThereEnoughFreeSpace(textboxPC))
-                    {
-                        MainForm.onlineComputerList.Add(textboxPC);
-                        MainForm.source.ResetBindings(false);
-                    }
-                    else
-                    {
-                        OfflineComputer noSpacePC = new OfflineComputer(textboxPC.PCName);
-                        noSpacePC.Reason = "Less than 20GB avail";
-                        MainForm.offlineComputerList.Add(noSpacePC);
-                        MessageBox.Show(noSpacePC.PCName.ToString() + " does not have enough disk space");
-                    }
                     
+                    textboxPC.getFreeSpace();
+                    MainForm.CheckIfPCHasMoreThan20GbAndPassesWMI(textboxPC);
                 }
                 else
                 {

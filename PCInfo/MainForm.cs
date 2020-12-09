@@ -427,12 +427,12 @@ namespace PCInfo
 
                         pc.getFreeSpace();
 
-                        CheckIfPCHasMoreThan20Gb(pc);
+                        CheckIfPCHasMoreThan20GbAndPassesWMI(pc);
 
                     }
                     else
                     {
-                        OfflineComputer offlinePC = new OfflineComputer(pc.PCName);
+                        OfflineComputer offlinePC = new OfflineComputer(pc.PCName,"Offline");
 
                         if (!offlineComputerList.Contains(offlinePC))
                         {
@@ -466,7 +466,7 @@ namespace PCInfo
             }
         }
 
-        private static void CheckIfPCHasMoreThan20Gb(Computer pc)
+        public static void CheckIfPCHasMoreThan20GbAndPassesWMI(Computer pc)
         {
             if (pc.FreeSpace == "WMI Failed")
             {
