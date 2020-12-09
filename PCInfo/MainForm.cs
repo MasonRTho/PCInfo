@@ -12,6 +12,8 @@ namespace PCInfo
 {
     public partial class MainForm : Form
     {
+
+        
         // used later for getting the path of the setup.exe file
         public static string filePath = "";
         public string setupPath = "";
@@ -42,7 +44,7 @@ namespace PCInfo
 
         private void StartTimers()
         {
-            processTimer.Tick += new EventHandler(GetProcessActive);
+            processTimer.Tick += new EventHandler(MainProgressChecker);
             processTimer.Interval = 3000; // 3 seconds
             processTimer.Start();
 
@@ -50,40 +52,52 @@ namespace PCInfo
             stuckCheckTimer.Interval = 300000; //5 minutes
             stuckCheckTimer.Start();
         }
-        private static void GetProcessActive(object sender, EventArgs e)
+        //TODO: More error handling
+        private static void MainProgressChecker(object sender, EventArgs e)
         {
-
-            for (var i = 0; i < onlineComputerList.Count; i++)
+            if(onlineComputerList.Count > 0)
             {
-                var tempPC = onlineComputerList[i];
-                tempPC.getProcessStatus();
-
-                if(tempPC.ProcessStatus == "Not running")
+                for (var i = 0; i < onlineComputerList.Count; i++)
                 {
-                    tempPC.getOnlineStatus();
-                    if (tempPC.OnlineStatus == "Online")
+                    var tempPC = onlineComputerList[i];
+                    tempPC.getProcessStatus();
+
+                    if (tempPC.ProcessStatus == "Not Running")
                     {
-                        if (File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
+                        tempPC.getOnlineStatus();
+                        if (tempPC.OnlineStatus == "Online")
                         {
-                            tempPC.UpgradeStatus = "Upgrade Failed";
-                            moveToOfflineList(tempPC,"Upgrade Failed");
+                            if (File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
+                            {
+                                tempPC.UpgradeStatus = "Upgrade Failed";
+                                moveToOfflineList(tempPC, "Upgrade Failed");
+                            }
+                            else if (!File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
+                            {
+                                tempPC.UpgradeStatus = "Upgrade Finished";
+                                moveToFinishedList(tempPC);
+                            }
+
                         }
                         else
                         {
-                            tempPC.UpgradeStatus = "Upgrade Finished";
-                            moveToFinishedList(tempPC);
+                            tempPC.UpgradeStatus = "Possible Reboot";
                         }
                     }
-                    else
-                    {
-                        tempPC.UpgradeStatus = "Possible Reboot";
-                    }
-                }
 
-                tempPC.getTimeStamp();
-                tempPC.getLogStatus();
-                source.ResetBindings(false);
+                    tempPC.getTimeStamp();
+                    tempPC.getLogStatus();
+                    source.ResetBindings(false);
+                }
             }
+            else
+            {
+                processTimer.Stop();
+                stuckCheckTimer.Stop();
+                source.ResetBindings(false);
+                MessageBox.Show("All Upgrades Finished. \n Be sure to check the \"Finished\" and \"Skipped\" lists above", "Upgrades finished", MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+            }
+           
 
         }
 
@@ -646,7 +660,9 @@ namespace PCInfo
             button_chooseSetup.Visible = false;
             datagrid_pcList.Width = 800;
             button_showOfflinePCs.Location = new System.Drawing.Point(685, 36);
-            Size = new System.Drawing.Size(851, 646);
+            button_showFinishedPCs.Location = new System.Drawing.Point(552, 36);
+            button_showFinishedPCs.Visible = true;
+            //Size = new System.Drawing.Size(851, 646);
             datagrid_pcList.Columns[4].Width = 150;
             datagrid_pcList.Columns[5].Width = 150;
         }
@@ -709,6 +725,12 @@ namespace PCInfo
 
 
 
+        }
+
+        private void button_showFinishedPCs_Click(object sender, EventArgs e)
+        {
+            var finishedPCForm = new FinishedPCs();
+            finishedPCForm.Show();
         }
     }
 }

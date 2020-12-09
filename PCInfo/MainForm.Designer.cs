@@ -55,6 +55,7 @@
             this.button_chooseSetup = new System.Windows.Forms.Button();
             this.label_waiting = new System.Windows.Forms.Label();
             this.label_choseSetupLocation = new System.Windows.Forms.Label();
+            this.button_showFinishedPCs = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.datagrid_pcList)).BeginInit();
             this.groupbox_settings.SuspendLayout();
             this.SuspendLayout();
@@ -325,11 +326,23 @@
             this.label_choseSetupLocation.Size = new System.Drawing.Size(247, 25);
             this.label_choseSetupLocation.TabIndex = 20;
             // 
+            // button_showFinishedPCs
+            // 
+            this.button_showFinishedPCs.Location = new System.Drawing.Point(357, 33);
+            this.button_showFinishedPCs.Name = "button_showFinishedPCs";
+            this.button_showFinishedPCs.Size = new System.Drawing.Size(127, 37);
+            this.button_showFinishedPCs.TabIndex = 21;
+            this.button_showFinishedPCs.Text = "Show Finished PCs";
+            this.button_showFinishedPCs.UseVisualStyleBackColor = true;
+            this.button_showFinishedPCs.Visible = false;
+            this.button_showFinishedPCs.Click += new System.EventHandler(this.button_showFinishedPCs_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1030, 607);
+            this.Controls.Add(this.button_showFinishedPCs);
             this.Controls.Add(this.label_choseSetupLocation);
             this.Controls.Add(this.label_waiting);
             this.Controls.Add(this.button_chooseSetup);
@@ -378,6 +391,7 @@
         private System.Windows.Forms.Button button_chooseSetup;
         private System.Windows.Forms.Label label_waiting;
         private System.Windows.Forms.Label label_choseSetupLocation;
+        private System.Windows.Forms.Button button_showFinishedPCs;
     }
 }
 

@@ -56,6 +56,12 @@
     </Compile>
     <Compile Include="Computer.cs" />
     <Compile Include="FinishedComputer.cs" />
+    <Compile Include="FinishedPCs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FinishedPCs.Designer.cs">
+      <DependentUpon>FinishedPCs.cs</DependentUpon>
+    </Compile>
     <Compile Include="GetUNC.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -74,6 +80,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AddPCForm.resx">
       <DependentUpon>AddPCForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FinishedPCs.resx">
+      <DependentUpon>FinishedPCs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
