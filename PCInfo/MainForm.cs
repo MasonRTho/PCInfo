@@ -390,6 +390,10 @@ namespace PCInfo
         // button gets text list of computers and puts them in an array of strings then into a list of computer objects. async method to not freeze UI thread
         private async void button_selectList_Click(object sender, EventArgs e)
         {
+            openSelectPCDialog.InitialDirectory = "c:\\";
+            openSelectPCDialog.Filter = "Text files (*.txt)|*.txt";
+            openSelectPCDialog.FilterIndex = 1;
+            openSelectPCDialog.RestoreDirectory = true;
 
             if (openSelectPCDialog.ShowDialog() == DialogResult.OK)
             {
@@ -472,7 +476,7 @@ namespace PCInfo
                     offlinePCS = offlinePCS + pc.PCName.ToString() + "\n";
                 }
 
-                MessageBox.Show("The following PCs will be skipped: \n" + offlinePCS.ToUpper());
+                MessageBox.Show("The following PCs will be skipped: \n" + offlinePCS);
 
             }
         }

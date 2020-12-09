@@ -39,7 +39,7 @@
             this.button_exportList.Name = "button_exportList";
             this.button_exportList.Size = new System.Drawing.Size(154, 38);
             this.button_exportList.TabIndex = 1;
-            this.button_exportList.Text = "Export List";
+            this.button_exportList.Text = "Export to Excel";
             this.button_exportList.UseVisualStyleBackColor = true;
             this.button_exportList.Click += new System.EventHandler(this.button_exportList_Click);
             // 

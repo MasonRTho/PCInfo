@@ -49,7 +49,7 @@
             this.button_finishedPcsExport.Name = "button_finishedPcsExport";
             this.button_finishedPcsExport.Size = new System.Drawing.Size(163, 41);
             this.button_finishedPcsExport.TabIndex = 1;
-            this.button_finishedPcsExport.Text = "Export";
+            this.button_finishedPcsExport.Text = "Export to Excel";
             this.button_finishedPcsExport.UseVisualStyleBackColor = true;
             this.button_finishedPcsExport.Click += new System.EventHandler(this.button_finishedPcsExport_Click);
             // 
