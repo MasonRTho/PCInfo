@@ -147,9 +147,9 @@
             // 
             // button_showOfflinePCs
             // 
-            this.button_showOfflinePCs.Location = new System.Drawing.Point(490, 33);
+            this.button_showOfflinePCs.Location = new System.Drawing.Point(510, 33);
             this.button_showOfflinePCs.Name = "button_showOfflinePCs";
-            this.button_showOfflinePCs.Size = new System.Drawing.Size(127, 37);
+            this.button_showOfflinePCs.Size = new System.Drawing.Size(107, 36);
             this.button_showOfflinePCs.TabIndex = 6;
             this.button_showOfflinePCs.Text = "Show Skipped PCs";
             this.button_showOfflinePCs.UseVisualStyleBackColor = true;
@@ -328,9 +328,9 @@
             // 
             // button_showFinishedPCs
             // 
-            this.button_showFinishedPCs.Location = new System.Drawing.Point(357, 33);
+            this.button_showFinishedPCs.Location = new System.Drawing.Point(387, 33);
             this.button_showFinishedPCs.Name = "button_showFinishedPCs";
-            this.button_showFinishedPCs.Size = new System.Drawing.Size(127, 37);
+            this.button_showFinishedPCs.Size = new System.Drawing.Size(107, 36);
             this.button_showFinishedPCs.TabIndex = 21;
             this.button_showFinishedPCs.Text = "Show Finished PCs";
             this.button_showFinishedPCs.UseVisualStyleBackColor = true;

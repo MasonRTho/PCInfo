@@ -65,19 +65,28 @@ namespace PCInfo
                     if (tempPC.ProcessStatus == "Not Running")
                     {
                         tempPC.getOnlineStatus();
+
                         if (tempPC.OnlineStatus == "Online")
                         {
-                            if (File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
-                            {
-                                tempPC.UpgradeStatus = "Upgrade Failed";
-                                moveToOfflineList(tempPC, "Upgrade Failed");
-                            }
-                            else if (!File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
-                            {
-                                tempPC.UpgradeStatus = "Upgrade Finished";
-                                moveToFinishedList(tempPC);
-                            }
+                            tempPC.getProcessStatus();
 
+                            if(tempPC.ProcessStatus == "Not Running")
+                            {
+                                if (File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
+                                {
+                                    tempPC.UpgradeStatus = "Upgrade Failed";
+                                    moveToOfflineList(tempPC, "Upgrade Failed");
+                                }
+                                else if (!File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
+                                {
+                                    tempPC.UpgradeStatus = "Upgrade Finished";
+                                    moveToFinishedList(tempPC);
+                                }
+                            }
+                            else
+                            {
+                                tempPC.UpgradeStatus = "In Progress";
+                            }
                         }
                         else
                         {
@@ -657,10 +666,12 @@ namespace PCInfo
             label_waiting.Visible = false;
             button_chooseSetup.Visible = false;
             datagrid_pcList.Width = 800;
-            button_showOfflinePCs.Location = new System.Drawing.Point(685, 36);
-            button_showFinishedPCs.Location = new System.Drawing.Point(552, 36);
+            button_showOfflinePCs.Location = new System.Drawing.Point(705, 33);
+            button_showFinishedPCs.Location = new System.Drawing.Point(582, 33);
+            button_RemovePC.Location = new System.Drawing.Point(581, 486);
+            button_clearList.Location = new System.Drawing.Point(705, 486);
             button_showFinishedPCs.Visible = true;
-            //Size = new System.Drawing.Size(851, 646);
+            Size = new System.Drawing.Size(836, 581);
             datagrid_pcList.Columns[4].Width = 150;
             datagrid_pcList.Columns[5].Width = 150;
         }
@@ -727,7 +738,7 @@ namespace PCInfo
 
         private void Mainform_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(MessageBox.Show("Are you sure you want to exit? \nAny updates will still continue","Exit",MessageBoxButtons.YesNo,MessageBoxIcon.Warning) == DialogResult.No)
+            if(MessageBox.Show("Are you sure you want to exit? \nAny active updates will still continue","Exit",MessageBoxButtons.YesNo,MessageBoxIcon.Warning) == DialogResult.No)
             {
                 e.Cancel = true;
             }

@@ -92,5 +92,13 @@ namespace PCInfo
         {
             throw new NotImplementedException();
         }
+
+        private void textbox_pcName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+               button_addPC_Click(this, new EventArgs());
+            }
+        }
     }
 }

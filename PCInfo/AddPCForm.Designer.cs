@@ -59,6 +59,7 @@
             this.button_addPC.Text = "Add PC";
             this.button_addPC.UseVisualStyleBackColor = true;
             this.button_addPC.Click += new System.EventHandler(this.button_addPC_Click);
+            this.button_addPC.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textbox_pcName_KeyDown);
             // 
             // AddPCForm
             // 
@@ -68,8 +69,10 @@
             this.Controls.Add(this.button_addPC);
             this.Controls.Add(this.textbox_pcName);
             this.Controls.Add(this.label_pcName);
+            this.KeyPreview = true;
             this.Name = "AddPCForm";
             this.Text = "Add a new PC";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textbox_pcName_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
