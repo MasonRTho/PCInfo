@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Security;
 using System.ServiceProcess;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,6 +20,7 @@ namespace PCInfo
         public string setupPath = "";
 
         private delegate void SafeCallDelegate(string text);
+        private delegate void SafeCallDelegateDataGrid();
 
         /// <summary>
         /// 3 Object lists for the initial computer list, the online list, and the offline list. The initial list is abandoned early on. Online list is vital
@@ -31,8 +33,8 @@ namespace PCInfo
         public static BindingSource source = new BindingSource();
 
 
-        static Timer processTimer = new Timer();
-        static Timer stuckCheckTimer = new Timer();
+        //static Timer processTimer = new Timer();
+        //static Timer stuckCheckTimer = new Timer();
 
         static bool exitProcessTimer = false;
         //static exitProcessTimer = new Timer();
@@ -42,20 +44,33 @@ namespace PCInfo
         const string caption = "Point of no return";
         DialogResult goodToGoMessageBox;
 
-        bool goodToGoMessageBoxShown;
-        private void StartTimers()
-        {
-            processTimer.Tick += new EventHandler(MainProgressChecker);
-            processTimer.Interval = 15000; // 15 seconds
-            processTimer.Start();
+        static bool stopChecks;
+        //private void StartTimers()
+        //{
+        //    processTimer.Tick += new EventHandler(MainProgressChecker);
+        //    processTimer.Interval = 15000; // 15 seconds
+        //    processTimer.Start();
 
-            stuckCheckTimer.Tick += new EventHandler(CheckStuckStatus);
-            stuckCheckTimer.Interval = 300000; //5 minutes
-            stuckCheckTimer.Start();
+        //    stuckCheckTimer.Tick += new EventHandler(CheckStuckStatus);
+        //    stuckCheckTimer.Interval = 300000; //5 minutes
+        //    stuckCheckTimer.Start();
+        //}
+
+        static async void StartStatusChecks()
+        {
+            while (!stopChecks)
+            {
+                await Task.Run(MainProgressChecker);
+                await Task.Run(CheckStuckStatus);
+                source.ResetBindings(false);
+            }
+
+
         }
         //TODO: More error handling
-        private static void MainProgressChecker(object sender, EventArgs e)
+        private static void MainProgressChecker()
         {
+            Thread.Sleep(5000);
             if (onlineComputerList.Count > 0)
             {
                 for (var i = 0; i < onlineComputerList.Count; i++)
@@ -96,20 +111,37 @@ namespace PCInfo
 
                     tempPC.getTimeStamp();
                     tempPC.getLogStatus();
-                    source.ResetBindings(false);
+                    
                 }
             }
             else
             {
-                processTimer.Stop();
-                stuckCheckTimer.Stop();
+                stopChecks = true;
+                //processTimer.Stop();
+                //stuckCheckTimer.Stop();
                 source.ResetBindings(false);
                 MessageBox.Show("All Upgrades Finished. \n Be sure to check the \"Finished\" and \"Skipped\" lists above", "Upgrades finished", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
 
         }
+        public static void updateDataGridSafeCall()
+        {
 
+            if (datagrid_pcList.InvokeRequired)
+            {
+                var d = new SafeCallDelegateDataGrid(updateDataGridSafeCall);
+                //label_StaticCurrentlyScanning.Invoke(d, new object[] { label_StaticCurrentlyScanning.Show = true });
+                label_statusLabel.Invoke(d, new object[] { pcName });
+
+            }
+            else
+            {
+                label_StaticCurrentlyScanning.Visible = true;
+                label_statusLabel.Text = pcName;
+            }
+
+        }
         //TODO: Add this method everywhere
         private static void moveToOfflineList(Computer tempPC, string reason)
         {
@@ -117,6 +149,7 @@ namespace PCInfo
             upgradeFailed.Reason = reason;
             offlineComputerList.Add(upgradeFailed);
             onlineComputerList.Remove(tempPC);
+            updateDataGridSafeCall();
             source.ResetBindings(false);
         }
         private static void moveToFinishedList(Computer tempPC)
@@ -126,11 +159,13 @@ namespace PCInfo
             upgradeFinished.FreeSpace = tempPC.FreeSpace;
             finishedComputerList.Add(upgradeFinished);
             onlineComputerList.Remove(tempPC);
+            updateDataGridSafeCall();
             source.ResetBindings(false);
         }
 
-        private static void CheckStuckStatus(object sender, EventArgs e)
+        private static void CheckStuckStatus()
         {
+            Thread.Sleep(5000);
             for (var i = 0; i < onlineComputerList.Count; i++)
             {
                 var tempPC = onlineComputerList[i];
@@ -663,7 +698,8 @@ namespace PCInfo
                         if (onlineComputerList.Count > 0)
                         {
                             ReorganizeWindow();
-                            StartTimers();
+                            StartStatusChecks();
+                            //StartTimers();
                         }
                         else
                         {
