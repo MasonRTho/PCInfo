@@ -42,10 +42,11 @@ namespace PCInfo
         const string caption = "Point of no return";
         DialogResult goodToGoMessageBox;
 
+        bool goodToGoMessageBoxShown;
         private void StartTimers()
         {
             processTimer.Tick += new EventHandler(MainProgressChecker);
-            processTimer.Interval = 3000; // 3 seconds
+            processTimer.Interval = 15000; // 15 seconds
             processTimer.Start();
 
             stuckCheckTimer.Tick += new EventHandler(CheckStuckStatus);
@@ -556,16 +557,14 @@ namespace PCInfo
 
 
             //do a final online status check
+            //TODO: Move this somewhere else
             for (var i = 0; i < onlineComputerList.Count; i++)
             {
                 var tempComputer = onlineComputerList.ElementAt<Computer>(i);
                 tempComputer.getOnlineStatus();
                 if (tempComputer.OnlineStatus == "Offline")
                 {
-                    onlineComputerList.Remove(tempComputer);
-                    source.ResetBindings(false);
-                    OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed final offline check");
-                    offlineComputerList.Add(offlinePCfinalCheck);
+                    moveToOfflineList(tempComputer, "Failed final offline check");
                     MessageBox.Show(tempComputer.PCName.ToUpper() + " has gone offline, removing from list");
                 }
             }
@@ -608,11 +607,8 @@ namespace PCInfo
                     var tempComputer = onlineComputerList.ElementAt<Computer>(i);
                     if (!CopyPsExec(tempComputer))
                     {
-                        onlineComputerList.Remove(tempComputer);
-                        source.ResetBindings(false);
-                        OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed to copy PSExec");
-                        offlineComputerList.Add(offlinePCfinalCheck);
-                        MessageBox.Show("Failed to copy PsExec to " + tempComputer.PCName.ToUpper() + " removing from list");
+                        moveToOfflineList(tempComputer, "Failed to copy PSExec");
+                        MessageBox.Show("Failed to copy PsExec to " + tempComputer.PCName.ToUpper() + ". Removing from list.");
                     }
 
                 }
@@ -622,7 +618,7 @@ namespace PCInfo
             {
                 if (onlineComputerList.Count > 0)
                 {
-
+                    //TODO: iterate backwards through for loop
                     for (var i = 0; i < onlineComputerList.Count; i++)
                     {
                         var tempComputer = onlineComputerList.ElementAt<Computer>(i);
@@ -636,10 +632,7 @@ namespace PCInfo
                         {
                             if (!EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
                             {
-                                onlineComputerList.Remove(tempComputer);
-                                source.ResetBindings(false);
-                                OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed to enable remote registry");
-                                offlineComputerList.Add(offlinePCfinalCheck);
+                                moveToOfflineList(tempComputer, "Failed to enable remote registry");
                                 MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + ": Removing from list.");
                             }
                             source.ResetBindings(false);
@@ -651,23 +644,27 @@ namespace PCInfo
 
                         if (goodToGoSetup)
                         {
-                            goodToGoMessageBox = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                            if (goodToGoMessageBox == DialogResult.Yes)
+                            if (!goodToGoMessageBoxShown)
                             {
-                                if (StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
-                                {
-                                    tempComputer.UpgradeStatus = "In Progress";
-                                }
-                                else
-                                {
-                                    onlineComputerList.Remove(tempComputer);
-                                    source.ResetBindings(false);
-                                    OfflineComputer offlinePCfinalCheck = new OfflineComputer(tempComputer.PCName, "Failed to start setup (tell Mason)");
-                                    offlineComputerList.Add(offlinePCfinalCheck);
-                                    MessageBox.Show("Failed to start setup on " + tempComputer.PCName.ToUpper() + ": Removing from list.");
-                                }
-                                
+
                             }
+                            goodToGoMessageBox = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            
+                                if (goodToGoMessageBox == DialogResult.Yes)
+                                {
+                                    if (StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
+                                    {
+                                        tempComputer.UpgradeStatus = "In Progress";
+                                    }
+                                    else
+                                    {
+                                        moveToOfflineList(tempComputer,"Failed to start setup(tell Mason");
+                                        MessageBox.Show("Failed to start setup on " + tempComputer.PCName.ToUpper() + ": Removing from list.(tell mason)");
+                                    }
+
+                                }
+                            
+                           
                         }
                     }
 

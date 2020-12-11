@@ -94,31 +94,50 @@ namespace PCInfo
         //this seems like a terrible method and is probably extremely slow on a large log
         public void getLogStatus()
         {
-            if(getLogLocation() == "\\\\" + PCName + "\\c$\\windows\\panther\\setupact.log")
+            string currentLine;
+            string split = "MOUPG";
+            string formattedLine = "Unable to get log info";
+            if (getLogLocation() == "\\\\" + PCName + "\\c$\\windows\\panther\\setupact.log")
             {
                 LogResult = "Finalizing";
             }
             else
             {
-                try
+                // try
+                // {
+                using (FileStream logFileStream = new FileStream("\\\\" + PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    var initialRead = File.ReadLines(getLogLocation());
+                    using (StreamReader logFileReader = new StreamReader(logFileStream))
+                    {
+                        while ((currentLine = logFileReader.ReadLine()) != null)
+                        {
+                            if (currentLine.Contains("Overall progress: "))
+                            {
 
-                    IEnumerable<string> selectLines = initialRead.Where(line => line.Contains("Overall progress:"));
+                                // logList.Add(currentLine);
+                                formattedLine = currentLine.Substring(currentLine.IndexOf(split) + split.Length);
+                                LogResult = formattedLine;
+                            }
+                        }
+                    }
+                    //    var initialRead = File.ReadLines("\\\\" + PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log");
 
-                    var initialReadArray = selectLines.ToArray();
+                    //IEnumerable<string> selectLines = initialRead.Where(line => line.Contains("Overall progress:"));
 
-                    var lastLine = initialReadArray[initialReadArray.Length - 1];
+                    //var initialReadArray = selectLines.ToArray();
 
-                    string split = "MOUPG  ";
-                    var lastLineFormatted = lastLine.Substring(lastLine.IndexOf(split) + split.Length);
+                    //var lastLine = initialReadArray[initialReadArray.Length - 1];
 
-                    LogResult = lastLineFormatted;
+                    //var lastLineFormatted = lastLine.Substring(lastLine.IndexOf(split) + split.Length);
+
+                    //LogResult = lastLineFormatted;
                 }
-                catch
-                {
-                    LogResult = "Unable to get log info";
-                }
+
+               // }
+                //catch
+                //{
+                //    LogResult = "Unable to get log info";
+                //}
             }
 
           
