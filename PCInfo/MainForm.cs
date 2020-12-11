@@ -13,7 +13,7 @@ namespace PCInfo
     public partial class MainForm : Form
     {
 
-        
+
         // used later for getting the path of the setup.exe file
         public static string filePath = "";
         public string setupPath = "";
@@ -56,7 +56,7 @@ namespace PCInfo
         //TODO: More error handling
         private static void MainProgressChecker(object sender, EventArgs e)
         {
-            if(onlineComputerList.Count > 0)
+            if (onlineComputerList.Count > 0)
             {
                 for (var i = 0; i < onlineComputerList.Count; i++)
                 {
@@ -71,7 +71,7 @@ namespace PCInfo
                         {
                             tempPC.getProcessStatus();
 
-                            if(tempPC.ProcessStatus == "Not Running")
+                            if (tempPC.ProcessStatus == "Not Running")
                             {
                                 if (File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
                                 {
@@ -105,14 +105,14 @@ namespace PCInfo
                 processTimer.Stop();
                 stuckCheckTimer.Stop();
                 source.ResetBindings(false);
-                MessageBox.Show("All Upgrades Finished. \n Be sure to check the \"Finished\" and \"Skipped\" lists above", "Upgrades finished", MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                MessageBox.Show("All Upgrades Finished. \n Be sure to check the \"Finished\" and \"Skipped\" lists above", "Upgrades finished", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-           
+
 
         }
 
         //TODO: Add this method everywhere
-        private static void moveToOfflineList(Computer tempPC,string reason)
+        private static void moveToOfflineList(Computer tempPC, string reason)
         {
             OfflineComputer upgradeFailed = new OfflineComputer(tempPC.PCName);
             upgradeFailed.Reason = reason;
@@ -139,7 +139,7 @@ namespace PCInfo
 
                 if (tempPC.UpgradeStatus == "Upgrade froze")
                 {
-                    
+
                     OfflineComputer upgradeStuck = new OfflineComputer(tempPC.PCName);
                     upgradeStuck.Reason = "Upgrade hung";
                     offlineComputerList.Add(upgradeStuck);
@@ -196,7 +196,7 @@ namespace PCInfo
                 success = false;
             }
 
-            
+
             if (success)
             {
                 return true;
@@ -279,7 +279,7 @@ namespace PCInfo
             }
             catch (Exception ex)
             {
-               // MessageBox.Show("Error starting PsExec on " + pcName + "\n" + ex);
+                // MessageBox.Show("Error starting PsExec on " + pcName + "\n" + ex);
                 success = false;
             }
 
@@ -423,17 +423,17 @@ namespace PCInfo
                 var tempPC = offlineComputerList[i];
                 initialComputerList.RemoveAll(a => a.PCName == tempPC.PCName);
             }
-                
+
             //online,version, free space check, using await task to update label and not freeze UI thread.
             await Task.Run(() =>
             {
 
-                for(var i = 0; i < initialComputerList.Count; i++)
+                for (var i = 0; i < initialComputerList.Count; i++)
                 {
                     var pc = initialComputerList[i];
 
                     updateStatusLabelSafe(pc.PCName);
-                   
+
                     pc.getOnlineStatus();
                     if (pc.OnlineStatus == "Online")
                     {
@@ -445,7 +445,7 @@ namespace PCInfo
                     }
                     else
                     {
-                        OfflineComputer offlinePC = new OfflineComputer(pc.PCName,"Offline");
+                        OfflineComputer offlinePC = new OfflineComputer(pc.PCName, "Offline");
 
                         if (!offlineComputerList.Contains(offlinePC))
                         {
@@ -558,16 +558,7 @@ namespace PCInfo
 
             //do a final online status check
             //TODO: Move this somewhere else
-            for (var i = 0; i < onlineComputerList.Count; i++)
-            {
-                var tempComputer = onlineComputerList.ElementAt<Computer>(i);
-                tempComputer.getOnlineStatus();
-                if (tempComputer.OnlineStatus == "Offline")
-                {
-                    moveToOfflineList(tempComputer, "Failed final offline check");
-                    MessageBox.Show(tempComputer.PCName.ToUpper() + " has gone offline, removing from list");
-                }
-            }
+
 
             //check if any radio button is selected
             foreach (RadioButton rb in groupbox_settings.Controls.OfType<RadioButton>())
@@ -586,6 +577,7 @@ namespace PCInfo
                 MessageBox.Show("You didn't select anything!");
                 goodToGoRadio = false;
             }
+
             //if something is checked, make sure a setup.exe file is selected
             if (goodToGoRadio)
             {
@@ -599,90 +591,96 @@ namespace PCInfo
                     goodToGoSetupPath = false;
                 }
             }
-            // if a setup path is selected, attempt to copy psexec
-            if (goodToGoSetupPath)
+            if (goodToGoRadio && goodToGoSetupPath)
             {
-                for (var i = 0; i < onlineComputerList.Count; i++)
-                {
-                    var tempComputer = onlineComputerList.ElementAt<Computer>(i);
-                    if (!CopyPsExec(tempComputer))
-                    {
-                        moveToOfflineList(tempComputer, "Failed to copy PSExec");
-                        MessageBox.Show("Failed to copy PsExec to " + tempComputer.PCName.ToUpper() + ". Removing from list.");
-                    }
+                goodToGoMessageBox = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-                }
-
-            }
-            if(goodToGoRadio && goodToGoSetupPath)
-            {
-                if (onlineComputerList.Count > 0)
+                if (goodToGoMessageBox == DialogResult.Yes)
                 {
-                    //TODO: iterate backwards through for loop
+                    //Final online check
                     for (var i = 0; i < onlineComputerList.Count; i++)
                     {
                         var tempComputer = onlineComputerList.ElementAt<Computer>(i);
-                        //get start type of remoteregistry
-                        ServiceController sc = new ServiceController("RemoteRegistry", tempComputer.PCName);
-                        var startType = sc.StartType.ToString();
-
-                        finalPcPsexeclocation = "\\\\" + tempComputer.PCName + noPcPsexecLocation;
-                        finalPcArgumentList = "\\\\" + tempComputer.PCName + noPcArgumentList;
-                        if (startType.Contains("Disabled") || startType.Contains("Manual"))
+                        tempComputer.getOnlineStatus();
+                        if (tempComputer.OnlineStatus == "Offline")
                         {
-                            if (!EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
-                            {
-                                moveToOfflineList(tempComputer, "Failed to enable remote registry");
-                                MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + ": Removing from list.");
-                            }
-                            source.ResetBindings(false);
+                            moveToOfflineList(tempComputer, "Failed final offline check");
+                            MessageBox.Show(tempComputer.PCName.ToUpper() + " has gone offline, removing from list");
                         }
-                        else
+                    }
+
+                    if (onlineComputerList.Count > 0)
+                    {
+                        //attemp to copy psexec and start remote registry if copy is succesful
+                        for (var i = 0; i < onlineComputerList.Count; i++)
+                        {
+                            var tempComputer = onlineComputerList.ElementAt<Computer>(i);
+                            if (CopyPsExec(tempComputer))
+                            {
+                                ServiceController sc = new ServiceController("RemoteRegistry", tempComputer.PCName);
+                                var startType = sc.StartType.ToString();
+
+                                finalPcPsexeclocation = "\\\\" + tempComputer.PCName + noPcPsexecLocation;
+                                finalPcArgumentList = "\\\\" + tempComputer.PCName + noPcArgumentList;
+
+                                if (startType.Contains("Disabled") || startType.Contains("Manual"))
+                                {
+                                    if (EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
+                                    {
+                                        moveToOfflineList(tempComputer, "Failed to enable remote registry");
+                                        MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + ": Removing from list.");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                moveToOfflineList(tempComputer, "Failed to copy PSExec");
+                                MessageBox.Show("Failed to copy PsExec to " + tempComputer.PCName.ToUpper() + ". Removing from list.");
+                            }
+                        }
+                        if (onlineComputerList.Count > 0)
                         {
                             goodToGoSetup = true;
                         }
-
-                        if (goodToGoSetup)
+                        else
                         {
-                            if (!goodToGoMessageBoxShown)
-                            {
-
-                            }
-                            goodToGoMessageBox = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                            
-                                if (goodToGoMessageBox == DialogResult.Yes)
-                                {
-                                    if (StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
-                                    {
-                                        tempComputer.UpgradeStatus = "In Progress";
-                                    }
-                                    else
-                                    {
-                                        moveToOfflineList(tempComputer,"Failed to start setup(tell Mason");
-                                        MessageBox.Show("Failed to start setup on " + tempComputer.PCName.ToUpper() + ": Removing from list.(tell mason)");
-                                    }
-
-                                }
-                            
-                           
+                            MessageBox.Show("Setup failed to start on any of the computers. Check the offline list");
                         }
-                    }
-
-                    if(onlineComputerList.Count > 0)
-                    {
-                        ReorganizeWindow();
-                        StartTimers();
                     }
                     else
                     {
-                        MessageBox.Show("Setup failed to start on any of the computers");
+                        MessageBox.Show("There are no computers in the list");
+                    }
+
+                    if (goodToGoSetup)
+                    {
+                        for (var i = 0; i < onlineComputerList.Count; i++)
+                        {
+                            var tempComputer = onlineComputerList.ElementAt<Computer>(i);
+
+                            if (StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
+                            {
+                                tempComputer.UpgradeStatus = "In Progress";
+                            }
+                            else
+                            {
+                                moveToOfflineList(tempComputer, "Failed to start setup (tell Mason");
+                                MessageBox.Show("Failed to start setup on " + tempComputer.PCName.ToUpper() + ": Removing from list.(tell mason)");
+                            }
+                        }
+                        if (onlineComputerList.Count > 0)
+                        {
+                            ReorganizeWindow();
+                            StartTimers();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Setup failed to start on any of the computers. Check the offline list");
+                        }
                     }
                 }
-                else
-                {
-                    MessageBox.Show("There are no computers in the list");
-                }
             }
+
         }
 
         private void ReorganizeWindow()
@@ -768,7 +766,7 @@ namespace PCInfo
 
         private void Mainform_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(MessageBox.Show("Are you sure you want to exit? \nAny active updates will still continue","Exit",MessageBoxButtons.YesNo,MessageBoxIcon.Warning) == DialogResult.No)
+            if (MessageBox.Show("Are you sure you want to exit? \nAny active updates will still continue", "Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
             {
                 e.Cancel = true;
             }
