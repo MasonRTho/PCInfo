@@ -75,8 +75,7 @@ namespace PCInfo
                             {
                                 if (File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
                                 {
-                                    tempPC.UpgradeStatus = "Upgrade Failed";
-                                    moveToOfflineList(tempPC, "Upgrade Failed");
+                                    moveToOfflineList(tempPC, "Upgrade Failed (Processes ended early)");
                                 }
                                 else if (!File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
                                 {
@@ -324,8 +323,6 @@ namespace PCInfo
                 exists = false;
                 return exists;
             }
-
-
         }
 
         public string GetInstallStringFromRadioButton(RadioButton rb)
@@ -376,8 +373,6 @@ namespace PCInfo
             datagrid_pcList.DataSource = source;
             //used to hide properties from the computer class from showing in the DG
             datagrid_pcList.Columns[6].Visible = false;
-
-
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -437,11 +432,8 @@ namespace PCInfo
                     pc.getOnlineStatus();
                     if (pc.OnlineStatus == "Online")
                     {
-
                         pc.getFreeSpace();
-
                         CheckIfPCHasMoreThan20GbAndPassesWMI(pc);
-
                     }
                     else
                     {
@@ -451,11 +443,9 @@ namespace PCInfo
                         {
                             offlineComputerList.Add(offlinePC);
                         }
-
                     }
                 }
                 initialComputerList.Clear();
-
             });
 
             label_StaticCurrentlyScanning.Visible = false;
@@ -523,7 +513,6 @@ namespace PCInfo
         private void button_addPC_Click(object sender, EventArgs e)
         {
             var addPCForm = new AddPCForm();
-
             addPCForm.Show();
 
         }
@@ -644,7 +633,7 @@ namespace PCInfo
                         }
                         else
                         {
-                            MessageBox.Show("Setup failed to start on any of the computers. Check the offline list");
+                            MessageBox.Show("All computers failed the setup checks, look at the offline list for the reasons.");
                         }
                     }
                     else
