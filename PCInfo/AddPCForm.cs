@@ -22,10 +22,7 @@ namespace PCInfo
         private void button_addPC_Click(object sender, EventArgs e)
         {
 
-            // button_addPC.Text = "Checking...";
-
-
-
+            //TODO: Make it multithreaded
 
             if (String.IsNullOrEmpty(textbox_pcName.Text))
             {
