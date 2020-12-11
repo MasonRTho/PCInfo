@@ -32,29 +32,12 @@ namespace PCInfo
 
         public static BindingSource source = new BindingSource();
 
-
-        //static Timer processTimer = new Timer();
-        //static Timer stuckCheckTimer = new Timer();
-
-        static bool exitProcessTimer = false;
-        //static exitProcessTimer = new Timer();
-
         //initializing messagebox for confirmation on starting setup
         const string message = "Are you sure you want to start setup?";
         const string caption = "Point of no return";
         DialogResult goodToGoMessageBox;
 
         static bool stopChecks;
-        //private void StartTimers()
-        //{
-        //    processTimer.Tick += new EventHandler(MainProgressChecker);
-        //    processTimer.Interval = 15000; // 15 seconds
-        //    processTimer.Start();
-
-        //    stuckCheckTimer.Tick += new EventHandler(CheckStuckStatus);
-        //    stuckCheckTimer.Interval = 300000; //5 minutes
-        //    stuckCheckTimer.Start();
-        //}
 
         static async void StartStatusChecks()
         {
@@ -117,13 +100,25 @@ namespace PCInfo
             else
             {
                 stopChecks = true;
-                //processTimer.Stop();
-                //stuckCheckTimer.Stop();
-                source.ResetBindings(false);
+                updateDataGridSafeCall();
                 MessageBox.Show("All Upgrades Finished. \n Be sure to check the \"Finished\" and \"Skipped\" lists above", "Upgrades finished", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
 
+        }
+        private static void CheckStuckStatus()
+        {
+            Thread.Sleep(300000);
+            for (var i = 0; i < onlineComputerList.Count; i++)
+            {
+                var tempPC = onlineComputerList[i];
+                tempPC.getStuckStatus();
+
+                if (tempPC.UpgradeStatus == "Upgrade froze")
+                {
+                    moveToOfflineList(tempPC, "Upgrade froze");
+                }
+            }
         }
         public static void updateDataGridSafeCall()
         {
@@ -132,13 +127,12 @@ namespace PCInfo
             {
                 var d = new SafeCallDelegateDataGrid(updateDataGridSafeCall);
                 //label_StaticCurrentlyScanning.Invoke(d, new object[] { label_StaticCurrentlyScanning.Show = true });
-                label_statusLabel.Invoke(d, new object[] { pcName });
+                datagrid_pcList.Invoke(d);
 
             }
             else
             {
-                label_StaticCurrentlyScanning.Visible = true;
-                label_statusLabel.Text = pcName;
+                source.ResetBindings(false);
             }
 
         }
@@ -150,7 +144,6 @@ namespace PCInfo
             offlineComputerList.Add(upgradeFailed);
             onlineComputerList.Remove(tempPC);
             updateDataGridSafeCall();
-            source.ResetBindings(false);
         }
         private static void moveToFinishedList(Computer tempPC)
         {
@@ -160,28 +153,9 @@ namespace PCInfo
             finishedComputerList.Add(upgradeFinished);
             onlineComputerList.Remove(tempPC);
             updateDataGridSafeCall();
-            source.ResetBindings(false);
         }
 
-        private static void CheckStuckStatus()
-        {
-            Thread.Sleep(5000);
-            for (var i = 0; i < onlineComputerList.Count; i++)
-            {
-                var tempPC = onlineComputerList[i];
-                tempPC.getStuckStatus();
 
-                if (tempPC.UpgradeStatus == "Upgrade froze")
-                {
-
-                    OfflineComputer upgradeStuck = new OfflineComputer(tempPC.PCName);
-                    upgradeStuck.Reason = "Upgrade hung";
-                    offlineComputerList.Add(upgradeStuck);
-                    onlineComputerList.Remove(tempPC);
-                    source.ResetBindings(false);
-                }
-            }
-        }
 
         private void setDataGrid(string text)
         {

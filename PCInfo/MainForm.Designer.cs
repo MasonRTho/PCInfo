@@ -56,13 +56,13 @@
             this.label_waiting = new System.Windows.Forms.Label();
             this.label_choseSetupLocation = new System.Windows.Forms.Label();
             this.button_showFinishedPCs = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.datagrid_pcList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(MainForm.datagrid_pcList)).BeginInit();
             this.groupbox_settings.SuspendLayout();
             this.SuspendLayout();
             // 
             // datagrid_pcList
             // 
-            this.datagrid_pcList.AllowUserToDeleteRows = false;
+            MainForm.datagrid_pcList.AllowUserToDeleteRows = false;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -70,7 +70,7 @@
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.datagrid_pcList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            MainForm.datagrid_pcList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -78,10 +78,10 @@
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.datagrid_pcList.DefaultCellStyle = dataGridViewCellStyle2;
-            this.datagrid_pcList.Location = new System.Drawing.Point(12, 76);
-            this.datagrid_pcList.Name = "datagrid_pcList";
-            this.datagrid_pcList.ReadOnly = true;
+            MainForm.datagrid_pcList.DefaultCellStyle = dataGridViewCellStyle2;
+            MainForm.datagrid_pcList.Location = new System.Drawing.Point(12, 76);
+            MainForm.datagrid_pcList.Name = "datagrid_pcList";
+            MainForm.datagrid_pcList.ReadOnly = true;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -89,11 +89,11 @@
             dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.datagrid_pcList.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.datagrid_pcList.RowHeadersVisible = false;
-            this.datagrid_pcList.Size = new System.Drawing.Size(605, 404);
-            this.datagrid_pcList.TabIndex = 0;
-            this.datagrid_pcList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            MainForm.datagrid_pcList.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            MainForm.datagrid_pcList.RowHeadersVisible = false;
+            MainForm.datagrid_pcList.Size = new System.Drawing.Size(605, 404);
+            MainForm.datagrid_pcList.TabIndex = 0;
+            MainForm.datagrid_pcList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // button_selectList
             // 
@@ -354,11 +354,11 @@
             this.Controls.Add(this.label_StaticCurrentlyScanning);
             this.Controls.Add(this.label_statusLabel);
             this.Controls.Add(this.button_selectList);
-            this.Controls.Add(this.datagrid_pcList);
+            this.Controls.Add(MainForm.datagrid_pcList);
             this.Name = "MainForm";
             this.Text = "Feature Upgrade";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Mainform_FormClosing);
-            ((System.ComponentModel.ISupportInitialize)(this.datagrid_pcList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(MainForm.datagrid_pcList)).EndInit();
             this.groupbox_settings.ResumeLayout(false);
             this.groupbox_settings.PerformLayout();
             this.ResumeLayout(false);

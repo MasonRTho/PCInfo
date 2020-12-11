@@ -37,7 +37,7 @@ namespace PCInfo
                 string pcName = textbox_pcName.Text;
                 Computer textboxPC = new Computer(pcName);
 
-
+                //TODO: Allow readding offline PCs and remove redundancy
                 if (!(MainForm.onlineComputerList.Any(a => a.PCName == textboxPC.PCName)) && !(MainForm.offlineComputerList.Any(b => b.PCName == textboxPC.PCName)))
                 {
                     textboxPC.getOnlineStatus();
@@ -68,7 +68,7 @@ namespace PCInfo
                 }
                 else
                 {
-                    MessageBox.Show("You've already added that PC");
+                    MessageBox.Show("You've already added that PC. I didn't feel like coding re-adding PCs. Sorry! Restart the application.");
                 }
    
             }
