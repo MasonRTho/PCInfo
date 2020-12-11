@@ -614,7 +614,7 @@ namespace PCInfo
 
                                 if (startType.Contains("Disabled") || startType.Contains("Manual"))
                                 {
-                                    if (EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
+                                    if (!EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
                                     {
                                         moveToOfflineList(tempComputer, "Failed to enable remote registry");
                                         MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + ": Removing from list.");
@@ -646,6 +646,9 @@ namespace PCInfo
                         for (var i = 0; i < onlineComputerList.Count; i++)
                         {
                             var tempComputer = onlineComputerList.ElementAt<Computer>(i);
+
+                            finalPcPsexeclocation = "\\\\" + tempComputer.PCName + noPcPsexecLocation;
+                            finalPcArgumentList = "\\\\" + tempComputer.PCName + noPcArgumentList;
 
                             if (StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
                             {

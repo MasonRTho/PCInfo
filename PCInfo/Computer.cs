@@ -36,18 +36,26 @@ namespace PCInfo
         //TODO: Add some error handling
         public void getProcessStatus()
         {
-            Process[] setupProcess = Process.GetProcessesByName("setup", PCName);
-            Process[] setupHostProcess = Process.GetProcessesByName("setuphost", PCName);
-            Process[] setupPrepProcess = Process.GetProcessesByName("setupprep", PCName);
-            
-            if (setupProcess.Length > 0 || setupHostProcess.Length > 0 || setupPrepProcess.Length > 0)
+            try
             {
-                ProcessStatus = "Running";
+                Process[] setupProcess = Process.GetProcessesByName("setup", PCName);
+                Process[] setupHostProcess = Process.GetProcessesByName("setuphost", PCName);
+                Process[] setupPrepProcess = Process.GetProcessesByName("setupprep", PCName);
+
+                if (setupProcess.Length > 0 || setupHostProcess.Length > 0 || setupPrepProcess.Length > 0)
+                {
+                    ProcessStatus = "Running";
+                }
+                else
+                {
+                    ProcessStatus = "Not Running";
+                }
             }
-            else
+            catch
             {
-                ProcessStatus = "Not Running";
+                ProcessStatus = "Unable to get process status";
             }
+
         }
 
         public string getLogLocation()
