@@ -347,6 +347,7 @@
             this.button_refresh.TabIndex = 22;
             this.button_refresh.Text = "Refresh";
             this.button_refresh.UseVisualStyleBackColor = true;
+            this.button_refresh.Click += new System.EventHandler(this.button_refresh_Click);
             // 
             // MainForm
             // 

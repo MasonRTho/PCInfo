@@ -39,6 +39,8 @@ namespace PCInfo
 
         static bool stopChecks;
 
+        private static System.Windows.Forms.Timer refreshButtonTimer = new System.Windows.Forms.Timer();
+
         static async void StartStatusChecks()
         {
             while (!stopChecks)
@@ -394,7 +396,7 @@ namespace PCInfo
         {
 
         }
-
+        //private async void CheckPCListAndUpdateLabel
         // button gets text list of computers and puts them in an array of strings then into a list of computer objects. async method to not freeze UI thread
         private async void button_selectList_Click(object sender, EventArgs e)
         {
@@ -435,33 +437,7 @@ namespace PCInfo
             }
 
             //online,version, free space check, using await task to update label and not freeze UI thread.
-            await Task.Run(() =>
-            {
-
-                for (var i = 0; i < initialComputerList.Count; i++)
-                {
-                    var pc = initialComputerList[i];
-
-                    updateStatusLabelSafe(pc.PCName);
-
-                    pc.getOnlineStatus();
-                    if (pc.OnlineStatus == "Online")
-                    {
-                        pc.getFreeSpace();
-                        CheckIfPCHasMoreThan20GbAndPassesWMI(pc);
-                    }
-                    else
-                    {
-                        OfflineComputer offlinePC = new OfflineComputer(pc.PCName, "Offline");
-
-                        if (!offlineComputerList.Contains(offlinePC))
-                        {
-                            offlineComputerList.Add(offlinePC);
-                        }
-                    }
-                }
-                initialComputerList.Clear();
-            });
+            await CheckPCListForStatus(initialComputerList, true);
 
             label_StaticCurrentlyScanning.Visible = false;
             label_statusLabel.Visible = false;
@@ -482,6 +458,47 @@ namespace PCInfo
                 MessageBox.Show("The following PCs will be skipped: \n" + offlinePCS);
 
             }
+        }
+
+        private async Task CheckPCListForStatus(List<Computer> pcList, bool showLabel)
+        {
+            await Task.Run(() =>
+            {
+
+                for (var i = 0; i < pcList.Count; i++)
+                {
+                    var pc = pcList[i];
+
+                    if (showLabel)
+                    {
+                        updateStatusLabelSafe(pc.PCName);
+                    }
+
+
+                    pc.getOnlineStatus();
+                    if (pc.OnlineStatus == "Online")
+                    {
+                        pc.getFreeSpace();
+                        CheckIfPCHasMoreThan20GbAndPassesWMI(pc);
+                    }
+                    else
+                    {
+                        if (onlineComputerList.Contains(pc))
+                        {
+                            onlineComputerList.Remove(pc);
+                        }
+                        OfflineComputer offlinePC = new OfflineComputer(pc.PCName, "Offline");
+
+                        if (!offlineComputerList.Contains(offlinePC))
+                        {
+                            offlineComputerList.Add(offlinePC);
+                        }
+
+                    }
+                }
+                initialComputerList.Clear();
+
+            });
         }
 
         public static void CheckIfPCHasMoreThan20GbAndPassesWMI(Computer pc)
@@ -697,6 +714,7 @@ namespace PCInfo
             button_clearList.Enabled = false;
             button_RemovePC.Enabled = false;
             button_selectList.Enabled = false;
+            button_refresh.Enabled = false;
             groupbox_settings.Visible = false;
             label_choseSetupLocation.Visible = false;
             label_waiting.Visible = false;
@@ -778,6 +796,22 @@ namespace PCInfo
             {
                 e.Cancel = true;
             }
+        }
+
+        private async void button_refresh_Click(object sender, EventArgs e)
+        {
+            refreshButtonTimer.Interval = 5000;
+            refreshButtonTimer.Tick += refreshButtonTimer_Tick;
+            refreshButtonTimer.Start();
+            button_refresh.Enabled = false;
+
+            await CheckPCListForStatus(onlineComputerList, false);
+            source.ResetBindings(false);
+        }
+        void refreshButtonTimer_Tick(object sender, System.EventArgs e)
+        {
+            button_refresh.Enabled = true;
+            refreshButtonTimer.Stop();
         }
     }
 }
