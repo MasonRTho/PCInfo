@@ -30,12 +30,13 @@
         {
             this.button_exportList = new System.Windows.Forms.Button();
             this.datagridview_offlinePCs = new System.Windows.Forms.DataGridView();
+            this.button_refreshOfflinePCs = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.datagridview_offlinePCs)).BeginInit();
             this.SuspendLayout();
             // 
             // button_exportList
             // 
-            this.button_exportList.Location = new System.Drawing.Point(118, 262);
+            this.button_exportList.Location = new System.Drawing.Point(12, 262);
             this.button_exportList.Name = "button_exportList";
             this.button_exportList.Size = new System.Drawing.Size(154, 38);
             this.button_exportList.TabIndex = 1;
@@ -52,11 +53,22 @@
             this.datagridview_offlinePCs.Size = new System.Drawing.Size(383, 244);
             this.datagridview_offlinePCs.TabIndex = 2;
             // 
+            // button_refreshOfflinePCs
+            // 
+            this.button_refreshOfflinePCs.Location = new System.Drawing.Point(241, 262);
+            this.button_refreshOfflinePCs.Name = "button_refreshOfflinePCs";
+            this.button_refreshOfflinePCs.Size = new System.Drawing.Size(154, 38);
+            this.button_refreshOfflinePCs.TabIndex = 3;
+            this.button_refreshOfflinePCs.Text = "Refresh";
+            this.button_refreshOfflinePCs.UseVisualStyleBackColor = true;
+            this.button_refreshOfflinePCs.Click += new System.EventHandler(this.button_refreshOfflinePCs_Click);
+            // 
             // OfflinePCList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(407, 312);
+            this.Controls.Add(this.button_refreshOfflinePCs);
             this.Controls.Add(this.datagridview_offlinePCs);
             this.Controls.Add(this.button_exportList);
             this.Name = "OfflinePCList";
@@ -69,5 +81,6 @@
         #endregion
         private System.Windows.Forms.Button button_exportList;
         private System.Windows.Forms.DataGridView datagridview_offlinePCs;
+        private System.Windows.Forms.Button button_refreshOfflinePCs;
     }
 }

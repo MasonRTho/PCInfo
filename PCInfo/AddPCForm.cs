@@ -33,6 +33,7 @@ namespace PCInfo
             else
             {
 
+                DialogResult doYouWantToReAddOfflinePCMessageBox;
 
                 string pcName = textbox_pcName.Text;
                 Computer textboxPC = new Computer(pcName);
@@ -68,7 +69,23 @@ namespace PCInfo
                 }
                 else
                 {
-                    MessageBox.Show("You've already added that PC. I didn't feel like coding re-adding PCs. Sorry! Restart the application.");
+                    //TODO: FINISH THIS
+                    if (MainForm.onlineComputerList.Any(a => a.PCName == textboxPC.PCName))
+                    {
+                        MessageBox.Show("You've already added that PC.");
+                    }
+                    if (MainForm.offlineComputerList.Any(b => b.PCName == textboxPC.PCName))
+                    {
+                        var messageString = textboxPC.PCName + " is already in the offline list. Do you want to try scanning it again?";
+                        doYouWantToReAddOfflinePCMessageBox = MessageBox.Show(messageString, "Try Again?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                        if (doYouWantToReAddOfflinePCMessageBox == DialogResult.Yes)
+                        {
+                            var pcToRemove = MainForm.offlineComputerList.Single(p => p.PCName == textboxPC.PCName);
+                            MainForm.offlineComputerList.Remove(pcToRemove);
+                        }
+
+                    }
                 }
    
             }

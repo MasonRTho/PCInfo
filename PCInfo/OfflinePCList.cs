@@ -50,5 +50,10 @@ namespace PCInfo
             CR.Select();
             xlWorkSheet.PasteSpecial(CR, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, true);
         }
+
+        private void button_refreshOfflinePCs_Click(object sender, EventArgs e)
+        {
+            offlineSource.ResetBindings(false);
+        }
     }
 }
