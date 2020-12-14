@@ -13,8 +13,8 @@ namespace PCInfo
 {
     public partial class MainForm : Form
     {
-
-
+        
+        
         // used later for getting the path of the setup.exe file
         public static string filePath = "";
         public string setupPath = "";
@@ -382,6 +382,12 @@ namespace PCInfo
             datagrid_pcList.DataSource = source;
             //used to hide properties from the computer class from showing in the DG
             datagrid_pcList.Columns[6].Visible = false;
+
+            this.MaximizeBox = false;
+            
+           
+
+            
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
