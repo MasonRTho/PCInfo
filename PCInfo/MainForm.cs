@@ -40,22 +40,45 @@ namespace PCInfo
         static bool stopChecks;
 
         private static System.Windows.Forms.Timer refreshButtonTimer = new System.Windows.Forms.Timer();
+        private static System.Windows.Forms.Timer mainProgressCheckTimer = new System.Windows.Forms.Timer();
+        private static System.Windows.Forms.Timer checkStuckStatusTimer = new System.Windows.Forms.Timer();
 
-        static async void StartStatusChecks()
+
+        static void StartStatusChecks()
         {
-            while (!stopChecks)
-            {
-                await Task.Run(MainProgressChecker);
-                await Task.Run(CheckStuckStatus);
-                source.ResetBindings(false);
-            }
+            mainProgressCheckTimer.Interval = 5000;
+            mainProgressCheckTimer.Tick += mainProgressCheckTimer_Tick;
+
+            checkStuckStatusTimer.Interval = 10000;
+            checkStuckStatusTimer.Tick += checkStuckStatusTimer_Tick;
+
+            mainProgressCheckTimer.Start();
+            checkStuckStatusTimer.Start();
+
+            //if (stopChecks)
+            //{
+            //    mainProgressCheckTimer.Stop();
+            //    checkStuckStatusTimer.Stop();
+
+                
+            //    //source.ResetBindings(false);
+            //}
 
 
+        }
+
+        static async void mainProgressCheckTimer_Tick(object sender, System.EventArgs e)
+        {
+            await Task.Run(MainProgressChecker);
+        }
+        static async void checkStuckStatusTimer_Tick(object sender, System.EventArgs e)
+        {
+            await Task.Run(CheckStuckStatus);
         }
         //TODO: More error handling
         private static void MainProgressChecker()
         {
-            Thread.Sleep(5000);
+           // Thread.Sleep(5000);
             if (onlineComputerList.Count > 0)
             {
                 for (var i = 0; i < onlineComputerList.Count; i++)
@@ -96,7 +119,7 @@ namespace PCInfo
 
                     tempPC.getTimeStamp();
                     tempPC.getLogStatus();
-                    
+                    updateDataGridSafeCall();
                 }
             }
             else
@@ -104,13 +127,15 @@ namespace PCInfo
                 stopChecks = true;
                 updateDataGridSafeCall();
                 MessageBox.Show("All Upgrades Finished. \n Be sure to check the \"Finished\" and \"Skipped\" lists above", "Upgrades finished", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                mainProgressCheckTimer.Stop();
+                checkStuckStatusTimer.Stop();
             }
 
 
         }
         private static void CheckStuckStatus()
         {
-            Thread.Sleep(300000);
+            //Thread.Sleep(300000);
             for (var i = 0; i < onlineComputerList.Count; i++)
             {
                 var tempPC = onlineComputerList[i];
@@ -127,10 +152,9 @@ namespace PCInfo
 
             if (datagrid_pcList.InvokeRequired)
             {
-                var d = new SafeCallDelegateDataGrid(updateDataGridSafeCall);
+                //var d = new SafeCallDelegateDataGrid(updateDataGridSafeCall);
                 //label_StaticCurrentlyScanning.Invoke(d, new object[] { label_StaticCurrentlyScanning.Show = true });
-                datagrid_pcList.Invoke(d);
-
+                datagrid_pcList.Invoke(new Action(() => { source.ResetBindings(false); }));
             }
             else
             {
