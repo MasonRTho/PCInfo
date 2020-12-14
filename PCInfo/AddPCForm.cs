@@ -95,7 +95,8 @@ namespace PCInfo
                                 {
                                     MessageBox.Show($"{textboxPC.PCName} is already in the list!");
                                 }
-
+                                MainForm.source.ResetBindings(false);
+                                this.Close();
                             }
                             else
                             {

@@ -57,6 +57,7 @@
             this.label_waiting = new System.Windows.Forms.Label();
             this.label_choseSetupLocation = new System.Windows.Forms.Label();
             this.button_showFinishedPCs = new System.Windows.Forms.Button();
+            this.button_refresh = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(MainForm.datagrid_pcList)).BeginInit();
             this.groupbox_settings.SuspendLayout();
             this.SuspendLayout();
@@ -168,7 +169,7 @@
             // 
             // button_RemovePC
             // 
-            this.button_RemovePC.Location = new System.Drawing.Point(387, 486);
+            this.button_RemovePC.Location = new System.Drawing.Point(397, 486);
             this.button_RemovePC.Name = "button_RemovePC";
             this.button_RemovePC.Size = new System.Drawing.Size(107, 36);
             this.button_RemovePC.TabIndex = 8;
@@ -338,11 +339,21 @@
             this.button_showFinishedPCs.Visible = false;
             this.button_showFinishedPCs.Click += new System.EventHandler(this.button_showFinishedPCs_Click);
             // 
+            // button_refresh
+            // 
+            this.button_refresh.Location = new System.Drawing.Point(261, 486);
+            this.button_refresh.Name = "button_refresh";
+            this.button_refresh.Size = new System.Drawing.Size(110, 36);
+            this.button_refresh.TabIndex = 22;
+            this.button_refresh.Text = "Refresh";
+            this.button_refresh.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1030, 607);
+            this.ClientSize = new System.Drawing.Size(1030, 543);
+            this.Controls.Add(this.button_refresh);
             this.Controls.Add(this.button_showFinishedPCs);
             this.Controls.Add(this.label_choseSetupLocation);
             this.Controls.Add(this.label_waiting);
@@ -395,6 +406,7 @@
         private System.Windows.Forms.Label label_choseSetupLocation;
         private System.Windows.Forms.Button button_showFinishedPCs;
         public static System.Windows.Forms.DataGridView datagrid_pcList;
+        private System.Windows.Forms.Button button_refresh;
     }
 }
 
