@@ -69,7 +69,6 @@ namespace PCInfo
                 }
                 else
                 {
-                    //TODO: FINISH THIS
                     if (MainForm.onlineComputerList.Any(a => a.PCName == textboxPC.PCName))
                     {
                         MessageBox.Show("You've already added that PC.");
@@ -83,6 +82,28 @@ namespace PCInfo
                         {
                             var pcToRemove = MainForm.offlineComputerList.Single(p => p.PCName == textboxPC.PCName);
                             MainForm.offlineComputerList.Remove(pcToRemove);
+
+                            textboxPC.getOnlineStatus();
+                            if (textboxPC.OnlineStatus == "Online")
+                            {
+                                if (!MainForm.CheckIfPCExistsinOnlineComputerList(textboxPC))
+                                {
+                                    textboxPC.getFreeSpace();
+                                    MainForm.CheckIfPCHasMoreThan20GbAndPassesWMI(textboxPC);
+                                }
+                                else
+                                {
+                                    MessageBox.Show($"{textboxPC.PCName} is already in the list!");
+                                }
+
+                            }
+                            else
+                            {
+                                OfflineComputer offlinePC = new OfflineComputer(textboxPC.PCName);
+                                offlinePC.Reason = "Offline";
+                                MainForm.offlineComputerList.Add(offlinePC);
+                                MessageBox.Show(textboxPC.PCName + " is still offline");
+                            }
                         }
 
                     }

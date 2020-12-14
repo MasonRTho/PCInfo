@@ -355,6 +355,7 @@
             this.Controls.Add(this.label_statusLabel);
             this.Controls.Add(this.button_selectList);
             this.Controls.Add(MainForm.datagrid_pcList);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
             this.Text = "Feature Upgrade";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Mainform_FormClosing);
