@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OfflinePCList));
             this.button_exportList = new System.Windows.Forms.Button();
             this.datagridview_offlinePCs = new System.Windows.Forms.DataGridView();
             this.button_refreshOfflinePCs = new System.Windows.Forms.Button();
@@ -71,6 +72,7 @@
             this.Controls.Add(this.button_refreshOfflinePCs);
             this.Controls.Add(this.datagridview_offlinePCs);
             this.Controls.Add(this.button_exportList);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "OfflinePCList";
             this.Text = "OfflinePCList";
             ((System.ComponentModel.ISupportInitialize)(this.datagridview_offlinePCs)).EndInit();

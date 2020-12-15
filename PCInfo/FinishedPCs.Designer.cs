@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FinishedPCs));
             this.dataGridView_finishedPcs = new System.Windows.Forms.DataGridView();
             this.button_finishedPcsExport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_finishedPcs)).BeginInit();
@@ -60,6 +61,7 @@
             this.ClientSize = new System.Drawing.Size(372, 342);
             this.Controls.Add(this.button_finishedPcsExport);
             this.Controls.Add(this.dataGridView_finishedPcs);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FinishedPCs";
             this.Text = "FinishedPCs";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_finishedPcs)).EndInit();

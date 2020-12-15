@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddPCForm));
             this.label_pcName = new System.Windows.Forms.Label();
             this.textbox_pcName = new System.Windows.Forms.TextBox();
             this.button_addPC = new System.Windows.Forms.Button();
@@ -69,6 +70,7 @@
             this.Controls.Add(this.button_addPC);
             this.Controls.Add(this.textbox_pcName);
             this.Controls.Add(this.label_pcName);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.Name = "AddPCForm";
             this.Text = "Add a new PC";
