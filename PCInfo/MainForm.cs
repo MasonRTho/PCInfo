@@ -100,7 +100,7 @@ namespace PCInfo
                         {
                             if (File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
                             {
-                                moveToOfflineList(tempPC, "Upgrade Failed (Processes ended early)");
+                                moveToOfflineList(tempPC, "Upgrade Failed (Processes ended early)", tempPC.LogResult);
                             }
                             else if (!File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
                             {
@@ -130,7 +130,7 @@ namespace PCInfo
 
                             if(elapsedTime.Value.TotalMinutes > 60)
                             {
-                                moveToOfflineList(tempPC, "The computer has been offline for over 60 minutes");
+                                moveToOfflineList(tempPC, "The computer has been offline for over 60 minutes", tempPC.LogResult);
                             }
                         }
                     }
@@ -162,7 +162,7 @@ namespace PCInfo
 
                     if (tempPC.UpgradeStatus == "Upgrade froze")
                     {
-                        moveToOfflineList(tempPC, "Upgrade froze");
+                        moveToOfflineList(tempPC, "Upgrade froze", tempPC.LogResult);
                     }
                 }
 
@@ -183,20 +183,19 @@ namespace PCInfo
             }
 
         }
-        //TODO: Add this method everywhere
-        private static void moveToOfflineList(Computer tempPC, string reason)
+        //TODO: add this everywhere if it isn't already
+        private static void moveToOfflineList(Computer tempPC, string reason, string lastLogResult)
         {
-            OfflineComputer upgradeFailed = new OfflineComputer(tempPC.PCName);
-            upgradeFailed.Reason = reason;
+            OfflineComputer upgradeFailed = new OfflineComputer(tempPC.PCName, reason, lastLogResult);
             offlineComputerList.Add(upgradeFailed);
             onlineComputerList.Remove(tempPC);
             updateDataGridSafeCall();
         }
         private static void moveToFinishedList(Computer tempPC)
         {
-            FinishedComputer upgradeFinished = new FinishedComputer(tempPC.PCName);
-            upgradeFinished.CurrentVersion = tempPC.CurrentVersion;
-            upgradeFinished.FreeSpace = tempPC.FreeSpace;
+            FinishedComputer upgradeFinished = new FinishedComputer(tempPC.PCName,tempPC.CurrentVersion,tempPC.FreeSpace);
+            //upgradeFinished.CurrentVersion = tempPC.CurrentVersion;
+            //upgradeFinished.FreeSpace = tempPC.FreeSpace;
             finishedComputerList.Add(upgradeFinished);
             onlineComputerList.Remove(tempPC);
             updateDataGridSafeCall();
@@ -673,7 +672,7 @@ namespace PCInfo
                         tempComputer.getOnlineStatus();
                         if (tempComputer.OnlineStatus == "Offline")
                         {
-                            moveToOfflineList(tempComputer, "Failed final offline check");
+                            moveToOfflineList(tempComputer, "Failed final offline check","N/A");
                             MessageBox.Show(tempComputer.PCName.ToUpper() + " has gone offline, removing from list");
                         }
                     }
@@ -696,14 +695,14 @@ namespace PCInfo
                                 {
                                     if (!EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
                                     {
-                                        moveToOfflineList(tempComputer, "Failed to enable remote registry");
+                                        moveToOfflineList(tempComputer, "Failed to enable remote registry","N/A");
                                         MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + ": Removing from list.");
                                     }
                                 }
                             }
                             else
                             {
-                                moveToOfflineList(tempComputer, "Failed to copy PSExec");
+                                moveToOfflineList(tempComputer, "Failed to copy PSExec","N/A");
                                 MessageBox.Show("Failed to copy PsExec to " + tempComputer.PCName.ToUpper() + ". Removing from list.");
                             }
                         }
@@ -737,7 +736,7 @@ namespace PCInfo
 
                             else
                             {
-                                moveToOfflineList(tempComputer, "Tell Mason - " + startSetupError);
+                                moveToOfflineList(tempComputer, "Tell Mason - " + startSetupError,"N/A");
                                 MessageBox.Show("Failed to start setup on " + tempComputer.PCName.ToUpper() + ": Removing from list.(tell mason)\n" + startSetupError);
                             }
                         }

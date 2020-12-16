@@ -12,11 +12,11 @@ namespace PCInfo
         public string CurrentVersion { get; set; }
         public string FreeSpace { get; set; }
 
-        public FinishedComputer(string name)
+        public FinishedComputer(string name, string currentVersion, string freeSpace)
         {
             PCName = name;
-            CurrentVersion = "N/A";
-            FreeSpace = "N/A";
+            CurrentVersion = currentVersion;
+            FreeSpace = freeSpace;
 
         }
     }
