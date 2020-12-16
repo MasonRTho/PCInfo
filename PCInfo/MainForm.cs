@@ -37,9 +37,6 @@ namespace PCInfo
         const string caption = "Point of no return";
         DialogResult goodToGoMessageBox;
 
-        //TODO: error check for invalid handle, maybe restart?
-        static bool startSetupInvalidHandle;
-
         static DateTime currentTime = DateTime.Now;
 
         private string startSetupError = "";

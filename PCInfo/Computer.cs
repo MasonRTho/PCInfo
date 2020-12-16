@@ -80,20 +80,27 @@ namespace PCInfo
         //TODO: add error handling for when pc goes offline
         public void getStuckStatus()
         {
-            
-            var lastWriteTime = File.GetLastWriteTime(getLogLocation());
-            DateTime currentTime = DateTime.Now;
-
-            TimeSpan elapsedTime = currentTime - lastWriteTime;
-
-            if(elapsedTime.TotalMinutes > 15)
+            try
             {
-                this.UpgradeStatus = "Upgrade Stuck, retrying in 15min, then removing";
+                var lastWriteTime = File.GetLastWriteTime(getLogLocation());
+                DateTime currentTime = DateTime.Now;
+
+                TimeSpan elapsedTime = currentTime - lastWriteTime;
+
+                if (elapsedTime.TotalMinutes > 15)
+                {
+                    this.UpgradeStatus = "Upgrade Stuck, retrying in 15min, then removing";
+                }
+                if (elapsedTime.TotalMinutes > 30)
+                {
+                    this.UpgradeStatus = "Upgrade stuck";
+                }
             }
-            if(elapsedTime.TotalMinutes > 30)
+            catch
             {
-                this.UpgradeStatus = "Upgrade stuck";
+                UpgradeStatus = "Unable to get stuck staus";
             }
+
 
         }
 
@@ -110,49 +117,36 @@ namespace PCInfo
             string currentLine;
             string split = "MOUPG";
             string formattedLine = "Unable to get log info";
-            if (getLogLocation() == "\\\\" + PCName + "\\c$\\windows\\panther\\setupact.log")
+            try
             {
-                LogResult = "Finalizing";
-            }
-            else
-            {
-                // try
-                // {
-                using (FileStream logFileStream = new FileStream("\\\\" + PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                if (getLogLocation() == "\\\\" + PCName + "\\c$\\windows\\panther\\setupact.log")
                 {
-                    using (StreamReader logFileReader = new StreamReader(logFileStream))
+                    LogResult = "Finalizing";
+                }
+                else
+                {
+                    using (FileStream logFileStream = new FileStream("\\\\" + PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
-                        while ((currentLine = logFileReader.ReadLine()) != null)
+                        using (StreamReader logFileReader = new StreamReader(logFileStream))
                         {
-                            if (currentLine.Contains("Overall progress: "))
+                            while ((currentLine = logFileReader.ReadLine()) != null)
                             {
+                                if (currentLine.Contains("Overall progress: "))
+                                {
 
-                                // logList.Add(currentLine);
-                                formattedLine = currentLine.Substring(currentLine.IndexOf(split) + split.Length);
-                                LogResult = formattedLine;
+                                    // logList.Add(currentLine);
+                                    formattedLine = currentLine.Substring(currentLine.IndexOf(split) + split.Length);
+                                    LogResult = formattedLine;
+                                }
                             }
                         }
                     }
-                    //    var initialRead = File.ReadLines("\\\\" + PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log");
-
-                    //IEnumerable<string> selectLines = initialRead.Where(line => line.Contains("Overall progress:"));
-
-                    //var initialReadArray = selectLines.ToArray();
-
-                    //var lastLine = initialReadArray[initialReadArray.Length - 1];
-
-                    //var lastLineFormatted = lastLine.Substring(lastLine.IndexOf(split) + split.Length);
-
-                    //LogResult = lastLineFormatted;
                 }
-
-               // }
-                //catch
-                //{
-                //    LogResult = "Unable to get log info";
-                //}
             }
-
+            catch
+            {
+                LogResult = "Unable to get log status";
+            }
           
         }
  
