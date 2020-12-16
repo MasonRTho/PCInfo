@@ -20,8 +20,9 @@ namespace PCInfo
         public string LogResult { get; set; }      
         public string ProcessStatus { get; set; }
         public string UpgradeStatus { get; set; }
+        public DateTime? OfflineTime { get; set; }
 
-        
+
 
 
 
@@ -58,6 +59,7 @@ namespace PCInfo
 
         }
 
+        //todo: might need error handling here for when pc goes offline
         public string getLogLocation()
         {
             string windowsBTLog = "\\\\" + PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log";
@@ -74,6 +76,8 @@ namespace PCInfo
             return windowsBTLog; //might need to do something about this
         }
         //check if upgrade is hung, using last write time of log file
+
+        //TODO: add error handling for when pc goes offline
         public void getStuckStatus()
         {
             
@@ -100,6 +104,7 @@ namespace PCInfo
         }
 
         //this seems like a terrible method and is probably extremely slow on a large log
+        //TODO: error handling for when pc goes offline
         public void getLogStatus()
         {
             string currentLine;

@@ -37,7 +37,10 @@ namespace PCInfo
         const string caption = "Point of no return";
         DialogResult goodToGoMessageBox;
 
-        static bool stopChecks;
+        //TODO: error check for invalid handle, maybe restart?
+        static bool startSetupInvalidHandle;
+
+        static DateTime currentTime = DateTime.Now;
 
         private string startSetupError = "";
 
@@ -86,47 +89,58 @@ namespace PCInfo
                 for (var i = 0; i < onlineComputerList.Count; i++)
                 {
                     var tempPC = onlineComputerList[i];
-                    tempPC.getProcessStatus();
 
-                    if (tempPC.ProcessStatus == "Not Running")
+                    tempPC.getOnlineStatus();
+
+                    if (tempPC.OnlineStatus == "Online")
                     {
-                        tempPC.getOnlineStatus();
+                        tempPC.getProcessStatus();
 
-                        if (tempPC.OnlineStatus == "Online")
+                        if (tempPC.ProcessStatus == "Not Running") 
                         {
-                            tempPC.getProcessStatus();
-
-                            if (tempPC.ProcessStatus == "Not Running")
+                            if (File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
                             {
-                                if (File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
-                                {
-                                    moveToOfflineList(tempPC, "Upgrade Failed (Processes ended early)");
-                                }
-                                else if (!File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
-                                {
-                                    tempPC.UpgradeStatus = "Upgrade Finished";
-                                    moveToFinishedList(tempPC);
-                                }
+                                moveToOfflineList(tempPC, "Upgrade Failed (Processes ended early)");
                             }
-                            else
+                            else if (!File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
                             {
-                                tempPC.UpgradeStatus = "In Progress";
-                            }
+                                tempPC.UpgradeStatus = "Upgrade Finished";
+                                moveToFinishedList(tempPC);
+                            }                           
                         }
                         else
                         {
-                            tempPC.UpgradeStatus = "Possible Reboot";
+                            tempPC.UpgradeStatus = "In Progress";
+                            tempPC.getTimeStamp();
+                            tempPC.getLogStatus();
+                        }
+                    }
+                    else
+                    {
+                        tempPC.UpgradeStatus = "Possible Reboot";
+
+                        //TODO: This will only work on a single reboot. Not sure if it's neccesary more than once.
+                        if (!tempPC.OfflineTime.HasValue)
+                        {
+                            tempPC.OfflineTime = DateTime.Now;
+                        }
+                        if (tempPC.OfflineTime.HasValue)
+                        {
+                            TimeSpan? elapsedTime = currentTime - tempPC.OfflineTime; 
+
+                            if(elapsedTime.Value.TotalMinutes > 60)
+                            {
+                                moveToOfflineList(tempPC, "The computer has been offline for over 60 minutes");
+                            }
                         }
                     }
 
-                    tempPC.getTimeStamp();
-                    tempPC.getLogStatus();
                     updateDataGridSafeCall();
                 }
             }
             else
             {
-                stopChecks = true;
+               // stopChecks = true;
                 updateDataGridSafeCall();
                 MessageBox.Show("All Upgrades Finished. \n Be sure to check the \"Finished\" and \"Skipped\" lists above", "Upgrades finished", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 mainProgressCheckTimer.Stop();
@@ -137,16 +151,21 @@ namespace PCInfo
         }
         private static void CheckStuckStatus()
         {
-            //Thread.Sleep(300000);
+            
             for (var i = 0; i < onlineComputerList.Count; i++)
             {
                 var tempPC = onlineComputerList[i];
-                tempPC.getStuckStatus();
-
-                if (tempPC.UpgradeStatus == "Upgrade froze")
+                tempPC.getOnlineStatus();
+                if(tempPC.OnlineStatus == "Online")
                 {
-                    moveToOfflineList(tempPC, "Upgrade froze");
+                    tempPC.getStuckStatus();
+
+                    if (tempPC.UpgradeStatus == "Upgrade froze")
+                    {
+                        moveToOfflineList(tempPC, "Upgrade froze");
+                    }
                 }
+
             }
         }
         public static void updateDataGridSafeCall()
@@ -412,6 +431,7 @@ namespace PCInfo
             datagrid_pcList.DataSource = source;
             //used to hide properties from the computer class from showing in the DG
             datagrid_pcList.Columns[6].Visible = false;
+            datagrid_pcList.Columns[8].Visible = false;
 
             this.MaximizeBox = false;
             
@@ -714,6 +734,7 @@ namespace PCInfo
                             {
                                 tempComputer.UpgradeStatus = "In Progress";
                             }
+
                             else
                             {
                                 moveToOfflineList(tempComputer, "Tell Mason - " + startSetupError);

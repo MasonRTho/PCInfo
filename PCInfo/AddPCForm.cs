@@ -19,10 +19,11 @@ namespace PCInfo
         }
 
         // does basically the same as the main form version 
+        //TODO: Make it multithreaded
         private void button_addPC_Click(object sender, EventArgs e)
         {
 
-            //TODO: Make it multithreaded
+            
 
             if (String.IsNullOrEmpty(textbox_pcName.Text))
             {
@@ -38,7 +39,7 @@ namespace PCInfo
                 string pcName = textbox_pcName.Text;
                 Computer textboxPC = new Computer(pcName);
 
-                //TODO: Allow readding offline PCs and remove redundancy
+                //TODO: remove redundancy
                 if (!(MainForm.onlineComputerList.Any(a => a.PCName == textboxPC.PCName)) && !(MainForm.offlineComputerList.Any(b => b.PCName == textboxPC.PCName)))
                 {
                     textboxPC.getOnlineStatus();

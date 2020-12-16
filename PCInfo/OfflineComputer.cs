@@ -12,6 +12,8 @@ namespace PCInfo
 
         public string Reason { get; set; }
 
+        public string LastLogResult { get; set; }
+
         public OfflineComputer(string name)
         {
             this.PCName = name;
