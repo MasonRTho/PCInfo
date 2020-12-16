@@ -881,7 +881,7 @@ namespace PCInfo
                 {
                     if (tempPC.killSetup())
                     {
-                        MessageBox.Show("Setup killed on " + tempPC.PCName + ". *You might want to double check*");
+                        MessageBox.Show("Setup killed on " + tempPC.PCName + ". (as far as I can tell)");
                     }
                     else
                     {
