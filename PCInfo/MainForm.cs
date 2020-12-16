@@ -139,9 +139,10 @@ namespace PCInfo
             {
                // stopChecks = true;
                 updateDataGridSafeCall();
-                MessageBox.Show("All Upgrades Finished. \n Be sure to check the \"Finished\" and \"Skipped\" lists above", "Upgrades finished", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 mainProgressCheckTimer.Stop();
                 checkStuckStatusTimer.Stop();
+                MessageBox.Show("All Upgrades Finished. \n Be sure to check the \"Finished\" and \"Skipped\" lists above", "Upgrades finished", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
             }
 
 
