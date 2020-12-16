@@ -731,9 +731,21 @@ namespace PCInfo
 
                             if (StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
                             {
-                                tempComputer.UpgradeStatus = "In Progress";
+                                
                             }
-
+                            //retry setup once if psexec throws an invalid handle error
+                            else if(startSetupError.Contains("handle is invalid"))
+                            {
+                                if(StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
+                                {
+                                    tempComputer.UpgradeStatus = "In Progress";
+                                }
+                                else
+                                {
+                                    moveToOfflineList(tempComputer, "Tell Mason - " + startSetupError, "N/A");
+                                    MessageBox.Show("Failed to start setup on " + tempComputer.PCName.ToUpper() + ": Removing from list.(tell mason)\n" + startSetupError);
+                                }
+                            }
                             else
                             {
                                 moveToOfflineList(tempComputer, "Tell Mason - " + startSetupError,"N/A");
