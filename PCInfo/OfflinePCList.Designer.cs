@@ -51,12 +51,12 @@
             this.datagridview_offlinePCs.Location = new System.Drawing.Point(12, 12);
             this.datagridview_offlinePCs.Name = "datagridview_offlinePCs";
             this.datagridview_offlinePCs.RowHeadersVisible = false;
-            this.datagridview_offlinePCs.Size = new System.Drawing.Size(383, 244);
+            this.datagridview_offlinePCs.Size = new System.Drawing.Size(508, 244);
             this.datagridview_offlinePCs.TabIndex = 2;
             // 
             // button_refreshOfflinePCs
             // 
-            this.button_refreshOfflinePCs.Location = new System.Drawing.Point(241, 262);
+            this.button_refreshOfflinePCs.Location = new System.Drawing.Point(366, 262);
             this.button_refreshOfflinePCs.Name = "button_refreshOfflinePCs";
             this.button_refreshOfflinePCs.Size = new System.Drawing.Size(154, 38);
             this.button_refreshOfflinePCs.TabIndex = 3;
@@ -68,7 +68,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(407, 312);
+            this.ClientSize = new System.Drawing.Size(532, 312);
             this.Controls.Add(this.button_refreshOfflinePCs);
             this.Controls.Add(this.datagridview_offlinePCs);
             this.Controls.Add(this.button_exportList);

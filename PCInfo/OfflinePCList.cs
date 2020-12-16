@@ -22,6 +22,7 @@ namespace PCInfo
             offlineSource.DataSource = MainForm.offlineComputerList;
             datagridview_offlinePCs.DataSource = offlineSource;
             datagridview_offlinePCs.Columns[1].Width = 250;
+            datagridview_offlinePCs.Columns[2].Width = 250;
             offlineSource.ResetBindings(false);
             
         }

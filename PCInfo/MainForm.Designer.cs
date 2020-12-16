@@ -58,6 +58,7 @@
             this.label_choseSetupLocation = new System.Windows.Forms.Label();
             this.button_showFinishedPCs = new System.Windows.Forms.Button();
             this.button_refresh = new System.Windows.Forms.Button();
+            this.button_killSetup = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(MainForm.datagrid_pcList)).BeginInit();
             this.groupbox_settings.SuspendLayout();
             this.SuspendLayout();
@@ -349,11 +350,22 @@
             this.button_refresh.UseVisualStyleBackColor = true;
             this.button_refresh.Click += new System.EventHandler(this.button_refresh_Click);
             // 
+            // button_killSetup
+            // 
+            this.button_killSetup.Location = new System.Drawing.Point(6, 4);
+            this.button_killSetup.Name = "button_killSetup";
+            this.button_killSetup.Size = new System.Drawing.Size(116, 38);
+            this.button_killSetup.TabIndex = 23;
+            this.button_killSetup.Text = "Kill Setup";
+            this.button_killSetup.UseVisualStyleBackColor = true;
+            this.button_killSetup.Visible = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1030, 543);
+            this.Controls.Add(this.button_killSetup);
             this.Controls.Add(this.button_refresh);
             this.Controls.Add(this.button_showFinishedPCs);
             this.Controls.Add(this.label_choseSetupLocation);
@@ -408,6 +420,7 @@
         private System.Windows.Forms.Button button_showFinishedPCs;
         public static System.Windows.Forms.DataGridView datagrid_pcList;
         private System.Windows.Forms.Button button_refresh;
+        private System.Windows.Forms.Button button_killSetup;
     }
 }
 

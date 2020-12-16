@@ -80,7 +80,6 @@ namespace PCInfo
         //TODO: More error handling
         private static void MainProgressChecker()
         {
-           // Thread.Sleep(5000);
             if (onlineComputerList.Count > 0)
             {
                 for (var i = 0; i < onlineComputerList.Count; i++)
@@ -115,7 +114,8 @@ namespace PCInfo
                     else
                     {
                         tempPC.UpgradeStatus = "Possible Reboot";
-
+                        tempPC.TimeStamp = DateTime.Now.ToString();
+                        tempPC.LogResult = "Unable to get log status";
                         //TODO: This will only work on a single reboot. Not sure if it's neccesary more than once.
                         if (!tempPC.OfflineTime.HasValue)
                         {
@@ -148,7 +148,6 @@ namespace PCInfo
         }
         private static void CheckStuckStatus()
         {
-            
             for (var i = 0; i < onlineComputerList.Count; i++)
             {
                 var tempPC = onlineComputerList[i];
