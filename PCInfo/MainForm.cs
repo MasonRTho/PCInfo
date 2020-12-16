@@ -39,6 +39,8 @@ namespace PCInfo
 
         static bool stopChecks;
 
+        private string startSetupError = "";
+
         private static System.Windows.Forms.Timer refreshButtonTimer = new System.Windows.Forms.Timer();
         private static System.Windows.Forms.Timer mainProgressCheckTimer = new System.Windows.Forms.Timer();
         private static System.Windows.Forms.Timer checkStuckStatusTimer = new System.Windows.Forms.Timer();
@@ -308,12 +310,14 @@ namespace PCInfo
                 else
                 {
                     success = false;
+                    startSetupError = error;
                 }
 
             }
             catch (Exception ex)
             {
                 // MessageBox.Show("Error starting PsExec on " + pcName + "\n" + ex);
+                startSetupError = ex.ToString();
                 success = false;
             }
 
@@ -712,8 +716,8 @@ namespace PCInfo
                             }
                             else
                             {
-                                moveToOfflineList(tempComputer, "Failed to start setup (tell Mason");
-                                MessageBox.Show("Failed to start setup on " + tempComputer.PCName.ToUpper() + ": Removing from list.(tell mason)");
+                                moveToOfflineList(tempComputer, "Tell Mason - " + startSetupError);
+                                MessageBox.Show("Failed to start setup on " + tempComputer.PCName.ToUpper() + ": Removing from list.(tell mason)\n" + startSetupError);
                             }
                         }
                         if (onlineComputerList.Count > 0)
