@@ -775,6 +775,7 @@ namespace PCInfo
             label_choseSetupLocation.Visible = false;
             label_waiting.Visible = false;
             button_chooseSetup.Visible = false;
+            button_killSetup.Visible = true;
             datagrid_pcList.Width = 800;
             button_showOfflinePCs.Location = new System.Drawing.Point(705, 33);
             button_showFinishedPCs.Location = new System.Drawing.Point(582, 33);
@@ -868,6 +869,31 @@ namespace PCInfo
         {
             button_refresh.Enabled = true;
             refreshButtonTimer.Stop();
+        }
+
+        private void button_killSetup_Click(object sender, EventArgs e)
+        {
+            if (onlineComputerList.Count > 0)
+            {
+                //onlineComputerList.RemoveAt(datagrid_pcList.CurrentRow.Index);
+                var tempPC = onlineComputerList[datagrid_pcList.CurrentRow.Index];
+                if (MessageBox.Show("Are you sure you want to kill setup on " + tempPC.PCName + "?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                {
+                    if (tempPC.killSetup())
+                    {
+                        MessageBox.Show("Setup killed on " + tempPC.PCName + ". *You might want to double check*");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unable to kill setup on " + tempPC.PCName);
+                    }
+                }
+                source.ResetBindings(false);
+            }
+            else
+            {
+                MessageBox.Show("Nothing selected", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

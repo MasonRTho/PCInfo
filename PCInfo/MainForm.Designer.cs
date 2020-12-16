@@ -359,6 +359,7 @@
             this.button_killSetup.Text = "Kill Setup";
             this.button_killSetup.UseVisualStyleBackColor = true;
             this.button_killSetup.Visible = false;
+            this.button_killSetup.Click += new System.EventHandler(this.button_killSetup_Click);
             // 
             // MainForm
             // 

@@ -292,6 +292,34 @@ namespace PCInfo
          
 
         }
+        public bool killSetup()
+        {
+            var processName = "setupHost.exe";
 
+            string wmiPath = "\\\\" + PCName + "\\root\\cimv2";
+
+            ConnectionOptions options = new ConnectionOptions();
+            ManagementScope scope = new ManagementScope(wmiPath, options);
+
+            try
+            {
+                var query = new SelectQuery("select * from Win32_process where name = '" + processName + "'");
+
+                using (var searcher = new ManagementObjectSearcher(scope, query))
+                {
+                    foreach (ManagementObject process in searcher.Get())
+                    {
+                        process.InvokeMethod("Terminate", null);
+                    }
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+
+        }
     }
 }
