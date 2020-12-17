@@ -84,16 +84,21 @@ namespace PCInfo
             {
                 var lastWriteTime = File.GetLastWriteTime(getLogLocation());
                 DateTime currentTime = DateTime.Now;
+                 
 
                 TimeSpan elapsedTime = currentTime - lastWriteTime;
 
-                if (elapsedTime.TotalMinutes > 15)
+                if (elapsedTime.TotalMinutes > 15 && elapsedTime.TotalMinutes < 45)
                 {
-                    this.UpgradeStatus = "Upgrade Stuck, retrying in 15min, then removing";
+                    this.UpgradeStatus = "Upgrade Stuck, will cancel in 45 min from " + lastWriteTime;
                 }
-                if (elapsedTime.TotalMinutes > 30)
+                else if (elapsedTime.TotalMinutes > 45)
                 {
                     this.UpgradeStatus = "Upgrade stuck";
+                }
+                else
+                {
+                    this.UpgradeStatus = "In Progress";
                 }
             }
             catch

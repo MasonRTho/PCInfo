@@ -106,7 +106,7 @@ namespace PCInfo
                         }
                         else
                         {
-                            tempPC.UpgradeStatus = "In Progress";
+                            //tempPC.UpgradeStatus = "In Progress";
                             tempPC.getTimeStamp();
                             tempPC.getLogStatus();
                         }
@@ -157,9 +157,17 @@ namespace PCInfo
                 {
                     tempPC.getStuckStatus();
 
-                    if (tempPC.UpgradeStatus == "Upgrade froze")
+                    if (tempPC.UpgradeStatus == "Upgrade stuck")
                     {
-                        moveToOfflineList(tempPC, "Upgrade froze", tempPC.LogResult);
+                        if (tempPC.killSetup())
+                        {
+                            moveToOfflineList(tempPC, "Upgrade froze & Setup killed", tempPC.LogResult);
+                        }
+                        else
+                        {
+                            moveToOfflineList(tempPC, "Upgrade froze, unable to kill setup", tempPC.LogResult);
+                        }
+                        
                     }
                 }
 
