@@ -226,6 +226,9 @@ namespace PCInfo
 
             switch (tempVersion)
             {
+                case "6.1.7601":
+                    CurrentVersion = "Windows 7 - SP1";
+                    break;
                 case "10.0.15063":
                     CurrentVersion = "1703";
                     break;

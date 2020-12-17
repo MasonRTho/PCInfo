@@ -98,12 +98,12 @@ namespace PCInfo
                 if (!MainForm.CheckIfPCExistsinOnlineComputerList(pc))
                 {
                     pc.getFreeSpace();
-
+                   // pc.getCurrentVersion();
                     MainForm.CheckIfPCHasMoreThan20GbAndPassesWMI(pc);
                 }
                 else
                 {
-                    MessageBox.Show($"{pc.PCName} is already in the list!");
+                    MessageBox.Show($"{pc.PCName} is already in the list");
                 }
             }
             else

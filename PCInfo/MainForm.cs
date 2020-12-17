@@ -229,7 +229,10 @@ namespace PCInfo
         {
             OfflineComputer upgradeFailed = new OfflineComputer(tempPC.PCName, reason, lastLogResult);
             offlineComputerList.Add(upgradeFailed);
-            onlineComputerList.Remove(tempPC);
+            if (onlineComputerList.Contains(tempPC))
+            {
+                onlineComputerList.Remove(tempPC);
+            }
             updateDataGridSafeCall();
         }
         private static void moveToFinishedList(Computer tempPC)
@@ -238,7 +241,10 @@ namespace PCInfo
             //upgradeFinished.CurrentVersion = tempPC.CurrentVersion;
             //upgradeFinished.FreeSpace = tempPC.FreeSpace;
             finishedComputerList.Add(upgradeFinished);
-            onlineComputerList.Remove(tempPC);
+            if (onlineComputerList.Contains(tempPC))
+            {
+                onlineComputerList.Remove(tempPC);
+            }
             updateDataGridSafeCall();
         }
 
