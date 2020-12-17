@@ -225,7 +225,7 @@ namespace PCInfo
 
         }
         //TODO: add this everywhere if it isn't already
-        private static void moveToOfflineList(Computer tempPC, string reason, string lastLogResult)
+        public static void moveToOfflineList(Computer tempPC, string reason, string lastLogResult)
         {
             OfflineComputer upgradeFailed = new OfflineComputer(tempPC.PCName, reason, lastLogResult);
             offlineComputerList.Add(upgradeFailed);

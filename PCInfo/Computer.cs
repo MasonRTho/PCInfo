@@ -271,29 +271,33 @@ namespace PCInfo
                 //not sure about this, hard to test. had a random error where an offline PC passed the ping
                 this.FreeSpace = "WMI Failed";
             }
-            try
+            if(!(FreeSpace == "WMI Failed"))
             {
-                // selects everything from the win32_operatingsystem DB, could probably rewrite to only select version.
-                ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_LogicalDisk where deviceid='C:'");
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
-
-                ManagementObjectCollection queryCollection = searcher.Get();
-
-                foreach (ManagementObject m in queryCollection)
+                try
                 {
-                    tempSpace = (m["freespace"]).ToString();
+                    // selects everything from the win32_operatingsystem DB, could probably rewrite to only select version.
+                    ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_LogicalDisk where deviceid='C:'");
+                    ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
 
+                    ManagementObjectCollection queryCollection = searcher.Get();
+
+                    foreach (ManagementObject m in queryCollection)
+                    {
+                        tempSpace = (m["freespace"]).ToString();
+
+                    }
+
+                    decimal tempSpaceCast = Int64.Parse(tempSpace);
+                    decimal freespace = tempSpaceCast / 1073741824;
+                    var freespaceRounded = Math.Round(freespace, 2);
+                    this.FreeSpace = freespaceRounded.ToString() + "GB";
                 }
-
-                decimal tempSpaceCast = Int64.Parse(tempSpace);
-                decimal freespace = tempSpaceCast / 1073741824;
-                var freespaceRounded = Math.Round(freespace, 2);
-                this.FreeSpace = freespaceRounded.ToString() + "GB";
+                catch
+                {
+                    this.FreeSpace = "WMI Failed";
+                }
             }
-            catch
-            {
-                this.FreeSpace = "WMI Failed";
-            }
+           
 
          
 
