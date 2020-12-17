@@ -21,6 +21,7 @@ namespace PCInfo
         public string ProcessStatus { get; set; }
         public string UpgradeStatus { get; set; }
         public DateTime? OfflineTime { get; set; }
+        public int RemoteRegistryEnableCount { get; set; }
 
 
 

@@ -41,6 +41,8 @@ namespace PCInfo
 
         private string startSetupError = "";
 
+        static string noPcPsexecLocation = "\\c$\\windows\\temp\\psexec.exe";
+
         private static System.Windows.Forms.Timer refreshButtonTimer = new System.Windows.Forms.Timer();
         private static System.Windows.Forms.Timer mainProgressCheckTimer = new System.Windows.Forms.Timer();
         private static System.Windows.Forms.Timer checkStuckStatusTimer = new System.Windows.Forms.Timer();
@@ -91,7 +93,7 @@ namespace PCInfo
                     if (tempPC.OnlineStatus == "Online")
                     {
                         tempPC.getProcessStatus();
-
+                        //TODO: Need to enable remote registry again when computer updates. process status - unable to get
                         if (tempPC.ProcessStatus == "Not Running") 
                         {
                             if (File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
@@ -101,12 +103,46 @@ namespace PCInfo
                             else if (!File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log"))
                             {
                                 tempPC.UpgradeStatus = "Upgrade Finished";
+                                tempPC.getCurrentVersion();
                                 moveToFinishedList(tempPC);
                             }                           
                         }
+                        else if (tempPC.ProcessStatus == "Unable to get process status")
+                        {
+                            var pcPsexeclocation = "\\\\" + tempPC.PCName + noPcPsexecLocation;
+                            //TODO: got lazy and didnt want to fix, but check this for error handling
+                            if (CopyPsExec(tempPC))
+                            {
+                                if (tempPC.RemoteRegistryEnableCount < 4)
+                                {
+                                    if (!EnableRemoteRegistry(pcPsexeclocation, tempPC))
+                                    {
+                                        tempPC.RemoteRegistryEnableCount++;
+                                    }
+                                }
+                                else if (tempPC.RemoteRegistryEnableCount == 3)
+                                {
+                                    if (!File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log") && File.Exists("\\\\" + tempPC.PCName + "\\c$\\windows\\panther\\setupact.log"))
+                                    {
+                                        tempPC.UpgradeStatus = "Upgrade Finished";
+                                        tempPC.getCurrentVersion();
+                                        moveToFinishedList(tempPC);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (!File.Exists("\\\\" + tempPC.PCName + "\\c$\\$windows.~BT\\sources\\panther\\setupact.log") && File.Exists("\\\\" + tempPC.PCName + "\\c$\\windows\\panther\\setupact.log"))
+                                {
+                                    tempPC.UpgradeStatus = "Upgrade Finished";
+                                    tempPC.getCurrentVersion();
+                                    moveToFinishedList(tempPC);
+                                }
+                            }
+
+                        }
                         else
                         {
-                            //tempPC.UpgradeStatus = "In Progress";
                             tempPC.getTimeStamp();
                             tempPC.getLogStatus();
                         }
@@ -250,7 +286,7 @@ namespace PCInfo
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"There was an error copying PSExec to {computer.PCName}.\n" + ex.ToString() + "\n" + "The PC will be removed");
+                //MessageBox.Show($"There was an error copying PSExec to {computer.PCName}.\n" + ex.ToString() + "\n" + "The PC will be removed");
 
                 success = false;
             }
@@ -267,7 +303,7 @@ namespace PCInfo
         }
         //use psexec to change the startup type of remote registry. Not very many options to change the startup type if it is disabled. There is spotty WMI, reg edit, or a winfunction
         //figured I would just use psexec if it's already being used anyway.
-        private bool EnableRemoteRegistry(string psExecLocation, Computer pc)
+        private static bool EnableRemoteRegistry(string psExecLocation, Computer pc)
         {
             bool success = false;
             try
@@ -623,7 +659,6 @@ namespace PCInfo
             //default string
             string installString = "/auto upgrade /quiet";
 
-            string noPcPsexecLocation = "\\c$\\windows\\temp\\psexec.exe";
             string noPcArgumentList = " -s -i -d " + setupPath + " " + installString;
             string finalPcPsexeclocation = "";
             string finalPcArgumentList = "";
