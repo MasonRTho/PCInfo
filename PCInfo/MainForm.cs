@@ -472,6 +472,7 @@ namespace PCInfo
             //used to hide properties from the computer class from showing in the DG
             datagrid_pcList.Columns[6].Visible = false;
             datagrid_pcList.Columns[8].Visible = false;
+            datagrid_pcList.Columns[9].Visible = false;
 
             this.MaximizeBox = false;
             
