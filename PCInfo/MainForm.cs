@@ -50,6 +50,8 @@ namespace PCInfo
         private static System.Windows.Forms.Timer mainProgressCheckTimer = new System.Windows.Forms.Timer();
         private static System.Windows.Forms.Timer checkStuckStatusTimer = new System.Windows.Forms.Timer();
 
+        bool windows7Delay = false;
+
 
         static void StartStatusChecks()
         {
@@ -58,6 +60,8 @@ namespace PCInfo
 
             checkStuckStatusTimer.Interval = 10000;
             checkStuckStatusTimer.Tick += checkStuckStatusTimer_Tick;
+
+            
 
             mainProgressCheckTimer.Start();
             checkStuckStatusTimer.Start();
@@ -391,7 +395,11 @@ namespace PCInfo
 
             if (success)
             {
+                //For slow networks
+                //TODO: Do something else for this, maybe a checkbox? Thread.sleep is bad practice regardless
+                Thread.Sleep(3000);
                 return true;
+
             }
             else
             {
@@ -455,15 +463,19 @@ namespace PCInfo
                     break;
                 case "radioButton_osRestart":
                     installString = "/auto upgrade /quiet /compat ignorewarning";
+                    windows7Delay = true;
                     break;
                 case "radioButton_osNoRestart":
                     installString = "/auto upgrade /quiet /compat ignorewarning /noreboot";
+                    windows7Delay = true;
                     break;
                 case "radioButton_osRestartSkip":
                     installString = "/auto upgrade /quiet /compat ignorewarning /DynamicUpdate disable";
+                    windows7Delay = true;
                     break;
                 case "radioButton_osNoRestartSkip":
                     installString = "/auto upgrade /quiet /compat ignorewarning /DynamicUpdate disable /noreboot";
+                    windows7Delay = true;
                     break;
             }
 
@@ -787,7 +799,7 @@ namespace PCInfo
 
                             if (StartSetup(finalPcPsexeclocation, finalPcArgumentList, tempComputer.PCName))
                             {
-                                
+
                             }
                             //retry setup once if psexec throws an invalid handle error
                             else if(startSetupError.Contains("handle is invalid"))
@@ -826,6 +838,7 @@ namespace PCInfo
 
         private void ReorganizeWindow()
         {
+           
             button_addPC.Enabled = false;
             button_clearList.Enabled = false;
             button_RemovePC.Enabled = false;
@@ -844,6 +857,7 @@ namespace PCInfo
             Size = new System.Drawing.Size(836, 581);
             datagrid_pcList.Columns[4].Width = 150;
             datagrid_pcList.Columns[5].Width = 150;
+
         }
 
         private void button_RemovePC_Click(object sender, EventArgs e)
