@@ -99,6 +99,12 @@
       <DependentUpon>AddPCForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Computer.cs" />
+    <Compile Include="EnterSetupLocation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EnterSetupLocation.Designer.cs">
+      <DependentUpon>EnterSetupLocation.cs</DependentUpon>
+    </Compile>
     <Compile Include="FinishedComputer.cs" />
     <Compile Include="FinishedPCs.cs">
       <SubType>Form</SubType>
@@ -124,6 +130,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AddPCForm.resx">
       <DependentUpon>AddPCForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EnterSetupLocation.resx">
+      <DependentUpon>EnterSetupLocation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FinishedPCs.resx">
       <DependentUpon>FinishedPCs.cs</DependentUpon>

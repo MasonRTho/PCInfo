@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FeatureUpgrade;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -17,7 +18,9 @@ namespace PCInfo
         
         // used later for getting the path of the setup.exe file
         public static string filePath = "";
-        public string setupPath = "";
+        public static string setupPath = "";
+        public static Label label_setupLocation = new Label();
+       
 
         private delegate void SafeCallDelegate(string text);
         private delegate void SafeCallDelegateDataGrid();
@@ -481,10 +484,16 @@ namespace PCInfo
             datagrid_pcList.Columns[9].Visible = false;
 
             this.MaximizeBox = false;
-            
-           
 
-            
+           
+            label_setupLocation.Text = "Waiting for location";
+            label_setupLocation.Location = new System.Drawing.Point(763, 54);
+            label_setupLocation.Size = new System.Drawing.Size(247, 25);
+            label_setupLocation.Visible = true;
+            this.Controls.Add(label_setupLocation);
+
+
+
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -823,8 +832,7 @@ namespace PCInfo
             button_selectList.Enabled = false;
             button_refresh.Enabled = false;
             groupbox_settings.Visible = false;
-            label_choseSetupLocation.Visible = false;
-            label_waiting.Visible = false;
+            label_setupLocation.Visible = false;
             button_chooseSetup.Visible = false;
             button_killSetup.Visible = true;
             datagrid_pcList.Width = 800;
@@ -861,6 +869,9 @@ namespace PCInfo
         // button for choosing the location of the setupfile. uses a windows function to convert the network path to UNC. little touchy with pointers, but seems to work. see GetUNC.cs for more info
         private void button_chooseSetup_Click(object sender, EventArgs e)
         {
+            var enterSetupForm = new EnterSetupLocation();
+            enterSetupForm.Show();
+            /*
             using (OpenFileDialog chooseSetupDialog = new OpenFileDialog())
             {
                 string localPath = "";
@@ -890,6 +901,7 @@ namespace PCInfo
                     }
                 }
             }
+            */
         }
 
         private void button_showFinishedPCs_Click(object sender, EventArgs e)

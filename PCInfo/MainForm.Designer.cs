@@ -33,6 +33,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             MainForm.datagrid_pcList = new System.Windows.Forms.DataGridView();
+
             this.button_selectList = new System.Windows.Forms.Button();
             this.openSelectPCDialog = new System.Windows.Forms.OpenFileDialog();
             this.label_statusLabel = new System.Windows.Forms.Label();
@@ -54,8 +55,6 @@
             this.label_osUpgrade = new System.Windows.Forms.Label();
             this.label_featureUpgrade = new System.Windows.Forms.Label();
             this.button_chooseSetup = new System.Windows.Forms.Button();
-            this.label_waiting = new System.Windows.Forms.Label();
-            this.label_choseSetupLocation = new System.Windows.Forms.Label();
             this.button_showFinishedPCs = new System.Windows.Forms.Button();
             this.button_refresh = new System.Windows.Forms.Button();
             this.button_killSetup = new System.Windows.Forms.Button();
@@ -310,24 +309,9 @@
             this.button_chooseSetup.Name = "button_chooseSetup";
             this.button_chooseSetup.Size = new System.Drawing.Size(134, 32);
             this.button_chooseSetup.TabIndex = 18;
-            this.button_chooseSetup.Text = "Choose setup file";
+            this.button_chooseSetup.Text = "Enter setup file";
             this.button_chooseSetup.UseVisualStyleBackColor = true;
             this.button_chooseSetup.Click += new System.EventHandler(this.button_chooseSetup_Click);
-            // 
-            // label_waiting
-            // 
-            this.label_waiting.Location = new System.Drawing.Point(763, 38);
-            this.label_waiting.Name = "label_waiting";
-            this.label_waiting.Size = new System.Drawing.Size(247, 16);
-            this.label_waiting.TabIndex = 19;
-            this.label_waiting.Text = "Waiting for setup file";
-            // 
-            // label_choseSetupLocation
-            // 
-            this.label_choseSetupLocation.Location = new System.Drawing.Point(763, 54);
-            this.label_choseSetupLocation.Name = "label_choseSetupLocation";
-            this.label_choseSetupLocation.Size = new System.Drawing.Size(247, 25);
-            this.label_choseSetupLocation.TabIndex = 20;
             // 
             // button_showFinishedPCs
             // 
@@ -369,8 +353,6 @@
             this.Controls.Add(this.button_killSetup);
             this.Controls.Add(this.button_refresh);
             this.Controls.Add(this.button_showFinishedPCs);
-            this.Controls.Add(this.label_choseSetupLocation);
-            this.Controls.Add(this.label_waiting);
             this.Controls.Add(this.button_chooseSetup);
             this.Controls.Add(this.groupbox_settings);
             this.Controls.Add(this.button_RemovePC);
@@ -416,8 +398,6 @@
         private System.Windows.Forms.Label label_featureUpgrade;
         public System.Windows.Forms.GroupBox groupbox_settings;
         private System.Windows.Forms.Button button_chooseSetup;
-        private System.Windows.Forms.Label label_waiting;
-        private System.Windows.Forms.Label label_choseSetupLocation;
         private System.Windows.Forms.Button button_showFinishedPCs;
         public static System.Windows.Forms.DataGridView datagrid_pcList;
         private System.Windows.Forms.Button button_refresh;
