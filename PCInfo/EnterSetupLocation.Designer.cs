@@ -80,8 +80,10 @@
             this.Controls.Add(this.textbox_setupLocation);
             this.Controls.Add(this.label_pcName);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Name = "EnterSetupLocation";
             this.Text = "EnterSetupLocation";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textbox_setupLocation_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -323,7 +323,7 @@ namespace PCInfo
                 p.StartInfo.RedirectStandardError = true;
                 p.StartInfo.RedirectStandardInput = true;
                 p.StartInfo.FileName = psExecLocation;
-                p.StartInfo.Arguments = "\\\\" + pc.PCName + " -s sc config remoteregistry start=auto";
+                p.StartInfo.Arguments = "\\\\" + pc.PCName + " -s sc config remoteregistry start= auto";
                 p.Start();
                 var error = p.StandardError.ReadToEnd();
                 var output = p.StandardOutput;

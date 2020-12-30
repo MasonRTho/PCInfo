@@ -43,6 +43,14 @@ namespace FeatureUpgrade
 
             }
         }
+
+        private void textbox_setupLocation_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                button_setupLocation_Click(this, new EventArgs());
+            }
+        }
     }
 }
 
