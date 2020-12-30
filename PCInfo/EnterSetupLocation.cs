@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,11 +29,16 @@ namespace FeatureUpgrade
             }
             else
             {
-                //string setupPath = MainForm.setupPath;
-                MainForm.setupPath = textbox_setupLocation.Text;
-                MainForm.label_setupLocation.Text = textbox_setupLocation.Text;
-                this.Close();
-                //TODO: remove redundancy
+                if (File.Exists(textbox_setupLocation.Text))
+                {
+                    MainForm.setupPath = textbox_setupLocation.Text;
+                    MainForm.label_setupLocation.Text = textbox_setupLocation.Text;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("The file path is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
 
             }
