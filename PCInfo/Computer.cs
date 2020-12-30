@@ -121,8 +121,10 @@ namespace PCInfo
         public void getLogStatus()
         {
             string currentLine;
+            string endLine;
             string split = "MOUPG";
             string formattedLine = "Unable to get log info";
+            List<string> statusList = new List<string>();
             try
             {
                 if (getLogLocation() == "\\\\" + PCName + "\\c$\\windows\\panther\\setupact.log")
@@ -137,11 +139,13 @@ namespace PCInfo
                         {
                             while ((currentLine = logFileReader.ReadLine()) != null)
                             {
-                                if (currentLine.Contains("Overall progress: "))
+                                statusList.Add(currentLine);
+
+                                if (statusList[statusList.Count - 1].Contains("Overall progress: "))
                                 {
 
                                     // logList.Add(currentLine);
-                                    formattedLine = currentLine.Substring(currentLine.IndexOf(split) + split.Length);
+                                    formattedLine = statusList[statusList.Count - 1].Substring(statusList[statusList.Count - 1].IndexOf(split) + split.Length);
                                     LogResult = formattedLine;
                                 }
                             }

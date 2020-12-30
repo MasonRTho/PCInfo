@@ -55,10 +55,10 @@ namespace PCInfo
 
         static void StartStatusChecks()
         {
-            mainProgressCheckTimer.Interval = 5000;
+            mainProgressCheckTimer.Interval = 15000;
             mainProgressCheckTimer.Tick += mainProgressCheckTimer_Tick;
 
-            checkStuckStatusTimer.Interval = 10000;
+            checkStuckStatusTimer.Interval = 600000;
             checkStuckStatusTimer.Tick += checkStuckStatusTimer_Tick;
 
             
