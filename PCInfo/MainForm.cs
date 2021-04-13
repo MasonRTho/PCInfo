@@ -758,14 +758,18 @@ namespace PCInfo
 
                                 finalPcPsexeclocation = "\\\\" + tempComputer.PCName + noPcPsexecLocation;
                                 finalPcArgumentList = "\\\\" + tempComputer.PCName + noPcArgumentList;
-
+                               
                                 if (startType.Contains("Disabled") || startType.Contains("Manual"))
                                 {
-                                    if (!EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
+                                    moveToOfflineList(tempComputer, "Remote registry turned off, enabled it manually", "N/A");
+                                    MessageBox.Show("Remote registry turned off, enabled it manually" + tempComputer.PCName.ToUpper() + ": Removing from list.");
+                                    /*
+                                     if (!EnableRemoteRegistry(finalPcPsexeclocation, tempComputer))
                                     {
                                         moveToOfflineList(tempComputer, "Failed to enable remote registry","N/A");
                                         MessageBox.Show("Failed to enabled Remote Registry on " + tempComputer.PCName.ToUpper() + ": Removing from list.");
                                     }
+                                    */
                                 }
                             }
                             else
