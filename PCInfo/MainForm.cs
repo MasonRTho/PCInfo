@@ -148,6 +148,7 @@ namespace PCInfo
                             }
 
                         }
+                       
                         else
                         {
                             tempPC.getTimeStamp();
@@ -327,7 +328,7 @@ namespace PCInfo
                 p.StartInfo.RedirectStandardError = true;
                 p.StartInfo.RedirectStandardInput = true;
                 p.StartInfo.FileName = psExecLocation;
-                p.StartInfo.Arguments = "\\\\" + pc.PCName + " -s sc config remoteregistry start= auto";
+                p.StartInfo.Arguments = "\\\\" + pc.PCName + " -s sc config remoteregistry start=auto";
                 p.Start();
                 var error = p.StandardError.ReadToEnd();
                 var output = p.StandardOutput;
@@ -356,6 +357,18 @@ namespace PCInfo
             }
         }
 
+        private static void StartService(string serviceName, string PCName)
+        {
+            ServiceController service = new ServiceController(serviceName, PCName);
+            try
+            {
+                service.Start();
+            }
+            catch
+            {
+                MessageBox.Show("Failed to start Remote Registry on " + PCName);
+            }
+        }
         //start the setup with a new process. using psexec, start a process on a remote computer. might use "using" eventually
 
         private bool StartSetup(string psExecLocation, string argumentList, string pcName)
@@ -748,12 +761,14 @@ namespace PCInfo
                     if (onlineComputerList.Count > 0)
                     {
                         //attemp to copy psexec and start remote registry if copy is succesful
+                          
                         for (var i = 0; i < onlineComputerList.Count; i++)
                         {
                             var tempComputer = onlineComputerList.ElementAt<Computer>(i);
+                            ServiceController sc = new ServiceController("Remote Registry", tempComputer.PCName);
                             if (CopyPsExec(tempComputer))
                             {
-                                ServiceController sc = new ServiceController("RemoteRegistry", tempComputer.PCName);
+                              
                                 var startType = sc.StartType.ToString();
 
                                 finalPcPsexeclocation = "\\\\" + tempComputer.PCName + noPcPsexecLocation;
@@ -773,6 +788,13 @@ namespace PCInfo
                                 moveToOfflineList(tempComputer, "Failed to copy PSExec","N/A");
                                 MessageBox.Show("Failed to copy PsExec to " + tempComputer.PCName.ToUpper() + ". Removing from list.");
                             }
+
+                            var rrStatus = sc.Status;
+                            if (rrStatus.Equals(ServiceControllerStatus.Stopped) || rrStatus.Equals(ServiceControllerStatus.StopPending))
+                            {
+                                StartService("Remote Registry", tempComputer.PCName);
+                            }
+                            
                         }
                         if (onlineComputerList.Count > 0)
                         {
